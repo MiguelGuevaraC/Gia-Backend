@@ -32,6 +32,7 @@ class UsersSeeders extends Seeder
 
             'ocupation' => "Administrador",
             'state' => 1,
+      
 
         ]);
 
@@ -40,7 +41,7 @@ class UsersSeeders extends Seeder
             'name' => 'ADMINISTRADOR', // Nombre del usuario
             'username' => 'admin', // Correo electrónico
             'password' => Hash::make('admingia'), // Contraseña hasheada usando Hash::make
-
+            'rol_id' => 1,
             'person_id' => 1, // Relacionar con el ID de la persona
         ]);
 
