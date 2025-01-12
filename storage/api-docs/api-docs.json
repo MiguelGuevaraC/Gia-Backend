@@ -6,18 +6,2520 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/gia-backend/public/api/user": {
+        "/gia-backend/public/api/searchByDni/{dni}": {
             "get": {
                 "tags": [
-                    "Product"
+                    "Search"
+                ],
+                "summary": "Search information by DNI",
+                "description": "Search information about a person by their DNI number.",
+                "operationId": "e89cd30947f67174513b6eecc3b67c15",
+                "parameters": [
+                    {
+                        "name": "dni",
+                        "in": "path",
+                        "description": "DNI number of the person to search",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Information found successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "dni": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "apepat": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "apemat": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "apcas": {
+                                                "type": "string",
+                                                "example": ""
+                                            },
+                                            "nombres": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "fecnac": {
+                                                "type": "string",
+                                                "format": "date"
+                                            },
+                                            "ubigeo": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/searchByRuc/{ruc}": {
+            "get": {
+                "tags": [
+                    "Search"
+                ],
+                "summary": "Search information by RUC",
+                "description": "Search information about a person by their RUC number.",
+                "operationId": "5a3423112cb2e5db0ad106daebce9185",
+                "parameters": [
+                    {
+                        "name": "ruc",
+                        "in": "path",
+                        "description": "RUC number of the person to search",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Information found successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "code": {
+                                                "type": "integer",
+                                                "example": 0
+                                            },
+                                            "RUC": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "RazonSocial": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "Direccion": {
+                                                "type": "string",
+                                                "example": "string"
+                                            },
+                                            "Tipo": {
+                                                "type": "string"
+                                            },
+                                            "Inscripcion": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/logout": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Logout",
+                "description": "Log out user.",
+                "operationId": "39082e933a5d086a95bb58e22159328f",
+                "responses": {
+                    "200": {
+                        "description": "Successful logout"
+                    },
+                    "401": {
+                        "description": "Unauthenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "An error occurred while trying to log out. Please try again later."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login user",
+                "description": "Authenticate user and generate access token",
+                "operationId": "94fa55469c7f87dcaa0f66e8eb1e8343",
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "branchOffice_id"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User authenticated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "token del usuario",
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "message": {
+                                            "description": "Message Response",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "User not found or password incorrect",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/authenticate": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get Profile user",
+                "description": "Get user",
+                "operationId": "04dee805bdb9db02cf5f0f0a3b086f9a",
+                "responses": {
+                    "200": {
+                        "description": "User authenticated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "Bearer token",
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "message": {
+                                            "description": "Message Response",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/company": {
+            "get": {
+                "tags": [
+                    "Company"
                 ],
                 "summary": "Obtener información con filtros y ordenamiento",
-                "operationId": "62771dbb43f5f6d4e95c15ac64edbe9e",
+                "operationId": "c91d4921963abe06b6073d853bb3850c",
+                "parameters": [
+                    {
+                        "name": "ruc",
+                        "in": "query",
+                        "description": "Filtrar por ruc de la empresa",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "business_name",
+                        "in": "query",
+                        "description": "Filtrar razón social",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "description": "Filtrar por dirección",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Filtrar por telefono",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filtrar por email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Empresas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Company"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Crear company",
+                "operationId": "7b7122635f3c5fcc726c063881f15ff9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "ruc",
+                                    "business_name",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Empresa X"
+                                    },
+                                    "ruc": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "business_name": {
+                                        "type": "string",
+                                        "example": "Razón Social S.A."
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Calle Ficticia 123"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "contacto@empresa.com"
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "route": {
+                                        "description": "Archivo de la imagen",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Company creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Company"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un company asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/company/{id}": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Obtener detalles de un company por ID",
+                "operationId": "68f4e7836877f2d82706f149f8e29050",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Company"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Company No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Company No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Actualizar Company",
+                "operationId": "001217f8121527b8a38c2e0b662b73cf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la empresa que se desea actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Empresa X"
+                                    },
+                                    "ruc": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "business_name": {
+                                        "type": "string",
+                                        "example": "Razón Social S.A."
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Calle Ficticia 123"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "contacto@empresa.com"
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "route": {
+                                        "description": "Archivo de la imagen",
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Company actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Company"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un company asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Eliminar company por ID",
+                "operationId": "961ff61ecf7cfae755d585d7debd1e82",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la compañía que se desea eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Company eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Company eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Company No Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Company No Encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/environment": {
+            "get": {
+                "tags": [
+                    "Environment"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "f41e384d8a3488e9b68367777b12215e",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtrar por nombre",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Filtrar por descripción",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "route",
+                        "in": "query",
+                        "description": "Filtrar por ruta",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por estado",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "company$business_name",
+                        "in": "query",
+                        "description": "Filtrar por nombre de empresa",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Entornos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Environment"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Environment"
+                ],
+                "summary": "Crear Environment",
+                "operationId": "221a2950959b5fb6c4f63a80b54556c0",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "company_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre del entorno",
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "description": "Descripción del entorno",
+                                        "type": "string"
+                                    },
+                                    "route": {
+                                        "description": "Archivo de la imagen",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "status": {
+                                        "description": "Estado del entorno",
+                                        "type": "boolean"
+                                    },
+                                    "company_id": {
+                                        "description": "ID de la empresa",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Environment creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Environment"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error al crear el environment"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/environment/{id}": {
+            "get": {
+                "tags": [
+                    "Environment"
+                ],
+                "summary": "Obtener detalles de un environment por ID",
+                "operationId": "f537061dfaa60e3fef86e52e8b7f5ae8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Environment"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Environment No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Environment No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Environment"
+                ],
+                "summary": "Actualizar Environment por ID",
+                "operationId": "2d469c90dae16f08a375bb931c9d4938",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del entorno",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre del entorno",
+                                        "type": "string",
+                                        "example": "Entorno Ejemplo"
+                                    },
+                                    "description": {
+                                        "description": "Descripción del entorno",
+                                        "type": "string",
+                                        "example": "Descripción del entorno"
+                                    },
+                                    "route": {
+                                        "description": "Archivo de la imagen",
+                                        "type": "string",
+                                        "format": "binary",
+                                        "nullable": true
+                                    },
+                                    "status": {
+                                        "description": "Estado del entorno",
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "company_id": {
+                                        "description": "ID de la empresa",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Environment actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Environment"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Environment No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Environment No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error al actualizar el environment"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Environment"
+                ],
+                "summary": "Eliminar environment por ID",
+                "operationId": "18b82d2975286a6986799d89a37c9ada",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la compañía que se desea eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Environment eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Environment eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Environment No Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Environment No Encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/person": {
+            "get": {
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "08cdc974e4afed28d2147c17b80142ad",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "Filtrar por nombre de la persona",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "person.name",
+                        "in": "query",
+                        "description": "Filtrar por nombre de la persona",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "person.business_name",
+                        "in": "query",
+                        "description": "Filtrar por nombre de la empresa",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Empresas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Person"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Crear una nueva persona",
+                "operationId": "46688aedf959f256780a222341b706c3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "numberDocument"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "persona Ejemplo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "persona creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Person"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Datos inválidos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/person/{id}": {
+            "get": {
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Obtener detalles de una persona por ID",
+                "operationId": "7846ee3a652fb89732751a01d6609960",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Person"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Persona no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Persona no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Actualizar la información de una persona",
+                "operationId": "0ba2af75d76506764c7f648359a81ebd",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "persona Ejemplo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "persona actualizada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Person"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Persona no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Persona no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Datos inválidos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Person"
+                ],
+                "summary": "Eliminar persona por ID",
+                "operationId": "3c084460a3f77d436ee547800af61164",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "persona eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Persona no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Persona no encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/rol": {
+            "get": {
+                "tags": [
+                    "Rol"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "acf8f52804555e7b1656165a6a64a602",
                 "parameters": [
                     {
                         "name": "name",
                         "in": "query",
                         "description": "Filtrar por nombre de la categoria",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Empresas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Rol"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Rol"
+                ],
+                "summary": "Crear rol",
+                "operationId": "f4f6d0d0fb95044a0b83f5c774a13e34",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Trabajador"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rol creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Rol"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un rol asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/rol/{id}": {
+            "get": {
+                "tags": [
+                    "Rol"
+                ],
+                "summary": "Obtener detalles de un rol por ID",
+                "operationId": "6a63ac8e332ed4e9efc9ca1d29471eea",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Rol"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rol No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Rol No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Rol"
+                ],
+                "summary": "Actualizar rol",
+                "operationId": "122be68ca718fcd6e9e835615ce2d296",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Trabajador"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rol actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Rol"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Datos inválidos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Rol"
+                ],
+                "summary": "Eliminar persona por ID",
+                "operationId": "b7a50392ed44502399a9929c32be0f69",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "persona eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Rol No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Rol No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/setAccess/{typeUserId}": {
+            "put": {
+                "tags": [
+                    "Rol"
+                ],
+                "summary": "Set access to type of User",
+                "description": "Set access permissions for a specific type of user.",
+                "operationId": "1cdcdd25df8badf7b8f741532a16c378",
+                "parameters": [
+                    {
+                        "name": "typeUserId",
+                        "in": "path",
+                        "description": "ID of the type of user",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Options menu in array format",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "access"
+                                ],
+                                "properties": {
+                                    "access": {
+                                        "description": "List of permission IDs to assign",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Permissions assigned successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Permissions assigned successfully."
+                                        },
+                                        "role": {
+                                            "description": "Updated role object",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Validation error."
+                                        },
+                                        "errors": {
+                                            "description": "Object containing validation errors",
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Role not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Role not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/station": {
+            "get": {
+                "tags": [
+                    "Station"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "5c88efc99d0b0e2b1018509e2a68e13f",
+                "parameters": [
+                    {
+                        "name": "ruc",
+                        "in": "query",
+                        "description": "Filtrar por ruc de la empresa",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "business_name",
+                        "in": "query",
+                        "description": "Filtrar razón social",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "description": "Filtrar por dirección",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Filtrar por telefono",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filtrar por email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Empresas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Station"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Station"
+                ],
+                "summary": "Crear station",
+                "operationId": "13df56e60881f3b85327ccd372a85c19",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "ruc",
+                                    "business_name",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Empresa X"
+                                    },
+                                    "ruc": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "business_name": {
+                                        "type": "string",
+                                        "example": "Razón Social S.A."
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Calle Ficticia 123"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "contacto@empresa.com"
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "route": {
+                                        "description": "Sube el logo de la empresa",
+                                        "type": "string",
+                                        "format": "uri",
+                                        "example": "logo.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Station creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Station"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un station asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/station/{id}": {
+            "get": {
+                "tags": [
+                    "Station"
+                ],
+                "summary": "Obtener detalles de un station por ID",
+                "operationId": "b9842af4f3187050fbbc75743308e29f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Station"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Station No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Station No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Station"
+                ],
+                "summary": "Actualizar Station",
+                "operationId": "ab5f9c111b5cc251aecfd0008fb5b8d8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la empresa que se desea actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Empresa X"
+                                    },
+                                    "ruc": {
+                                        "type": "string",
+                                        "example": "12345678901"
+                                    },
+                                    "business_name": {
+                                        "type": "string",
+                                        "example": "Razón Social S.A."
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Calle Ficticia 123"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "987654321"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "contacto@empresa.com"
+                                    },
+                                    "status": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "route": {
+                                        "description": "Sube el logo de la empresa",
+                                        "type": "string",
+                                        "format": "uri",
+                                        "example": "logo_updated.jpg"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Station actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Station"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un station asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Station"
+                ],
+                "summary": "Eliminar station por ID",
+                "operationId": "0b6ebed8631d2c9b5ab8a825cfe69dd5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la compañía que se desea eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Station eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Station eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Station No Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Station No Encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "62771dbb43f5f6d4e95c15ac64edbe9e",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "description": "Filtrar por nombre de la categoria",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "person.name",
+                        "in": "query",
+                        "description": "Filtrar por nombre de la persona",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "person.business_name",
+                        "in": "query",
+                        "description": "Filtrar por nombre de la empresa",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -76,11 +2578,625 @@
                         "bearerAuth": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Crear usuario",
+                "operationId": "54f46bc4330fdd5d2203e5fca8b596b6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "number_document"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "juan.perez@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "type_document": {
+                                        "type": "string",
+                                        "example": "DNI"
+                                    },
+                                    "type_person": {
+                                        "type": "string",
+                                        "example": "natural"
+                                    },
+                                    "names": {
+                                        "type": "string",
+                                        "example": "Juan Pérez"
+                                    },
+                                    "father_surname": {
+                                        "type": "string",
+                                        "example": "Pérez"
+                                    },
+                                    "mother_surname": {
+                                        "type": "string",
+                                        "example": "Gómez"
+                                    },
+                                    "business_name": {
+                                        "type": "string",
+                                        "example": "Pérez Enterprises"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Calle Ficticia 123"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+51987654321"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "juan.perez@example.com"
+                                    },
+                                    "number_document": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "ocupation": {
+                                        "type": "string",
+                                        "example": "Trabajador"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un usuario asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/gia-backend/public/api/user/{id}": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Obtener detalles de un usuario por ID",
+                "operationId": "f852792932825932894dc8db96599e17",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Usuario No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Actualizar usuario",
+                "operationId": "b7af2fbacfbf9f6399f601863e21add7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "number_document"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "juan.perez@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "type_document": {
+                                        "type": "string",
+                                        "example": "DNI"
+                                    },
+                                    "type_person": {
+                                        "type": "string",
+                                        "example": "natural"
+                                    },
+                                    "names": {
+                                        "type": "string",
+                                        "example": "Juan Pérez"
+                                    },
+                                    "father_surname": {
+                                        "type": "string",
+                                        "example": "Pérez"
+                                    },
+                                    "mother_surname": {
+                                        "type": "string",
+                                        "example": "Gómez"
+                                    },
+                                    "business_name": {
+                                        "type": "string",
+                                        "example": "Pérez Enterprises"
+                                    },
+                                    "address": {
+                                        "type": "string",
+                                        "example": "Calle Ficticia 123"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+51987654321"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "juan.perez@example.com"
+                                    },
+                                    "number_document": {
+                                        "type": "string",
+                                        "example": "12345678"
+                                    },
+                                    "ocupation": {
+                                        "type": "string",
+                                        "example": "Trabajador"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Datos inválidos"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Eliminar persona por ID",
+                "operationId": "7a5a4af26f29a52594636aed2e30a2ee",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "persona eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Usuario No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         }
     },
     "components": {
         "schemas": {
+            "Company": {
+                "title": "Company",
+                "description": "Company model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "20123456789"
+                    },
+                    "business_name": {
+                        "type": "string",
+                        "example": "Tech Solutions S.A."
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Principal 123, Lima"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "info@techsolutions.com"
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "/company/123"
+                    }
+                },
+                "type": "object"
+            },
+            "Environment": {
+                "title": "Environment",
+                "description": "Environment model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Production"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Primary production environment"
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "/environment/production"
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "server_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "company_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "company": {
+                        "$ref": "#/components/schemas/Company"
+                    }
+                },
+                "type": "object"
+            },
+            "Permission": {
+                "title": "Permission",
+                "description": "Permission model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "users"
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "Tipo-01"
+                    },
+                    "person_id": {
+                        "description": "Person Id",
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "PermissionRole": {
+                "title": "PermissionRole",
+                "description": "PermissionRole model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name_permission": {
+                        "type": "string",
+                        "example": "users"
+                    },
+                    "name_rol": {
+                        "type": "string",
+                        "example": "Admin"
+                    },
+                    "rol_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "permission_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "rol": {
+                        "$ref": "#/components/schemas/Rol"
+                    },
+                    "permission": {
+                        "$ref": "#/components/schemas/Permission"
+                    }
+                },
+                "type": "object"
+            },
+            "Person": {
+                "title": "Person",
+                "description": "Person model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "type_document": {
+                        "type": "string",
+                        "example": "DNI"
+                    },
+                    "type_person": {
+                        "type": "string",
+                        "example": "Individual"
+                    },
+                    "number_document": {
+                        "type": "string",
+                        "example": "12345678"
+                    },
+                    "names": {
+                        "type": "string",
+                        "example": "Juan"
+                    },
+                    "father_surname": {
+                        "type": "string",
+                        "example": "Perez"
+                    },
+                    "mother_surname": {
+                        "type": "string",
+                        "example": "Lopez"
+                    },
+                    "business_name": {
+                        "type": "string",
+                        "example": "Perez & Co."
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Siempre Viva 123"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "juanperez@example.com"
+                    },
+                    "occupation": {
+                        "type": "string",
+                        "example": "Engineer"
+                    },
+                    "state": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "server_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-01T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-02T12:00:00Z"
+                    },
+                    "deleted_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": null
+                    }
+                },
+                "type": "object"
+            },
+            "Rol": {
+                "title": "Rol",
+                "description": "Rol model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Cajero"
+                    },
+                    "person_id": {
+                        "description": "Person Id",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "permissions": {
+                        "description": "Lista de permisos asociados al rol",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Permission"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "Station": {
+                "title": "Station",
+                "description": "Station model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Station A"
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "Monitoring"
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "server_id": {
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "/station/a"
+                    },
+                    "environment_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "environment": {
+                        "$ref": "#/components/schemas/Environment"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "description": "User model",
@@ -97,6 +3213,9 @@
                         "description": "Person Id",
                         "type": "integer",
                         "example": "1"
+                    },
+                    "person": {
+                        "$ref": "#/components/schemas/Person"
                     }
                 },
                 "type": "object"
@@ -114,8 +3233,36 @@
     },
     "tags": [
         {
-            "name": "Product",
-            "description": "Product"
+            "name": "Search",
+            "description": "Search"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Company",
+            "description": "Company"
+        },
+        {
+            "name": "Environment",
+            "description": "Environment"
+        },
+        {
+            "name": "Person",
+            "description": "Person"
+        },
+        {
+            "name": "Rol",
+            "description": "Rol"
+        },
+        {
+            "name": "Station",
+            "description": "Station"
+        },
+        {
+            "name": "User",
+            "description": "User"
         }
     ]
 }
