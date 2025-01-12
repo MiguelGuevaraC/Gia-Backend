@@ -111,7 +111,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * @OA\Put(
+     * @OA\Post(
      *     path="/gia-backend/public/api/company/{id}",
      *     summary="Actualizar Company",
      *     tags={"Company"},

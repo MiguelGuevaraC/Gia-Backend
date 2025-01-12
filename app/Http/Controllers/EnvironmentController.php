@@ -110,7 +110,7 @@ class EnvironmentController extends Controller
     }
 
 /**
- * @OA\Put(
+ * @OA\Post(
  *     path="/gia-backend/public/api/environment/{id}",
  *     summary="Actualizar Environment por ID",
  *     tags={"Environment"},

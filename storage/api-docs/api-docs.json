@@ -684,12 +684,12 @@
                     }
                 ]
             },
-            "put": {
+            "post": {
                 "tags": [
                     "Company"
                 ],
                 "summary": "Actualizar Company",
-                "operationId": "001217f8121527b8a38c2e0b662b73cf",
+                "operationId": "02bcd4af4f5f15f93d4dc1545ed405dd",
                 "parameters": [
                     {
                         "name": "id",
@@ -1095,12 +1095,12 @@
                     }
                 ]
             },
-            "put": {
+            "post": {
                 "tags": [
                     "Environment"
                 ],
                 "summary": "Actualizar Environment por ID",
-                "operationId": "2d469c90dae16f08a375bb931c9d4938",
+                "operationId": "d6cfb4dbe036ed187513639efb8c62e1",
                 "parameters": [
                     {
                         "name": "id",

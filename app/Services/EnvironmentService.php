@@ -26,11 +26,38 @@ class EnvironmentService
         return $environment;
     }
 
-    public function updateEnvironment($Environment, array $data)
+    public function updateEnvironment(Environment $environment, array $data): Environment
     {
-        $Environment->update($data);
-        return $Environment;
+        // Verificar si hay una nueva imagen en los datos
+        if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
+            // Eliminar la imagen anterior si existe
+            if ($environment->route) {
+                // Extraer la ruta relativa del archivo eliminando la URL pública
+                $publicPath = env('APP_URL') . '/storage/';
+                $relativePath = str_replace($publicPath, '', $environment->route);
+    
+                // Borrar la imagen antigua si la ruta relativa existe
+                Storage::disk('public')->delete($relativePath);
+            }
+    
+            // Generar un nuevo nombre para la imagen
+            $timestamp = now()->format('Ymd_His');
+            $extension = $data['route']->getClientOriginalExtension();
+            $fileName = "{$environment->id}_{$timestamp}.{$extension}";
+    
+            // Guardar la nueva imagen
+            $filePath = $data['route']->storeAs('environments', $fileName, 'public');
+    
+            // Actualizar el campo 'route' con la nueva URL completa
+            $data['route'] = env('APP_URL') . Storage::url($filePath);
+        }
+    
+        // Actualizar los datos del ambiente
+        $environment->update($data);
+    
+        return $environment;
     }
+    
 
     public function destroyById($id)
     {
