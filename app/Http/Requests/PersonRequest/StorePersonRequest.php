@@ -20,7 +20,7 @@ class StorePersonRequest extends StoreRequest
 
         return [
             'type_document' => 'required|string|max:50',
-            'type_person' => 'required|string|in:individual,business', // Ajustar según opciones válidas
+            'type_person' => 'required|string|in:NATURAL,JURIDICA', // Ajustar según opciones válidas
             'number_document' => 'required|string|max:20|unique:people,number_document,NULL,id,deleted_at,NULL',
             'names' => 'required|string|max:255',
             'father_surname' => 'nullable|string|max:255',
@@ -31,7 +31,7 @@ class StorePersonRequest extends StoreRequest
             'phone' => 'nullable|string|regex:/^\d{9,15}$/', // Acepta números de 9 a 15 dígitos
             'email' => 'nullable|email|max:255|unique:people,email,NULL,id,deleted_at,NULL',
 
-            'occupation' => 'nullable|string|max:255',
+            'ocupation' => 'nullable|string|max:255',
             'state' => 'required|boolean',
             'server_id' => 'nullable|integer|exists:servers,id', // Cambiar 'servers' según tu tabla
         ];
@@ -47,7 +47,7 @@ class StorePersonRequest extends StoreRequest
 
             'type_person.required' => 'El tipo de persona es obligatorio.',
             'type_person.string' => 'El tipo de persona debe ser una cadena de texto.',
-            'type_person.in' => 'El tipo de persona debe ser "individual" o "business".',
+            'type_person.in' => 'El tipo de persona debe ser "NATURAL" o "JURIDICA".',
 
             'number_document.required' => 'El número de documento es obligatorio.',
             'number_document.string' => 'El número de documento debe ser una cadena de texto.',

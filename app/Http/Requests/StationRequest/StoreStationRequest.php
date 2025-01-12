@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\StationRequest;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\StoreRequest;
 
-class StoreStationRequest extends FormRequest
+class StoreStationRequest extends StoreRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,34 +26,29 @@ class StoreStationRequest extends FormRequest
             'environment_id' => 'required|integer|exists:environments,id', // Validar que exista en la tabla 'environments'
         ];
     }
-    
-    
-    
-    
+
     public function messages()
     {
         return [
             'name.required' => 'El nombre es obligatorio.',
             'name.string' => 'El nombre debe ser una cadena de texto.',
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
-    
+
             'type.required' => 'El tipo es obligatorio.',
             'type.string' => 'El tipo debe ser una cadena de texto.',
             'type.max' => 'El tipo no puede tener más de 50 caracteres.',
-    
+
             'status.required' => 'El estado es obligatorio.',
             'status.boolean' => 'El estado debe ser verdadero o falso.',
-    
+
             'route.image' => 'El archivo debe ser una imagen.',
             'route.mimes' => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',
             'route.max' => 'El archivo no puede ser mayor a 2 MB.',
-    
+
             'environment_id.required' => 'El ambiente es obligatorio.',
             'environment_id.integer' => 'El identificador del ambiente debe ser un número entero.',
             'environment_id.exists' => 'El ambiente seleccionado no existe.',
         ];
     }
-    
-    
 
 }
