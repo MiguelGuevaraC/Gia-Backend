@@ -1,9 +1,8 @@
 <?php
 namespace App\Services;
 
-use App\Http\Resources\EnvironmentResource;
 use App\Models\Environment;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class EnvironmentService
 {
@@ -15,7 +14,16 @@ class EnvironmentService
 
     public function createEnvironment(array $data): Environment
     {
-        return Environment::create($data);
+        $environment = Environment::create($data);
+
+        if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
+            $timestamp = now()->format('Ymd_His');
+            $extension = $data['route']->getClientOriginalExtension();
+            $fileName = "{$environment->id}_{$timestamp}.{$extension}";
+            $filePath = $data['route']->storeAs('companies', $fileName, 'public');
+            $environment->update(['route' => Storage::url($filePath)]);
+        }
+        return $environment;
     }
 
     public function updateEnvironment($Environment, array $data)
@@ -33,8 +41,5 @@ class EnvironmentService
         }
         return $Environment->delete(); // Devuelve true si la eliminación fue exitosa
     }
-
-   
-    
 
 }

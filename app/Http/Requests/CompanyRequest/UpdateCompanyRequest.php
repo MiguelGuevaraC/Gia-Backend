@@ -25,7 +25,7 @@ class UpdateCompanyRequest extends UpdateRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+     
             'ruc' => 'required|string|max:11',
             'business_name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
@@ -39,10 +39,7 @@ class UpdateCompanyRequest extends UpdateRequest
     public function messages()
     {
         return [
-            'name.required' => 'El campo "nombre" es obligatorio.',
-            'name.string' => 'El campo "nombre" debe ser una cadena de texto.',
-            'name.max' => 'El campo "nombre" no puede tener más de 255 caracteres.',
-
+        
             'ruc.required' => 'El campo "RUC" es obligatorio.',
             'ruc.string' => 'El campo "RUC" debe ser una cadena de texto.',
             'ruc.max' => 'El campo "RUC" no puede tener más de 11 caracteres.',

@@ -19,13 +19,12 @@ class StoreCompanyRequest extends StoreRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
             'ruc' => 'required|string|max:11',
             'business_name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:15', // Limitar a un tamaño más razonable para números de teléfono
             'email' => 'nullable|email|max:255', // Validar que sea un correo válido
-            'status' => 'required|boolean', // Asegurarse de que sea true o false
+            'status' => 'nullable|boolean', // Asegurarse de que sea true o false
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
         ];
     }
@@ -33,9 +32,6 @@ class StoreCompanyRequest extends StoreRequest
     public function messages()
     {
         return [
-            'name.required' => 'El campo "nombre" es obligatorio.',
-            'name.string' => 'El campo "nombre" debe ser una cadena de texto.',
-            'name.max' => 'El campo "nombre" no puede tener más de 255 caracteres.',
 
             'ruc.required' => 'El campo "RUC" es obligatorio.',
             'ruc.string' => 'El campo "RUC" debe ser una cadena de texto.',
