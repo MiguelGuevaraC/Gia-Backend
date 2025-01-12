@@ -95,6 +95,7 @@ trait Filterable
 
     protected function getFilteredResults($modelOrQuery, $request, $filters, $sorts, $resource)
     {
+     
         if ($modelOrQuery instanceof Builder) {
             $query = $modelOrQuery;
         } else {

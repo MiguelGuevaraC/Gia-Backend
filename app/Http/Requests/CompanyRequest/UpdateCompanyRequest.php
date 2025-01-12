@@ -24,9 +24,11 @@ class UpdateCompanyRequest extends UpdateRequest
      */
     public function rules()
     {
+        $id = $this->route('id'); // Obtén el ID de la ruta, que se asume que es el ID del usuario
+    
         return [
      
-            'ruc' => 'required|string|max:11',
+            'ruc' => "required|string|max:20|unique:companies,ruc,{$id},id,deleted_at,NULL",
             'business_name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:15', // Limitar a un tamaño más razonable para números de teléfono
@@ -39,7 +41,7 @@ class UpdateCompanyRequest extends UpdateRequest
     public function messages()
     {
         return [
-        
+            'ruc.unique' => 'El RUC ya ha sido tomado.',
             'ruc.required' => 'El campo "RUC" es obligatorio.',
             'ruc.string' => 'El campo "RUC" debe ser una cadena de texto.',
             'ruc.max' => 'El campo "RUC" no puede tener más de 11 caracteres.',

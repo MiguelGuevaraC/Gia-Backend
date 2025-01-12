@@ -33,6 +33,7 @@ class Environment extends Model
         'route' => 'like',
         'status' => 'like',
         'company.business_name' => 'like',
+        'company_id' => '=',
     ];
 
     /**

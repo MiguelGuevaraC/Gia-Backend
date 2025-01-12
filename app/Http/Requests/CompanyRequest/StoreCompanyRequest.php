@@ -19,7 +19,7 @@ class StoreCompanyRequest extends StoreRequest
     public function rules()
     {
         return [
-            'ruc' => 'required|string|max:11',
+            'ruc' => 'required|string|max:255|unique:companies,ruc,NULL,id,deleted_at,NULL',
             'business_name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:15', // Limitar a un tamaño más razonable para números de teléfono
@@ -32,7 +32,7 @@ class StoreCompanyRequest extends StoreRequest
     public function messages()
     {
         return [
-
+            'ruc.unique' => 'El RUC ya ha sido tomado.',
             'ruc.required' => 'El campo "RUC" es obligatorio.',
             'ruc.string' => 'El campo "RUC" debe ser una cadena de texto.',
             'ruc.max' => 'El campo "RUC" no puede tener más de 11 caracteres.',

@@ -31,6 +31,7 @@ class CompanyController extends Controller
      *     @OA\Parameter(name="address", in="query", description="Filtrar por dirección", required=false, @OA\Schema(type="string")),
      *     @OA\Parameter(name="phone", in="query", description="Filtrar por telefono", required=false, @OA\Schema(type="string")),
      *     @OA\Parameter(name="email", in="query", description="Filtrar por email", required=false, @OA\Schema(type="string")),
+     
      *     @OA\Parameter(name="from", in="query", description="Fecha de inicio", required=false, @OA\Schema(type="string", format="date")),
      *     @OA\Parameter(name="to", in="query", description="Fecha de fin", required=false, @OA\Schema(type="string", format="date")),
      *     @OA\Response(response=200, description="Lista de Empresas", @OA\JsonContent(ref="#/components/schemas/Company")),

@@ -21,7 +21,7 @@ class StorePersonRequest extends StoreRequest
         return [
             'type_document' => 'required|string|max:50',
             'type_person' => 'required|string|in:individual,business', // Ajustar según opciones válidas
-            'number_document' => 'required|string|max:20|unique:users,number_document,NULL,id,deleted_at,NULL',
+            'number_document' => 'required|string|max:20|unique:people,number_document,NULL,id,deleted_at,NULL',
             'names' => 'required|string|max:255',
             'father_surname' => 'nullable|string|max:255',
             'mother_surname' => 'nullable|string|max:255',
@@ -29,7 +29,7 @@ class StorePersonRequest extends StoreRequest
 
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|regex:/^\d{9,15}$/', // Acepta números de 9 a 15 dígitos
-            'email' => 'nullable|email|max:255|unique:users,email,NULL,id,deleted_at,NULL',
+            'email' => 'nullable|email|max:255|unique:people,email,NULL,id,deleted_at,NULL',
 
             'occupation' => 'nullable|string|max:255',
             'state' => 'required|boolean',
