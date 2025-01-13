@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,7 +12,7 @@ class Station extends Model
         'id',
         'name',
         'type',
-       
+
         'status',
         'server_id',
         'route',
@@ -29,9 +28,9 @@ class Station extends Model
         'deleted_at',
     ];
     const filters = [
-        'name'=> 'like',
-        'type'=> 'like',
-        'status'=> 'like',
+        'name' => 'like',
+        'type' => 'like',
+        'status' => 'like',
         'environment.name' => 'like',
     ];
 
@@ -47,6 +46,6 @@ class Station extends Model
 
     public function environment()
     {
-        return $this->belongsTo(Environment::class,'environment_id');
+        return $this->belongsTo(Environment::class, 'environment_id');
     }
 }

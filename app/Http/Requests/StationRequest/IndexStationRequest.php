@@ -27,11 +27,11 @@ class IndexStationRequest extends IndexRequest
 
             'name' => 'nullable|string',
             'type' => 'nullable|string',
-
+            'descriptioni' => 'nullable|string',
             'status' => 'nullable|string',
 
             'environment$name' => 'nullable|string',
-
+            'environment_id' => 'nullable|string',
         ];
     }
 }

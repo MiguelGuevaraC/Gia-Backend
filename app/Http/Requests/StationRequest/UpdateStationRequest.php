@@ -27,6 +27,7 @@ class UpdateStationRequest extends UpdateRequest
         return [
             'name' => 'sometimes|string|max:255', // Opcional, pero si está presente debe cumplir con las reglas
             'type' => 'sometimes|string|max:255', // Opcional y limitado a 50 caracteres
+            'description' => 'sometimes|string|max:50', // Limitar la longitud del tipo
             'status' => 'sometimes|boolean', // Opcional, pero si está presente debe ser booleano
             'route' => 'sometimes|image|mimes:jpg,jpeg,png,gif|max:2048', // Opcional, archivo debe ser imagen
             'environment_id' => 'sometimes|integer|exists:environments,id', // Opcional, pero debe existir en la tabla 'environments'
@@ -40,6 +41,9 @@ class UpdateStationRequest extends UpdateRequest
             'name.string' => 'El nombre debe ser una cadena de texto.',
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
     
+            'description.string' => 'La Descripción debe ser una cadena de texto.',
+            'description.max' => 'La Descripción no puede tener más de 255 caracteres.',
+
             'type.string' => 'El tipo debe ser una cadena de texto.',
             'type.max' => 'El tipo no puede tener más de 50 caracteres.',
     

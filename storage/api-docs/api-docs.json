@@ -910,6 +910,15 @@
                         }
                     },
                     {
+                        "name": "company_id",
+                        "in": "query",
+                        "description": "Filtrar por id Empresa",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "from",
                         "in": "query",
                         "description": "Fecha de inicio",
@@ -2073,78 +2082,67 @@
                 "operationId": "5c88efc99d0b0e2b1018509e2a68e13f",
                 "parameters": [
                     {
-                        "name": "ruc",
+                        "name": "name",
                         "in": "query",
-                        "description": "Filtrar por ruc de la empresa",
+                        "description": "Filtrar por nombre",
                         "required": false,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "business_name",
+                        "name": "type",
                         "in": "query",
-                        "description": "Filtrar razón social",
+                        "description": "Filtrar por tipo",
                         "required": false,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "address",
+                        "name": "description",
                         "in": "query",
-                        "description": "Filtrar por dirección",
+                        "description": "Filtrar por descripción",
                         "required": false,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "phone",
+                        "name": "status",
                         "in": "query",
-                        "description": "Filtrar por telefono",
+                        "description": "Filtrar por estado",
                         "required": false,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "email",
+                        "name": "environment_id",
                         "in": "query",
-                        "description": "Filtrar por email",
+                        "description": "ID del Ambiente",
                         "required": false,
                         "schema": {
                             "type": "string"
                         }
                     },
                     {
-                        "name": "from",
+                        "name": "environment$name",
                         "in": "query",
-                        "description": "Fecha de inicio",
+                        "description": "Filtrar por nombre del entorno",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "format": "date"
-                        }
-                    },
-                    {
-                        "name": "to",
-                        "in": "query",
-                        "description": "Fecha de fin",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date"
+                            "type": "string"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Lista de Empresas",
+                        "description": "Lista de Entornos",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Station"
+                                    "$ref": "#/components/schemas/Environment"
                                 }
                             }
                         }
@@ -2184,44 +2182,42 @@
                             "schema": {
                                 "required": [
                                     "name",
-                                    "ruc",
-                                    "business_name",
-                                    "status"
+                                    "type",
+                                    "description",
+                                    "status",
+                                    "environment_id"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
+                                        "maxLength": 255,
                                         "example": "Empresa X"
                                     },
-                                    "ruc": {
+                                    "type": {
                                         "type": "string",
-                                        "example": "12345678901"
+                                        "maxLength": 50,
+                                        "example": "Tipo A"
                                     },
-                                    "business_name": {
+                                    "description": {
                                         "type": "string",
-                                        "example": "Razón Social S.A."
-                                    },
-                                    "address": {
-                                        "type": "string",
-                                        "example": "Calle Ficticia 123"
-                                    },
-                                    "phone": {
-                                        "type": "string",
-                                        "example": "987654321"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "example": "contacto@empresa.com"
+                                        "maxLength": 50,
+                                        "example": "Descripción breve"
                                     },
                                     "status": {
+                                        "description": "Estado activo/inactivo",
                                         "type": "boolean",
                                         "example": true
                                     },
                                     "route": {
-                                        "description": "Sube el logo de la empresa",
+                                        "description": "Subir archivo de imagen (jpg, jpeg, png, gif, máx. 2MB)",
                                         "type": "string",
-                                        "format": "uri",
+                                        "format": "binary",
                                         "example": "logo.jpg"
+                                    },
+                                    "environment_id": {
+                                        "description": "ID del entorno asociado",
+                                        "type": "integer",
+                                        "example": 1
                                     }
                                 },
                                 "type": "object"
@@ -2248,7 +2244,7 @@
                                     "properties": {
                                         "error": {
                                             "type": "string",
-                                            "example": "La persona ya tiene un station asociado."
+                                            "example": "Error en los datos enviados."
                                         }
                                     },
                                     "type": "object"
@@ -2343,37 +2339,34 @@
                                 "properties": {
                                     "name": {
                                         "type": "string",
+                                        "maxLength": 255,
                                         "example": "Empresa X"
                                     },
-                                    "ruc": {
+                                    "type": {
                                         "type": "string",
-                                        "example": "12345678901"
+                                        "maxLength": 50,
+                                        "example": "Tipo A"
                                     },
-                                    "business_name": {
+                                    "description": {
                                         "type": "string",
-                                        "example": "Razón Social S.A."
-                                    },
-                                    "address": {
-                                        "type": "string",
-                                        "example": "Calle Ficticia 123"
-                                    },
-                                    "phone": {
-                                        "type": "string",
-                                        "example": "987654321"
-                                    },
-                                    "email": {
-                                        "type": "string",
-                                        "example": "contacto@empresa.com"
+                                        "maxLength": 50,
+                                        "example": "Descripción breve"
                                     },
                                     "status": {
+                                        "description": "Estado activo/inactivo",
                                         "type": "boolean",
                                         "example": true
                                     },
                                     "route": {
-                                        "description": "Sube el logo de la empresa",
+                                        "description": "Subir archivo de imagen actualizado (jpg, jpeg, png, gif, máx. 2MB)",
                                         "type": "string",
-                                        "format": "uri",
+                                        "format": "binary",
                                         "example": "logo_updated.jpg"
+                                    },
+                                    "environment_id": {
+                                        "description": "ID del entorno asociado",
+                                        "type": "integer",
+                                        "example": 1
                                     }
                                 },
                                 "type": "object"
@@ -2400,7 +2393,7 @@
                                     "properties": {
                                         "error": {
                                             "type": "string",
-                                            "example": "La persona ya tiene un station asociado."
+                                            "example": "Error en los datos enviados."
                                         }
                                     },
                                     "type": "object"

@@ -20,24 +20,22 @@ class StationController extends Controller
         $this->stationService = $stationService;
     }
 
-    /**
-     * @OA\Get(
-     *     path="/gia-backend/public/api/station",
-     *     summary="Obtener información con filtros y ordenamiento",
-     *     tags={"Station"},
-     *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="ruc", in="query", description="Filtrar por ruc de la empresa", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="business_name", in="query", description="Filtrar razón social", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="address", in="query", description="Filtrar por dirección", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="phone", in="query", description="Filtrar por telefono", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="email", in="query", description="Filtrar por email", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="station_id", in="query", description="Filtrar por id Ambiente", required=false, @OA\Schema(type="string")),
-     *     @OA\Parameter(name="from", in="query", description="Fecha de inicio", required=false, @OA\Schema(type="string", format="date")),
-     *     @OA\Parameter(name="to", in="query", description="Fecha de fin", required=false, @OA\Schema(type="string", format="date")),
-     *     @OA\Response(response=200, description="Lista de Empresas", @OA\JsonContent(ref="#/components/schemas/Station")),
-     *     @OA\Response(response=422, description="Validación fallida", @OA\JsonContent(type="object", @OA\Property(property="error", type="string")))
-     * )
-     */
+/**
+ * @OA\Get(
+ *     path="/gia-backend/public/api/station",
+ *     summary="Obtener información con filtros y ordenamiento",
+ *     tags={"Station"},
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Parameter(name="name", in="query", description="Filtrar por nombre", required=false, @OA\Schema(type="string")),
+ *     @OA\Parameter(name="type", in="query", description="Filtrar por tipo", required=false, @OA\Schema(type="string")),
+ *     @OA\Parameter(name="description", in="query", description="Filtrar por descripción", required=false, @OA\Schema(type="string")),
+ *     @OA\Parameter(name="status", in="query", description="Filtrar por estado", required=false, @OA\Schema(type="string")),
+ *     @OA\Parameter(name="environment_id", in="query", description="ID del Ambiente", required=false, @OA\Schema(type="string")),
+ *     @OA\Parameter(name="environment$name", in="query", description="Filtrar por nombre del entorno", required=false, @OA\Schema(type="string")),
+ *     @OA\Response(response=200, description="Lista de Entornos", @OA\JsonContent(ref="#/components/schemas/Environment")),
+ *     @OA\Response(response=422, description="Validación fallida", @OA\JsonContent(@OA\Property(property="error", type="string")))
+ * )
+ */
 
     public function index(IndexStationRequest $request)
     {
@@ -89,64 +87,75 @@ class StationController extends Controller
      *             mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 type="object",
-     *                 required={"name", "ruc", "business_name", "status"},
-     *                 @OA\Property(property="name", type="string", example="Empresa X"),
-     *                 @OA\Property(property="ruc", type="string", example="12345678901"),
-     *                 @OA\Property(property="business_name", type="string", example="Razón Social S.A."),
-     *                 @OA\Property(property="address", type="string", example="Calle Ficticia 123"),
-     *                 @OA\Property(property="phone", type="string", example="987654321"),
-     *                 @OA\Property(property="email", type="string", example="contacto@empresa.com"),
-     *                 @OA\Property(property="status", type="boolean", example=true),
-     *                 @OA\Property(property="route", type="string", format="uri", description="Sube el logo de la empresa", example="logo.jpg")
+     *                 required={"name", "type", "description", "status", "environment_id"},
+     *                 @OA\Property(property="name", type="string", maxLength=255, example="Empresa X"),
+     *                 @OA\Property(property="type", type="string", maxLength=50, example="Tipo A"),
+     *                 @OA\Property(property="description", type="string", maxLength=50, example="Descripción breve"),
+     *                 @OA\Property(property="status", type="boolean", example=true, description="Estado activo/inactivo"),
+     *                 @OA\Property(property="route", type="string", format="binary", description="Subir archivo de imagen (jpg, jpeg, png, gif, máx. 2MB)", example="logo.jpg"),
+     *                 @OA\Property(property="environment_id", type="integer", description="ID del entorno asociado", example=1)
      *             )
      *         )
      *     ),
-     *     @OA\Response(response=200, description="Station creado exitosamente", @OA\JsonContent(ref="#/components/schemas/Station")),
-     *     @OA\Response(response=422, description="Error de validación", @OA\JsonContent(@OA\Property(property="error", type="string", example="La persona ya tiene un station asociado.")))
+     *     @OA\Response(
+     *         response=200,
+     *         description="Station creado exitosamente",
+     *         @OA\JsonContent(ref="#/components/schemas/Station")
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación",
+     *         @OA\JsonContent(@OA\Property(property="error", type="string", example="Error en los datos enviados."))
+     *     )
      * )
      */
+
     public function store(StoreStationRequest $request)
     {
         $station = $this->stationService->createStation($request->validated());
         return new StationResource($station);
     }
-
-    /**
-     * @OA\Put(
-     *     path="/gia-backend/public/api/station/{id}",
-     *     summary="Actualizar Station",
-     *     tags={"Station"},
-     *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         description="ID de la empresa que se desea actualizar",
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\MediaType(
-     *             mediaType="multipart/form-data",
-     *             @OA\Schema(
-     *                 type="object",
-     *                 required={},
-     *                 @OA\Property(property="name", type="string", example="Empresa X"),
-     *                 @OA\Property(property="ruc", type="string", example="12345678901"),
-     *                 @OA\Property(property="business_name", type="string", example="Razón Social S.A."),
-     *                 @OA\Property(property="address", type="string", example="Calle Ficticia 123"),
-     *                 @OA\Property(property="phone", type="string", example="987654321"),
-     *                 @OA\Property(property="email", type="string", example="contacto@empresa.com"),
-     *                 @OA\Property(property="status", type="boolean", example=true),
-     *                 @OA\Property(property="route", type="string", format="uri", description="Sube el logo de la empresa", example="logo_updated.jpg")
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(response=200, description="Station actualizado exitosamente", @OA\JsonContent(ref="#/components/schemas/Station")),
-     *     @OA\Response(response=422, description="Error de validación", @OA\JsonContent(@OA\Property(property="error", type="string", example="La persona ya tiene un station asociado.")))
-     * )
-     */
-
+/**
+ * @OA\Put(
+ *     path="/gia-backend/public/api/station/{id}",
+ *     summary="Actualizar Station",
+ *     tags={"Station"},
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Parameter(
+ *         name="id",
+ *         in="path",
+ *         required=true,
+ *         description="ID de la empresa que se desea actualizar",
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\RequestBody(
+ *         required=true,
+ *         @OA\MediaType(
+ *             mediaType="multipart/form-data",
+ *             @OA\Schema(
+ *                 type="object",
+ *                 required={},
+ *                 @OA\Property(property="name", type="string", maxLength=255, example="Empresa X"),
+ *                 @OA\Property(property="type", type="string", maxLength=50, example="Tipo A"),
+ *                 @OA\Property(property="description", type="string", maxLength=50, example="Descripción breve"),
+ *                 @OA\Property(property="status", type="boolean", example=true, description="Estado activo/inactivo"),
+ *                 @OA\Property(property="route", type="string", format="binary", description="Subir archivo de imagen actualizado (jpg, jpeg, png, gif, máx. 2MB)", example="logo_updated.jpg"),
+ *                 @OA\Property(property="environment_id", type="integer", description="ID del entorno asociado", example=1)
+ *             )
+ *         )
+ *     ),
+ *     @OA\Response(
+ *         response=200,
+ *         description="Station actualizado exitosamente",
+ *         @OA\JsonContent(ref="#/components/schemas/Station")
+ *     ),
+ *     @OA\Response(
+ *         response=422,
+ *         description="Error de validación",
+ *         @OA\JsonContent(@OA\Property(property="error", type="string", example="Error en los datos enviados."))
+ *     )
+ * )
+ */
     public function update(UpdateStationRequest $request, $id)
     {
 
