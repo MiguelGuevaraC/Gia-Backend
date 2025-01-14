@@ -21,7 +21,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/user",
+     *     path="/Gia-Backend/public/api/user",
      *     summary="Obtener información con filtros y ordenamiento",
      *     tags={"User"},
      *     security={{"bearerAuth": {}}},
@@ -51,7 +51,7 @@ class UserController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/user/{id}",
+     *     path="/Gia-Backend/public/api/user/{id}",
      *     summary="Obtener detalles de un usuario por ID",
      *     tags={"User"},
      *     security={{"bearerAuth": {}}},
@@ -76,7 +76,7 @@ class UserController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/gia-backend/public/api/user",
+     *     path="/Gia-Backend/public/api/user",
      *     summary="Crear usuario",
      *     tags={"User"},
      *     security={{"bearerAuth": {}}},
@@ -112,7 +112,7 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/gia-backend/public/api/user/{id}",
+     *     path="/Gia-Backend/public/api/user/{id}",
      *     summary="Actualizar usuario",
      *     tags={"User"},
      *     security={{"bearerAuth": {}}},
@@ -165,7 +165,7 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/gia-backend/public/api/user/{id}",
+     *     path="/Gia-Backend/public/api/user/{id}",
      *     summary="Eliminar persona por ID",
      *     tags={"User"},
      *     security={{"bearerAuth": {}}},

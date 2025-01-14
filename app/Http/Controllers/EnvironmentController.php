@@ -18,11 +18,12 @@ class EnvironmentController extends Controller
     public function __construct(EnvironmentService $environmentService)
     {
         $this->environmentService = $environmentService;
-    }
-
+    } 
+    
+ 
 /**
  * @OA\Get(
- *     path="/gia-backend/public/api/environment",
+ *     path="/Gia-Backend/public/api/environment",
  *     summary="Obtener información con filtros y ordenamiento",
  *     tags={"Environment"},
  *     security={{"bearerAuth": {}}},
@@ -53,7 +54,7 @@ class EnvironmentController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/environment/{id}",
+     *     path="/Gia-Backend/public/api/environment/{id}",
      *     summary="Obtener detalles de un environment por ID",
      *     tags={"Environment"},
      *     security={{"bearerAuth": {}}},
@@ -79,7 +80,7 @@ class EnvironmentController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/gia-backend/public/api/environment",
+     *     path="/Gia-Backend/public/api/environment",
      *     summary="Crear Environment",
      *     tags={"Environment"},
      *     security={{"bearerAuth": {}}},
@@ -112,7 +113,7 @@ class EnvironmentController extends Controller
 
 /**
  * @OA\Post(
- *     path="/gia-backend/public/api/environment/{id}",
+ *     path="/Gia-Backend/public/api/environment/{id}",
  *     summary="Actualizar Environment por ID",
  *     tags={"Environment"},
  *     security={{"bearerAuth": {}}},
@@ -156,7 +157,7 @@ class EnvironmentController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/gia-backend/public/api/environment/{id}",
+     *     path="/Gia-Backend/public/api/environment/{id}",
      *     summary="Eliminar environment por ID",
      *     tags={"Environment"},
      *     security={{"bearerAuth": {}}},

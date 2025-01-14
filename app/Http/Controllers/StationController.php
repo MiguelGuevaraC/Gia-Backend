@@ -22,7 +22,7 @@ class StationController extends Controller
 
 /**
  * @OA\Get(
- *     path="/gia-backend/public/api/station",
+ *     path="/Gia-Backend/public/api/station",
  *     summary="Obtener información con filtros y ordenamiento",
  *     tags={"Station"},
  *     security={{"bearerAuth": {}}},
@@ -51,7 +51,7 @@ class StationController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/station/{id}",
+     *     path="/Gia-Backend/public/api/station/{id}",
      *     summary="Obtener detalles de un station por ID",
      *     tags={"Station"},
      *     security={{"bearerAuth": {}}},
@@ -77,7 +77,7 @@ class StationController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/gia-backend/public/api/station",
+     *     path="/Gia-Backend/public/api/station",
      *     summary="Crear station",
      *     tags={"Station"},
      *     security={{"bearerAuth": {}}},
@@ -117,7 +117,7 @@ class StationController extends Controller
     }
 /**
  * @OA\Put(
- *     path="/gia-backend/public/api/station/{id}",
+ *     path="/Gia-Backend/public/api/station/{id}",
  *     summary="Actualizar Station",
  *     tags={"Station"},
  *     security={{"bearerAuth": {}}},
@@ -174,7 +174,7 @@ class StationController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/gia-backend/public/api/station/{id}",
+     *     path="/Gia-Backend/public/api/station/{id}",
      *     summary="Eliminar station por ID",
      *     tags={"Station"},
      *     security={{"bearerAuth": {}}},

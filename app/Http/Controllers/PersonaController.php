@@ -21,7 +21,7 @@ class PersonaController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/person",
+     *     path="/Gia-Backend/public/api/person",
      *     summary="Obtener información con filtros y ordenamiento",
      *     tags={"Person"},
      *     security={{"bearerAuth": {}}},
@@ -51,7 +51,7 @@ class PersonaController extends Controller
 
        /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/person/{id}",
+     *     path="/Gia-Backend/public/api/person/{id}",
      *     summary="Obtener detalles de una persona por ID",
      *     tags={"Person"},
      *     security={{"bearerAuth": {}}},
@@ -76,7 +76,7 @@ class PersonaController extends Controller
  
      /**
       * @OA\Post(
-      *     path="/gia-backend/public/api/person",
+      *     path="/Gia-Backend/public/api/person",
       *     summary="Crear una nueva persona",
       *     tags={"Person"},
       *     security={{"bearerAuth": {}}},
@@ -94,7 +94,7 @@ class PersonaController extends Controller
  
      /**
       * @OA\Put(
-      *     path="/gia-backend/public/api/person/{id}",
+      *     path="/Gia-Backend/public/api/person/{id}",
       *     summary="Actualizar la información de una persona",
       *     tags={"Person"},
       *     security={{"bearerAuth": {}}},
@@ -123,7 +123,7 @@ class PersonaController extends Controller
  
      /**
       * @OA\Delete(
-      *     path="/gia-backend/public/api/person/{id}",
+      *     path="/Gia-Backend/public/api/person/{id}",
       *     summary="Eliminar persona por ID",
       *     tags={"Person"},
       *     security={{"bearerAuth": {}}},

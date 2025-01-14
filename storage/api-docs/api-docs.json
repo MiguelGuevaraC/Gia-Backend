@@ -6,7 +6,7 @@
         "version": "1.0.0"
     },
     "paths": {
-        "/gia-backend/public/api/searchByDni/{dni}": {
+        "/Gia-Backend/public/api/searchByDni/{dni}": {
             "get": {
                 "tags": [
                     "Search"
@@ -112,7 +112,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/searchByRuc/{ruc}": {
+        "/Gia-Backend/public/api/searchByRuc/{ruc}": {
             "get": {
                 "tags": [
                     "Search"
@@ -209,7 +209,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/logout": {
+        "/Gia-Backend/public/api/logout": {
             "get": {
                 "tags": [
                     "Authentication"
@@ -261,7 +261,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/login": {
+        "/Gia-Backend/public/api/login": {
             "post": {
                 "tags": [
                     "Authentication"
@@ -360,7 +360,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/authenticate": {
+        "/Gia-Backend/public/api/authenticate": {
             "get": {
                 "tags": [
                     "Authentication"
@@ -432,7 +432,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/company": {
+        "/Gia-Backend/public/api/company": {
             "get": {
                 "tags": [
                     "Company"
@@ -631,7 +631,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/company/{id}": {
+        "/Gia-Backend/public/api/company/{id}": {
             "get": {
                 "tags": [
                     "Company"
@@ -856,7 +856,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/environment": {
+        "/Gia-Backend/public/api/environment": {
             "get": {
                 "tags": [
                     "Environment"
@@ -1051,7 +1051,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/environment/{id}": {
+        "/Gia-Backend/public/api/environment/{id}": {
             "get": {
                 "tags": [
                     "Environment"
@@ -1285,7 +1285,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/person": {
+        "/Gia-Backend/public/api/person": {
             "get": {
                 "tags": [
                     "Person"
@@ -1435,7 +1435,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/person/{id}": {
+        "/Gia-Backend/public/api/person/{id}": {
             "get": {
                 "tags": [
                     "Person"
@@ -1631,7 +1631,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/rol": {
+        "/Gia-Backend/public/api/rol": {
             "get": {
                 "tags": [
                     "Rol"
@@ -1762,7 +1762,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/rol/{id}": {
+        "/Gia-Backend/public/api/rol/{id}": {
             "get": {
                 "tags": [
                     "Rol"
@@ -1944,7 +1944,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/setAccess/{typeUserId}": {
+        "/Gia-Backend/public/api/setAccess/{typeUserId}": {
             "put": {
                 "tags": [
                     "Rol"
@@ -2073,7 +2073,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/station": {
+        "/Gia-Backend/public/api/station": {
             "get": {
                 "tags": [
                     "Station"
@@ -2260,7 +2260,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/station/{id}": {
+        "/Gia-Backend/public/api/station/{id}": {
             "get": {
                 "tags": [
                     "Station"
@@ -2483,7 +2483,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/user": {
+        "/Gia-Backend/public/api/user": {
             "get": {
                 "tags": [
                     "User"
@@ -2682,7 +2682,7 @@
                 ]
             }
         },
-        "/gia-backend/public/api/user/{id}": {
+        "/Gia-Backend/public/api/user/{id}": {
             "get": {
                 "tags": [
                     "User"

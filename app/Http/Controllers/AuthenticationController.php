@@ -22,7 +22,7 @@ class AuthenticationController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/logout",
+     *     path="/Gia-Backend/public/api/logout",
      *     tags={"Authentication"},
      *     summary="Logout",
      *     description="Log out user.",
@@ -53,7 +53,7 @@ class AuthenticationController extends Controller
     }
     /**
      * @OA\Post(
-     *     path="/gia-backend/public/api/login",
+     *     path="/Gia-Backend/public/api/login",
      *     summary="Login user",
      *     tags={"Authentication"},
      *     description="Authenticate user and generate access token",
@@ -135,7 +135,7 @@ class AuthenticationController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/authenticate",
+     *     path="/Gia-Backend/public/api/authenticate",
      *     summary="Get Profile user",
      *     tags={"Authentication"},
      *     security={{"bearerAuth":{}}},

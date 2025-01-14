@@ -8,7 +8,7 @@ class ApiExternaController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/searchByDni/{dni}",
+     *     path="/Gia-Backend/public/api/searchByDni/{dni}",
      *     tags={"Search"},
      *     summary="Search information by DNI",
      *     description="Search information about a person by their DNI number.",
@@ -84,7 +84,7 @@ class ApiExternaController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/searchByRuc/{ruc}",
+     *     path="/Gia-Backend/public/api/searchByRuc/{ruc}",
      *     tags={"Search"},
      *     summary="Search information by RUC",
      *     description="Search information about a person by their RUC number.",

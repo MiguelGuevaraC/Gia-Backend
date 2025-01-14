@@ -22,7 +22,7 @@ class CompanyController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/company",
+     *     path="/Gia-Backend/public/api/company",
      *     summary="Obtener información con filtros y ordenamiento",
      *     tags={"Company"},
      *     security={{"bearerAuth": {}}},
@@ -53,7 +53,7 @@ class CompanyController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/company/{id}",
+     *     path="/Gia-Backend/public/api/company/{id}",
      *     summary="Obtener detalles de un company por ID",
      *     tags={"Company"},
      *     security={{"bearerAuth": {}}},
@@ -79,7 +79,7 @@ class CompanyController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/gia-backend/public/api/company",
+     *     path="/Gia-Backend/public/api/company",
      *     summary="Crear company",
      *     tags={"Company"},
      *     security={{"bearerAuth": {}}},
@@ -113,7 +113,7 @@ class CompanyController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/gia-backend/public/api/company/{id}",
+     *     path="/Gia-Backend/public/api/company/{id}",
      *     summary="Actualizar Company",
      *     tags={"Company"},
      *     security={{"bearerAuth": {}}},
@@ -165,7 +165,7 @@ class CompanyController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/gia-backend/public/api/company/{id}",
+     *     path="/Gia-Backend/public/api/company/{id}",
      *     summary="Eliminar company por ID",
      *     tags={"Company"},
      *     security={{"bearerAuth": {}}},

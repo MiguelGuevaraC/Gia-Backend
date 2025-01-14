@@ -22,7 +22,7 @@ class RolController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/rol",
+     *     path="/Gia-Backend/public/api/rol",
      *     summary="Obtener información con filtros y ordenamiento",
      *     tags={"Rol"},
      *     security={{"bearerAuth": {}}},
@@ -49,7 +49,7 @@ class RolController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/gia-backend/public/api/rol/{id}",
+     *     path="/Gia-Backend/public/api/rol/{id}",
      *     summary="Obtener detalles de un rol por ID",
      *     tags={"Rol"},
      *     security={{"bearerAuth": {}}},
@@ -75,7 +75,7 @@ class RolController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/gia-backend/public/api/rol",
+     *     path="/Gia-Backend/public/api/rol",
      *     summary="Crear rol",
      *     tags={"Rol"},
      *     security={{"bearerAuth": {}}},
@@ -99,7 +99,7 @@ class RolController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/gia-backend/public/api/rol/{id}",
+     *     path="/Gia-Backend/public/api/rol/{id}",
      *     summary="Actualizar rol",
      *     tags={"Rol"},
      *     security={{"bearerAuth": {}}},
@@ -140,7 +140,7 @@ class RolController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/gia-backend/public/api/rol/{id}",
+     *     path="/Gia-Backend/public/api/rol/{id}",
      *     summary="Eliminar persona por ID",
      *     tags={"Rol"},
      *     security={{"bearerAuth": {}}},
@@ -167,7 +167,7 @@ class RolController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/gia-backend/public/api/setAccess/{typeUserId}",
+     *     path="/Gia-Backend/public/api/setAccess/{typeUserId}",
      *     tags={"Rol"},
      *     summary="Set access to type of User",
      *     description="Set access permissions for a specific type of user.",
