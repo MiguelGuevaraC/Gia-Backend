@@ -23,7 +23,7 @@ class PersonResource extends JsonResource
  *     @OA\Property(property="phone", type="string", example="987654321"),
  *     @OA\Property(property="email", type="string", example="juanperez@example.com"),
  *     @OA\Property(property="occupation", type="string", example="Engineer"),
- *     @OA\Property(property="state", type="boolean", example=true),
+ *     @OA\Property(property="status", type="string", example="Activo"),
  *     @OA\Property(property="server_id", type="integer", example=2),
  *     @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-01T12:00:00Z"),
  *     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-02T12:00:00Z"),
@@ -46,7 +46,7 @@ class PersonResource extends JsonResource
             'phone' => $this->phone,
             'email' => $this->email,
             'occupation' => $this->occupation,
-            'state' => $this->state,
+            'status' => $this->status,
 
         ];
     }

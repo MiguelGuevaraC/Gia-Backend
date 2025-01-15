@@ -38,7 +38,7 @@ class IndexPersonRequest extends IndexRequest
             'email' => 'nullable|string',
 
             'ocupation' => 'nullable|string',
-            'state' => 'nullable|string',
+            'status' => 'nullable|string',
 
         ];
     }

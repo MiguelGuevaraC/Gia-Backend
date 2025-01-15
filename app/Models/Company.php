@@ -17,7 +17,8 @@ class Company extends Model
         'phone',
         'email',
         'route',
- 
+        'status',
+
         'created_at',
         'updated_at',
         'deleted_at',

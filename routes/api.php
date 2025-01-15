@@ -26,7 +26,8 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     require __DIR__ . '/Api/PersonApi.php'; //PERSON
     require __DIR__ . '/Api/UserApi.php'; //USER
     require __DIR__ . '/Api/RolApi.php'; //ROL
-    require __DIR__ . '/Api/EnvironmentApi.php'; //ROL
+    require __DIR__ . '/Api/EnvironmentApi.php'; //ENVIRONMENT
     require __DIR__ . '/Api/StationApi.php'; //ROL
+    require __DIR__ . '/Api/PermissionApi.php'; //PERMISSIONS
 
 });

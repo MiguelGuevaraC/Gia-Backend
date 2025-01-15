@@ -31,7 +31,7 @@ class UsersSeeders extends Seeder
             'email' => "",
 
             'ocupation' => "Administrador",
-            'state' => 1,
+            'status' => "Activo",
       
 
         ]);
@@ -39,6 +39,7 @@ class UsersSeeders extends Seeder
         DB::table('users')->insert([
             'id' => 1, // El ID del usuario
             'name' => 'ADMINISTRADOR', // Nombre del usuario
+            'status' => "Activo",
             'username' => 'admin', // Correo electrónico
             'password' => Hash::make('admingia'), // Contraseña hasheada usando Hash::make
             'rol_id' => 1,

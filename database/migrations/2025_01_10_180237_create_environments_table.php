@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->string('route')->nullable();
-            $table->string('status')->nullable();
+            $table->string('status')->default('Activo')->nullable();
             $table->string('server_id')->nullable();
             $table->foreignId('company_id')->nullable()->unsigned()->constrained('companies');
             $table->softDeletes();

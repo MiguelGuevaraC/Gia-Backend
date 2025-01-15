@@ -32,7 +32,7 @@ class StorePersonRequest extends StoreRequest
             'email' => 'nullable|email|max:255|unique:people,email,NULL,id,deleted_at,NULL',
 
             'ocupation' => 'nullable|string|max:255',
-            'state' => 'required|boolean',
+            'status' => 'required|string',
             'server_id' => 'nullable|integer|exists:servers,id', // Cambiar 'servers' según tu tabla
         ];
 
@@ -80,8 +80,8 @@ class StorePersonRequest extends StoreRequest
             'occupation.string' => 'La ocupación debe ser una cadena de texto.',
             'occupation.max' => 'La ocupación no debe exceder los 255 caracteres.',
 
-            'state.required' => 'El estado es obligatorio.',
-            'state.boolean' => 'El estado debe ser verdadero o falso.',
+            'status.required' => 'El estado es obligatorio.',
+ //           'status.boolean' => 'El estado debe ser verdadero o falso.',
 
             'server_id.integer' => 'El servidor debe ser un número entero.',
             'server_id.exists' => 'El servidor seleccionado no existe.',

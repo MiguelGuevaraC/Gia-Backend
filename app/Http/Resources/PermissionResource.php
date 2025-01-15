@@ -14,6 +14,7 @@ class PermissionResource extends JsonResource
      *     @OA\Property( property="id", type="integer", example="1" ),
      *     @OA\Property( property="name", type="string", example="users" ),
      *     @OA\Property( property="type", type="string", example="Tipo-01" ),
+     *     @OA\Property( property="status", type="string", example="Activo" ),
      *     @OA\Property(property="person_id",type="integer",description="Person Id", example="1"),
 
      * )
@@ -24,6 +25,7 @@ class PermissionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name ?? 'Sin Nombre',
             'type' => $this->type ?? 'Sin Tipo',
+            'status' => $this->status ?? 'Sin Estado',
         ];
     }
 }

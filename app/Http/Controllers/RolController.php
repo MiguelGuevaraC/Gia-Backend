@@ -167,7 +167,7 @@ class RolController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/Gia-Backend/public/api/setAccess/{typeUserId}",
+     *     path="/Gia-Backend/public/api/rol/{typeUserId}/setaccess",
      *     tags={"Rol"},
      *     summary="Set access to type of User",
      *     description="Set access permissions for a specific type of user.",

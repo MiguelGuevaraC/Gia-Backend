@@ -23,7 +23,7 @@ class Person extends Model
         'email',
 
         'occupation',
-        'state',
+        'status',
         'server_id',
 
         'created_at',

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('username')->unique();
             $table->string('password');
- 
+            $table->string('status')->default('Activo')->nullable();
             $table->foreignId('person_id')->nullable()->unsigned()->constrained('people');
             $table->foreignId('rol_id')->nullable()->unsigned()->constrained('rols');
             $table->rememberToken();

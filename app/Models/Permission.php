@@ -13,7 +13,7 @@ class Permission extends Model
         'id',
         'name',
         'type',
-       
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -27,6 +27,7 @@ class Permission extends Model
     const filters = [
         'name' => 'like',
         'type' => 'like',
+        'status' => 'like',
     ];
 
     /**

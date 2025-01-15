@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('route')->nullable();
+            $table->string('status')->default('Activo')->nullable();
 
             $table->softDeletes();
             $table->timestamps();

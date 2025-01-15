@@ -13,7 +13,7 @@
                 ],
                 "summary": "Search information by DNI",
                 "description": "Search information about a person by their DNI number.",
-                "operationId": "e89cd30947f67174513b6eecc3b67c15",
+                "operationId": "f57e452cc1e7bf76e381919978feaee2",
                 "parameters": [
                     {
                         "name": "dni",
@@ -119,7 +119,7 @@
                 ],
                 "summary": "Search information by RUC",
                 "description": "Search information about a person by their RUC number.",
-                "operationId": "5a3423112cb2e5db0ad106daebce9185",
+                "operationId": "9bbc9ff9965577bec2dad63459a4063c",
                 "parameters": [
                     {
                         "name": "ruc",
@@ -216,7 +216,7 @@
                 ],
                 "summary": "Logout",
                 "description": "Log out user.",
-                "operationId": "39082e933a5d086a95bb58e22159328f",
+                "operationId": "097f7415e8f3c899ef5a4cec1fd44e14",
                 "responses": {
                     "200": {
                         "description": "Successful logout"
@@ -268,7 +268,7 @@
                 ],
                 "summary": "Login user",
                 "description": "Authenticate user and generate access token",
-                "operationId": "94fa55469c7f87dcaa0f66e8eb1e8343",
+                "operationId": "631423d189bd40b0ed755b031862f143",
                 "requestBody": {
                     "description": "User credentials",
                     "required": true,
@@ -367,7 +367,7 @@
                 ],
                 "summary": "Get Profile user",
                 "description": "Get user",
-                "operationId": "04dee805bdb9db02cf5f0f0a3b086f9a",
+                "operationId": "b6a51d10689608eabc3c13f9dacba1b4",
                 "responses": {
                     "200": {
                         "description": "User authenticated successfully",
@@ -438,7 +438,7 @@
                     "Company"
                 ],
                 "summary": "Obtener información con filtros y ordenamiento",
-                "operationId": "c91d4921963abe06b6073d853bb3850c",
+                "operationId": "4d9d835746d72824d7f7ff0263659cb1",
                 "parameters": [
                     {
                         "name": "ruc",
@@ -544,7 +544,7 @@
                     "Company"
                 ],
                 "summary": "Crear company",
-                "operationId": "7b7122635f3c5fcc726c063881f15ff9",
+                "operationId": "d3d869bf32f4d577387713ca41dbce79",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -637,7 +637,7 @@
                     "Company"
                 ],
                 "summary": "Obtener detalles de un company por ID",
-                "operationId": "68f4e7836877f2d82706f149f8e29050",
+                "operationId": "568fa125e80eb7f1f01dbf5fcd65deb9",
                 "parameters": [
                     {
                         "name": "id",
@@ -689,7 +689,7 @@
                     "Company"
                 ],
                 "summary": "Actualizar Company",
-                "operationId": "02bcd4af4f5f15f93d4dc1545ed405dd",
+                "operationId": "f230a0818551a5dadda9c3960c790607",
                 "parameters": [
                     {
                         "name": "id",
@@ -786,7 +786,7 @@
                     "Company"
                 ],
                 "summary": "Eliminar company por ID",
-                "operationId": "961ff61ecf7cfae755d585d7debd1e82",
+                "operationId": "adaa48c847dd7b1b90de195bc2703afb",
                 "parameters": [
                     {
                         "name": "id",
@@ -862,7 +862,7 @@
                     "Environment"
                 ],
                 "summary": "Obtener información con filtros y ordenamiento",
-                "operationId": "f41e384d8a3488e9b68367777b12215e",
+                "operationId": "bf53b38fcf68ccedc7188e944364d78a",
                 "parameters": [
                     {
                         "name": "name",
@@ -977,7 +977,7 @@
                     "Environment"
                 ],
                 "summary": "Crear Environment",
-                "operationId": "221a2950959b5fb6c4f63a80b54556c0",
+                "operationId": "c196e77ef872663afb18f44b158157a4",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1057,7 +1057,7 @@
                     "Environment"
                 ],
                 "summary": "Obtener detalles de un environment por ID",
-                "operationId": "f537061dfaa60e3fef86e52e8b7f5ae8",
+                "operationId": "30d9db4271838a5e186d80f9314a1974",
                 "parameters": [
                     {
                         "name": "id",
@@ -1109,7 +1109,7 @@
                     "Environment"
                 ],
                 "summary": "Actualizar Environment por ID",
-                "operationId": "d6cfb4dbe036ed187513639efb8c62e1",
+                "operationId": "cf305c6540521d578f5ae3dfd656eb95",
                 "parameters": [
                     {
                         "name": "id",
@@ -1215,7 +1215,7 @@
                     "Environment"
                 ],
                 "summary": "Eliminar environment por ID",
-                "operationId": "18b82d2975286a6986799d89a37c9ada",
+                "operationId": "a532d8eeee0cd9602f66e7c6e53abd57",
                 "parameters": [
                     {
                         "name": "id",
@@ -1285,13 +1285,157 @@
                 ]
             }
         },
+        "/Gia-Backend/public/api/permission": {
+            "get": {
+                "tags": [
+                    "Permission"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "cf3f9e6009a2acfe5a76d5de7d9c0c85",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtrar por nombre",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Filtrar por tipo",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por estado",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Entornos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Permission"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/permission/{id}": {
+            "get": {
+                "tags": [
+                    "Permission"
+                ],
+                "summary": "Obtener detalles de un permission por ID",
+                "operationId": "fe427488ae48ca8d3776e2c3713f2e9c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la persona",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Permission"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Permission No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Permission No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/Gia-Backend/public/api/person": {
             "get": {
                 "tags": [
                     "Person"
                 ],
                 "summary": "Obtener información con filtros y ordenamiento",
-                "operationId": "08cdc974e4afed28d2147c17b80142ad",
+                "operationId": "b004a92c1c691a92285e22f67cd514ba",
                 "parameters": [
                     {
                         "name": "username",
@@ -1379,7 +1523,7 @@
                     "Person"
                 ],
                 "summary": "Crear una nueva persona",
-                "operationId": "46688aedf959f256780a222341b706c3",
+                "operationId": "0195f250a92b189ba207db211c31852c",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1441,7 +1585,7 @@
                     "Person"
                 ],
                 "summary": "Obtener detalles de una persona por ID",
-                "operationId": "7846ee3a652fb89732751a01d6609960",
+                "operationId": "c4e174da7dc33b932fd511d56b2629a8",
                 "parameters": [
                     {
                         "name": "id",
@@ -1493,7 +1637,7 @@
                     "Person"
                 ],
                 "summary": "Actualizar la información de una persona",
-                "operationId": "0ba2af75d76506764c7f648359a81ebd",
+                "operationId": "55c8f46442100bd3c0823750ddf2597c",
                 "parameters": [
                     {
                         "name": "id",
@@ -1577,7 +1721,7 @@
                     "Person"
                 ],
                 "summary": "Eliminar persona por ID",
-                "operationId": "3c084460a3f77d436ee547800af61164",
+                "operationId": "00d6cb8d34ebfb78b7943158de79f2f1",
                 "parameters": [
                     {
                         "name": "id",
@@ -1637,7 +1781,7 @@
                     "Rol"
                 ],
                 "summary": "Obtener información con filtros y ordenamiento",
-                "operationId": "acf8f52804555e7b1656165a6a64a602",
+                "operationId": "af08015224b8083bf84d3a2e8761ebd7",
                 "parameters": [
                     {
                         "name": "name",
@@ -1707,7 +1851,7 @@
                     "Rol"
                 ],
                 "summary": "Crear rol",
-                "operationId": "f4f6d0d0fb95044a0b83f5c774a13e34",
+                "operationId": "c5ffd5817c312c8bc2c38e91b7ecad2f",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1768,7 +1912,7 @@
                     "Rol"
                 ],
                 "summary": "Obtener detalles de un rol por ID",
-                "operationId": "6a63ac8e332ed4e9efc9ca1d29471eea",
+                "operationId": "f9b783757509b59c91e1b0e56fcff63e",
                 "parameters": [
                     {
                         "name": "id",
@@ -1820,7 +1964,7 @@
                     "Rol"
                 ],
                 "summary": "Actualizar rol",
-                "operationId": "122be68ca718fcd6e9e835615ce2d296",
+                "operationId": "490e73d8bac296d4ae95e5f2660e5d49",
                 "parameters": [
                     {
                         "name": "id",
@@ -1890,7 +2034,7 @@
                     "Rol"
                 ],
                 "summary": "Eliminar persona por ID",
-                "operationId": "b7a50392ed44502399a9929c32be0f69",
+                "operationId": "876b1c35ae403351db263f305ad49c1f",
                 "parameters": [
                     {
                         "name": "id",
@@ -1944,14 +2088,14 @@
                 ]
             }
         },
-        "/Gia-Backend/public/api/setAccess/{typeUserId}": {
+        "/Gia-Backend/public/api/rol/{typeUserId}/setaccess": {
             "put": {
                 "tags": [
                     "Rol"
                 ],
                 "summary": "Set access to type of User",
                 "description": "Set access permissions for a specific type of user.",
-                "operationId": "1cdcdd25df8badf7b8f741532a16c378",
+                "operationId": "f67bc2dfcc870803337217df25ac0687",
                 "parameters": [
                     {
                         "name": "typeUserId",
@@ -2079,7 +2223,7 @@
                     "Station"
                 ],
                 "summary": "Obtener información con filtros y ordenamiento",
-                "operationId": "5c88efc99d0b0e2b1018509e2a68e13f",
+                "operationId": "3f8ac8f91f2868af2d6d4cb55e3610cf",
                 "parameters": [
                     {
                         "name": "name",
@@ -2174,7 +2318,7 @@
                     "Station"
                 ],
                 "summary": "Crear station",
-                "operationId": "13df56e60881f3b85327ccd372a85c19",
+                "operationId": "8c6405515e1791286d4212d37929b822",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2266,7 +2410,7 @@
                     "Station"
                 ],
                 "summary": "Obtener detalles de un station por ID",
-                "operationId": "b9842af4f3187050fbbc75743308e29f",
+                "operationId": "b313b99fe4537106db78ae09dcdfea87",
                 "parameters": [
                     {
                         "name": "id",
@@ -2318,7 +2462,7 @@
                     "Station"
                 ],
                 "summary": "Actualizar Station",
-                "operationId": "ab5f9c111b5cc251aecfd0008fb5b8d8",
+                "operationId": "16a515aef827e354232183cff2fd5fac",
                 "parameters": [
                     {
                         "name": "id",
@@ -2413,7 +2557,7 @@
                     "Station"
                 ],
                 "summary": "Eliminar station por ID",
-                "operationId": "0b6ebed8631d2c9b5ab8a825cfe69dd5",
+                "operationId": "cc6b8a654356c24fbfaf07109bbd303e",
                 "parameters": [
                     {
                         "name": "id",
@@ -2489,7 +2633,7 @@
                     "User"
                 ],
                 "summary": "Obtener información con filtros y ordenamiento",
-                "operationId": "62771dbb43f5f6d4e95c15ac64edbe9e",
+                "operationId": "8c071a9aece4242c66f4fe18b07aa6f7",
                 "parameters": [
                     {
                         "name": "username",
@@ -2577,7 +2721,7 @@
                     "User"
                 ],
                 "summary": "Crear usuario",
-                "operationId": "54f46bc4330fdd5d2203e5fca8b596b6",
+                "operationId": "fb6650e4371711395d059602ddfb6d25",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2688,7 +2832,7 @@
                     "User"
                 ],
                 "summary": "Obtener detalles de un usuario por ID",
-                "operationId": "f852792932825932894dc8db96599e17",
+                "operationId": "e93368012b4c65d35b1aae89a4b535b0",
                 "parameters": [
                     {
                         "name": "id",
@@ -2740,7 +2884,7 @@
                     "User"
                 ],
                 "summary": "Actualizar usuario",
-                "operationId": "b7af2fbacfbf9f6399f601863e21add7",
+                "operationId": "f795686679873f04ab403ff39658fab7",
                 "parameters": [
                     {
                         "name": "id",
@@ -2860,7 +3004,7 @@
                     "User"
                 ],
                 "summary": "Eliminar persona por ID",
-                "operationId": "7a5a4af26f29a52594636aed2e30a2ee",
+                "operationId": "f306ea1caa6d2c1e104b11ae6ce5f561",
                 "parameters": [
                     {
                         "name": "id",
@@ -3006,6 +3150,10 @@
                         "type": "string",
                         "example": "Tipo-01"
                     },
+                    "status": {
+                        "type": "string",
+                        "example": "Activo"
+                    },
                     "person_id": {
                         "description": "Person Id",
                         "type": "integer",
@@ -3099,9 +3247,9 @@
                         "type": "string",
                         "example": "Engineer"
                     },
-                    "state": {
-                        "type": "boolean",
-                        "example": true
+                    "status": {
+                        "type": "string",
+                        "example": "Activo"
                     },
                     "server_id": {
                         "type": "integer",
@@ -3240,6 +3388,10 @@
         {
             "name": "Environment",
             "description": "Environment"
+        },
+        {
+            "name": "Permission",
+            "description": "Permission"
         },
         {
             "name": "Person",
