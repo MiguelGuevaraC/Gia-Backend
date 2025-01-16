@@ -55,8 +55,8 @@ class StationController extends Controller
      *     summary="Obtener detalles de un station por ID",
      *     tags={"Station"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID de la persona", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona encontrada", @OA\JsonContent(ref="#/components/schemas/Station")),
+     *     @OA\Parameter(name="id", in="path", description="ID de la Estación", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Station encontrada", @OA\JsonContent(ref="#/components/schemas/Station")),
      *     @OA\Response(response=404, description="Station No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Station No Encontrado")))
      * )
      */
@@ -178,7 +178,7 @@ class StationController extends Controller
      *     summary="Eliminar station por ID",
      *     tags={"Station"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id",in="path",description="ID de la compañía que se desea eliminar",required=true,@OA\Schema(type="integer", example=1)),
+     *     @OA\Parameter(name="id",in="path",description="ID de la estación que se desea eliminar",required=true,@OA\Schema(type="integer", example=1)),
      *     @OA\Response(response=200,description="Station eliminada exitosamente",@OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Station eliminada exitosamente"))),
      *     @OA\Response(response=404,description="Station No Encontrada",@OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Station No Encontrada"))),
      *     @OA\Response(response=401,description="No autorizado",@OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="No autorizado"))

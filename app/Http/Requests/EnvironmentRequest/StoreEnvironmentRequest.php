@@ -24,7 +24,8 @@ class StoreEnvironmentRequest extends StoreRequest
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
             'status' => 'required|boolean', // Asegurar que sea true o false
             'server_id' => 'nullable|integer', // Validar que exista en la tabla 'servers'
-            'company_id' => 'required|integer|exists:companies,id', // Validar que exista en la tabla 'companies'
+           'company_id' => 'required|integer|exists:companies,id,deleted_at,NULL',
+
         ];
     }
     

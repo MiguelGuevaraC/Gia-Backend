@@ -4,19 +4,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Entry extends Model
+class Reservation extends Model
 {
     use SoftDeletes;
     protected $fillable = [
         'id',
         'correlative',
-        'entry_datetime',
-        'code_pay',
-        'quantity',
-        'status_pay',
-        'status_entry',
+        'name',
+        'reservation_datetime',
+        'nro_people',
+        'status',
         'user_id',
         'event_id',
+        'station_id',
         'person_id',
         'created_at',
         'updated_at',
@@ -29,22 +29,20 @@ class Entry extends Model
         'deleted_at',
     ];
     const filters = [
-        'entry_datetime' => 'between',
-        'code_pay'       => 'like',
-        'quantity'       => '=',
-        'status_pay'     => 'like',
-        'status_entry'   => 'like',
-        'user_id'        => '=',
-        'event_id'       => '=',
-        'person_id'      => '=',
+        'reservation_datetime' => 'between',
+        'nro_people'           => '=',
+        'status'               => '=',
+        'user_id'              => '=',
+        'event_id'             => '=',
+        'person_id'            => '=',
     ];
 
     /**
      * Campos de ordenación disponibles.
      */
     const sorts = [
-        'id'       => 'desc',
-        'code_pay' => 'desc',
+        'id'          => 'desc',
+        'description' => 'desc',
     ];
 
     public function event()
@@ -58,5 +56,9 @@ class Entry extends Model
     public function person()
     {
         return $this->belongsTo(Person::class, 'person_id');
+    }
+    public function station()
+    {
+        return $this->belongsTo(Station::class, 'station_id');
     }
 }

@@ -58,8 +58,8 @@ class EnvironmentController extends Controller
      *     summary="Obtener detalles de un environment por ID",
      *     tags={"Environment"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID de la persona", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona encontrada", @OA\JsonContent(ref="#/components/schemas/Environment")),
+     *     @OA\Parameter(name="id", in="path", description="ID del Environment", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Environment encontrada", @OA\JsonContent(ref="#/components/schemas/Environment")),
      *     @OA\Response(response=404, description="Environment No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Environment No Encontrado")))
      * )
      */
@@ -161,7 +161,7 @@ class EnvironmentController extends Controller
      *     summary="Eliminar environment por ID",
      *     tags={"Environment"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id",in="path",description="ID de la compañía que se desea eliminar",required=true,@OA\Schema(type="integer", example=1)),
+     *     @OA\Parameter(name="id",in="path",description="ID del evento que se desea eliminar",required=true,@OA\Schema(type="integer", example=1)),
      *     @OA\Response(response=200,description="Environment eliminada exitosamente",@OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="Environment eliminada exitosamente"))),
      *     @OA\Response(response=404,description="Environment No Encontrada",@OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Environment No Encontrada"))),
      *     @OA\Response(response=401,description="No autorizado",@OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="No autorizado"))

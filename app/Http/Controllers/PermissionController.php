@@ -51,8 +51,8 @@ class PermissionController extends Controller
      *     summary="Obtener detalles de un permission por ID",
      *     tags={"Permission"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID de la persona", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona encontrada", @OA\JsonContent(ref="#/components/schemas/Permission")),
+     *     @OA\Parameter(name="id", in="path", description="ID de Permission", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Permission encontrada", @OA\JsonContent(ref="#/components/schemas/Permission")),
      *     @OA\Response(response=404, description="Permission No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Permission No Encontrado")))
      * )
      */

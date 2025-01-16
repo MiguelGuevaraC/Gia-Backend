@@ -11,11 +11,22 @@ return new class extends Migration
      *
      * @return void
      */
+
+
     public function up()
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->string('correlative')->nullable();
+            $table->string('name')->nullable();
+            $table->dateTime('event_datetime')->nullable();
+            $table->string('comment')->nullable();
+            $table->string('nro_reservas')->nullable();
+            $table->string('nro_boxes')->nullable();
+            $table->string('status')->default('Próximo')->nullable();
+            $table->foreignId('user_id')->nullable()->unsigned()->constrained('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -24,7 +24,7 @@ class StoreStationRequest extends StoreRequest
             'description' => 'required|string|max:50', // Limitar la longitud del tipo
             'status' => 'required|boolean', // Asegurar que sea true o false
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
-            'environment_id' => 'required|integer|exists:environments,id', // Validar que exista en la tabla 'environments'
+            'environment_id' => 'required|integer|exists:environments,id,deleted_at,NULL', // Validar que exista en la tabla 'environments'
         ];
     }
 

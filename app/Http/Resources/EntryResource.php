@@ -15,7 +15,7 @@ class EntryResource extends JsonResource
      *     @OA\Property(property="code_pay", type="string", example="ABC123", description="Código de pago"),
      *     @OA\Property(property="quantity", type="string", example="10", description="Cantidad asociada al evento"),
      *     @OA\Property(property="status_pay", type="string", example="Pagado", description="Estado del pago"),
-     *     @OA\Property(property="status_entry", type="string", example="Entrada Confirmada", description="Estado de la entrada"),
+     *     @OA\Property(property="status_entry", type="string", example="No Ingresado", description="Estado de la entrada"),
      *     @OA\Property(property="user_id", type="integer", example=42, description="ID del usuario"),
     *      @OA\Property(property="user", ref="#/components/schemas/User"),
      *     @OA\Property(property="person_id", type="integer", example=7, description="ID de la persona"),

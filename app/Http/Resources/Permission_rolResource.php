@@ -28,8 +28,8 @@ class Permission_rolResource extends JsonResource
             'id' => $this->id,
             'name_permission' => $this->name_permission ?? 'Sin Nombre',
             'name_rol' => $this->name_rol ?? 'Sin Nombre',
-            'rol_id' => $this->rol_id,
-            'permission_id' => $this->rol_id,
+            'rol_id' => $this->rol_id ?? 'Sin ID rol',
+            'permission_id' => $this->rol_id ??'Sin ID permiso',
            
          
         ];

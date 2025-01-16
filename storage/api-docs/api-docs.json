@@ -642,7 +642,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la persona",
+                        "description": "ID de la empresa",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -652,7 +652,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "persona encontrada",
+                        "description": "Company encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -825,6 +825,481 @@
                                         "error": {
                                             "type": "string",
                                             "example": "Company No Encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/entry": {
+            "get": {
+                "tags": [
+                    "Entry"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "67d1cdcdf9109c5a80336b9b006f9fe0",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtrar por nombre",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "entry_datetime",
+                        "in": "query",
+                        "description": "Filtrar por fecha de entrada",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "code_pay",
+                        "in": "query",
+                        "description": "Filtrar por código de pago",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "quantity",
+                        "in": "query",
+                        "description": "Filtrar por cantidad",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status_pay",
+                        "in": "query",
+                        "description": "Filtrar por estado de pago",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status_entry",
+                        "in": "query",
+                        "description": "Filtrar por estado de entrada",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "Filtrar por ID de usuario",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "event_id",
+                        "in": "query",
+                        "description": "Filtrar por ID de evento",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "person_id",
+                        "in": "query",
+                        "description": "Filtrar por ID de persona",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Entradas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Entry"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Entry"
+                ],
+                "summary": "Crear Entry",
+                "operationId": "4910d27e4be7233b09ec35a658bac0b4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre del entorno",
+                                        "type": "string"
+                                    },
+                                    "entry_datetime": {
+                                        "description": "Fecha de la entrada (opcional)",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "code_pay": {
+                                        "description": "Código de pago (opcional)",
+                                        "type": "string"
+                                    },
+                                    "quantity": {
+                                        "description": "Cantidad (opcional)",
+                                        "type": "string"
+                                    },
+                                    "status_pay": {
+                                        "description": "Estado del pago",
+                                        "type": "string",
+                                        "example": "Pendiente"
+                                    },
+                                    "status_entry": {
+                                        "description": "Estado de la entrada",
+                                        "type": "string",
+                                        "example": "Activo"
+                                    },
+                                    "event_id": {
+                                        "description": "ID del evento (opcional)",
+                                        "type": "string"
+                                    },
+                                    "person_id": {
+                                        "description": "ID de la persona (opcional)",
+                                        "type": "string"
+                                    },
+                                    "company_id": {
+                                        "description": "ID de la empresa",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Entry creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Entry"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error al crear el entry"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/entry/{id}": {
+            "get": {
+                "tags": [
+                    "Entry"
+                ],
+                "summary": "Obtener detalles de un entry por ID",
+                "operationId": "944856e9a4d5772daaa9c65552eaa0c2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del Entry",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entrada encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Entry"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Entrada No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Entrada No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Entry"
+                ],
+                "summary": "Actualizar Entry",
+                "operationId": "b50c514ea4462af1c7574d2289b0864e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del entry a actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre del entorno",
+                                        "type": "string"
+                                    },
+                                    "entry_datetime": {
+                                        "description": "Fecha de la entrada (opcional)",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "code_pay": {
+                                        "description": "Código de pago (opcional)",
+                                        "type": "string"
+                                    },
+                                    "quantity": {
+                                        "description": "Cantidad (opcional)",
+                                        "type": "string"
+                                    },
+                                    "status_pay": {
+                                        "description": "Estado del pago",
+                                        "type": "string",
+                                        "example": "Pendiente"
+                                    },
+                                    "status_entry": {
+                                        "description": "Estado de la entrada",
+                                        "type": "string",
+                                        "example": "Activo"
+                                    },
+                                    "event_id": {
+                                        "description": "ID del evento (opcional)",
+                                        "type": "string"
+                                    },
+                                    "person_id": {
+                                        "description": "ID de la persona (opcional)",
+                                        "type": "string"
+                                    },
+                                    "company_id": {
+                                        "description": "ID de la empresa",
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Entry actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Entry"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error al actualizar el entry"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Entry"
+                ],
+                "summary": "Eliminar entry por ID",
+                "operationId": "f16536185e6584574ccc8017694a46cf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del evento que se desea eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Entry eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Entry eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Entry No Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Entry No Encontrada"
                                         }
                                     },
                                     "type": "object"
@@ -1062,7 +1537,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la persona",
+                        "description": "ID del Environment",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -1072,7 +1547,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "persona encontrada",
+                        "description": "Environment encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1220,7 +1695,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la compañía que se desea eliminar",
+                        "description": "ID del evento que se desea eliminar",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -1254,6 +1729,449 @@
                                         "error": {
                                             "type": "string",
                                             "example": "Environment No Encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/event": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Obtener eventos con filtros",
+                "operationId": "24f2674aa102c191ce961d639a534c57",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtrar por nombre",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "event_datetime",
+                        "in": "query",
+                        "description": "Fecha y hora del evento (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "comment",
+                        "in": "query",
+                        "description": "Filtrar por comentarios",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 1000
+                        }
+                    },
+                    {
+                        "name": "nro_reservas",
+                        "in": "query",
+                        "description": "Número de reservas (≥ 0)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "nro_boxes",
+                        "in": "query",
+                        "description": "Número de boxes (≥ 0)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Estado del evento",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "ID del usuario",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Eventos obtenidos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Event"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Crear un evento",
+                "operationId": "203d20d0162b2f4def9158c4c5d59808",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "event_datetime"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre del evento",
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "event_datetime": {
+                                        "description": "Fecha y hora del evento (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "comment": {
+                                        "description": "Comentario sobre el evento",
+                                        "type": "string",
+                                        "maxLength": 1000,
+                                        "nullable": true
+                                    },
+                                    "status": {
+                                        "description": "Estado del evento",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Evento creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Event"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error al crear el evento"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/event/{id}": {
+            "get": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Obtener detalles de un event por ID",
+                "operationId": "e8a90acf6a0325e29d87f3f15fc68404",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del evento",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "persona encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Event"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Evento No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Evento No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Editar un evento",
+                "operationId": "f695de39c06b82db3318146038ec2a51",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del evento a editar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "event_datetime"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre del evento",
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "event_datetime": {
+                                        "description": "Fecha y hora del evento (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "comment": {
+                                        "description": "Comentario sobre el evento",
+                                        "type": "string",
+                                        "maxLength": 1000,
+                                        "nullable": true
+                                    },
+                                    "status": {
+                                        "description": "Estado del evento",
+                                        "type": "string",
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Evento actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Event"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error al actualizar el evento"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Evento no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "El evento no existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Event"
+                ],
+                "summary": "Eliminar event por ID",
+                "operationId": "644104909854405198ab8152137cd59d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del evento que se desea eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Event eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Event eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Event No Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Event No Encontrada"
                                         }
                                     },
                                     "type": "object"
@@ -1386,7 +2304,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la persona",
+                        "description": "ID de Permission",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -1396,7 +2314,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "persona encontrada",
+                        "description": "Permission encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1775,6 +2693,506 @@
                 ]
             }
         },
+        "/Gia-Backend/public/api/reservation": {
+            "get": {
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Obtener reservas con filtros",
+                "operationId": "77496f1ea8cd125c814e366219575e81",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtrar por nombre",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "correlative",
+                        "in": "query",
+                        "description": "Filtrar por número correlativo",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "reservation_datetime",
+                        "in": "query",
+                        "description": "Filtrar por fecha y hora de la reservación (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "nro_people",
+                        "in": "query",
+                        "description": "Filtrar por número de personas asociadas a la reservación",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Estado de la reservación",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "Filtrar por ID del usuario que realizó la reservación",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "reserva_id",
+                        "in": "query",
+                        "description": "Filtrar por ID del reservao relacionado",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "station_id",
+                        "in": "query",
+                        "description": "Filtrar por ID de la estación relacionada",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "person_id",
+                        "in": "query",
+                        "description": "Filtrar por ID de la persona asociada a la reservación",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "maxLength": 255
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin (YYYY-MM-DD)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reservas obtenidas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Reservation"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Crear una nueva reservación",
+                "operationId": "40c5a6459399587f069b0bd12924feb6",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "reservation_datetime"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre de la reservación",
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "reservation_datetime": {
+                                        "description": "Fecha y hora de la reservación (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "nro_people": {
+                                        "description": "Número de personas asociadas a la reservación",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "nullable": true
+                                    },
+                                    "status": {
+                                        "description": "Estado de la reservación",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "event_id": {
+                                        "description": "ID del evento relacionado a la reservación",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "nullable": true
+                                    },
+                                    "station_id": {
+                                        "description": "ID de la estación asociada",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "nullable": true
+                                    },
+                                    "person_id": {
+                                        "description": "ID de la persona asociada a la reservación",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reservación creada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reservation"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error al crear la reservación"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/reservation/{id}": {
+            "get": {
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Obtener detalles de un reserva por ID",
+                "operationId": "ef8deba9c98345d8099b315fc81f067c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la reserva",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "reserva encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reservation"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Reservación No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Reservación No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Editar una reservación existente",
+                "operationId": "3def5da48cd2ee2996278a0ddbb69b15",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la reservación a editar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "reservation_datetime"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "description": "Nombre de la reservación",
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "reservation_datetime": {
+                                        "description": "Fecha y hora de la reservación (YYYY-MM-DD)",
+                                        "type": "string",
+                                        "format": "date"
+                                    },
+                                    "nro_people": {
+                                        "description": "Número de personas asociadas a la reservación",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "nullable": true
+                                    },
+                                    "status": {
+                                        "description": "Estado de la reservación",
+                                        "type": "string",
+                                        "nullable": true
+                                    },
+                                    "event_id": {
+                                        "description": "ID del evento relacionado a la reservación",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "nullable": true
+                                    },
+                                    "station_id": {
+                                        "description": "ID de la estación asociada",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "nullable": true
+                                    },
+                                    "person_id": {
+                                        "description": "ID de la persona asociada a la reservación",
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reservación actualizada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Reservation"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Error al actualizar la reservación"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Reservación no encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La reservación no existe"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Reservation"
+                ],
+                "summary": "Eliminar reserva por ID",
+                "operationId": "f368c4a9d94d46753998c259ff03edab",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la reserva que se desea eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reserva eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Reserva eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Reserva No Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Reserva No Encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/Gia-Backend/public/api/rol": {
             "get": {
                 "tags": [
@@ -1917,7 +3335,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la persona",
+                        "description": "ID de Rol",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -1927,7 +3345,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "persona encontrada",
+                        "description": "Rol encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2039,7 +3457,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la persona",
+                        "description": "ID de Rol",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -2049,7 +3467,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "persona eliminada exitosamente",
+                        "description": "Rol eliminado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2415,7 +3833,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la persona",
+                        "description": "ID de la Estación",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -2425,7 +3843,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "persona encontrada",
+                        "description": "Station encontrada",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2562,7 +3980,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la compañía que se desea eliminar",
+                        "description": "ID de la estación que se desea eliminar",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -2837,7 +4255,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la persona",
+                        "description": "ID del Usuario",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -2847,7 +4265,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "persona encontrada",
+                        "description": "Usuario encontrado",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3009,7 +4427,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID de la persona",
+                        "description": "ID de Usuario",
                         "required": true,
                         "schema": {
                             "type": "integer",
@@ -3019,7 +4437,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "persona eliminada exitosamente",
+                        "description": "Usuario eliminado exitosamente",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3127,7 +4545,7 @@
                     "status_entry": {
                         "description": "Estado de la entrada",
                         "type": "string",
-                        "example": "Entrada Confirmada"
+                        "example": "No Ingresado"
                     },
                     "user_id": {
                         "description": "ID del usuario",
@@ -3239,7 +4657,7 @@
                         "example": 42
                     },
                     "user": {
-                        "$ref": "#/components/schemas/User"
+                        "$ref": "#/components/schemas/User1"
                     }
                 },
                 "type": "object"
@@ -3383,6 +4801,75 @@
                 },
                 "type": "object"
             },
+            "Reservation": {
+                "title": "Reservation",
+                "description": "Modelo de reservación",
+                "properties": {
+                    "id": {
+                        "description": "Identificador único de la reservación",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "correlative": {
+                        "description": "Número correlativo de la reservación",
+                        "type": "string",
+                        "example": "RES-001"
+                    },
+                    "name": {
+                        "description": "Nombre asociado a la reservación",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "reservation_datetime": {
+                        "description": "Fecha y hora de la reservación",
+                        "type": "string",
+                        "example": "2025-01-16 14:30:00"
+                    },
+                    "nro_people": {
+                        "description": "Número de personas asociadas a la reservación",
+                        "type": "string",
+                        "example": "4"
+                    },
+                    "status": {
+                        "description": "Estado de la reservación",
+                        "type": "string",
+                        "example": "Confirmado"
+                    },
+                    "user_id": {
+                        "description": "ID del usuario que realizó la reservación",
+                        "type": "integer",
+                        "example": 42
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "person_id": {
+                        "description": "ID de la persona asociada a la reservación",
+                        "type": "integer",
+                        "example": 7
+                    },
+                    "person": {
+                        "$ref": "#/components/schemas/Person"
+                    },
+                    "event_id": {
+                        "description": "ID del evento relacionado a la reservación",
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "event": {
+                        "$ref": "#/components/schemas/Event"
+                    },
+                    "station_id": {
+                        "description": "ID de la estación relacionada a la reservación",
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "station": {
+                        "$ref": "#/components/schemas/Station"
+                    }
+                },
+                "type": "object"
+            },
             "Rol": {
                 "title": "Rol",
                 "description": "Rol model",
@@ -3448,6 +4935,29 @@
                 },
                 "type": "object"
             },
+            "User1": {
+                "title": "User Only",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "miguel@gmail.com"
+                    },
+                    "person_id": {
+                        "description": "Person Id",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "person": {
+                        "$ref": "#/components/schemas/Person"
+                    }
+                },
+                "type": "object"
+            },
             "User": {
                 "title": "User",
                 "description": "User model",
@@ -3467,6 +4977,14 @@
                     },
                     "person": {
                         "$ref": "#/components/schemas/Person"
+                    },
+                    "rol_id": {
+                        "description": "Rol Id",
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "rol": {
+                        "$ref": "#/components/schemas/Rol"
                     }
                 },
                 "type": "object"
@@ -3496,8 +5014,16 @@
             "description": "Company"
         },
         {
+            "name": "Entry",
+            "description": "Entry"
+        },
+        {
             "name": "Environment",
             "description": "Environment"
+        },
+        {
+            "name": "Event",
+            "description": "Event"
         },
         {
             "name": "Permission",
@@ -3506,6 +5032,10 @@
         {
             "name": "Person",
             "description": "Person"
+        },
+        {
+            "name": "Reservation",
+            "description": "Reservation"
         },
         {
             "name": "Rol",

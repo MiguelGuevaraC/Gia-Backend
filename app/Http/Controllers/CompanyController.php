@@ -57,8 +57,8 @@ class CompanyController extends Controller
      *     summary="Obtener detalles de un company por ID",
      *     tags={"Company"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID de la persona", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona encontrada", @OA\JsonContent(ref="#/components/schemas/Company")),
+     *     @OA\Parameter(name="id", in="path", description="ID de la empresa", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Company encontrada", @OA\JsonContent(ref="#/components/schemas/Company")),
      *     @OA\Response(response=404, description="Company No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Company No Encontrado")))
      * )
      */

@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('status')->default('Activo')->nullable();
             $table->string('server_id')->nullable();
             $table->foreignId('company_id')->nullable()->unsigned()->constrained('companies');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

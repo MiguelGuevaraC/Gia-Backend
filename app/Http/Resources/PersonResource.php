@@ -34,19 +34,19 @@ class PersonResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'type_document' => $this->type_document,
-            'type_person' => $this->type_person,
-            'number_document' => $this->number_document,
-            'names' => $this->names,
-            'father_surname' => $this->father_surname,
-            'mother_surname' => $this->mother_surname,
-            'business_name' => $this->business_name,
-            'address' => $this->address,
-            'phone' => $this->phone,
-            'email' => $this->email,
-            'occupation' => $this->occupation,
-            'status' => $this->status,
+            'id' => $this->id?? '',
+            'type_document' => $this->type_document?? 'Sin Tipo Documento',
+            'type_person' => $this->type_person?? 'Sin Tipo Persona',
+            'number_document' => $this->number_document?? 'Sin Numbero Documento',
+            'names' => $this->names?? 'Sin Nombres',
+            'father_surname' => $this->father_surname?? 'Sin Apellido Paterno',
+            'mother_surname' => $this->mother_surname?? 'Sin Apellido Materno',
+            'business_name' => $this->business_name?? 'Sin Razón Social',
+            'address' => $this->address?? 'Sin Dirección',
+            'phone' => $this->phone?? 'Sin Telefono',
+            'email' => $this->email?? 'Sin Email',
+            'occupation' => $this->occupation?? 'Sin Ocupación',
+            'status' => $this->status?? 'Sin Estado',
 
         ];
     }

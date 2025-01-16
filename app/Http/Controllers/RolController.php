@@ -53,8 +53,8 @@ class RolController extends Controller
      *     summary="Obtener detalles de un rol por ID",
      *     tags={"Rol"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID de la persona", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona encontrada", @OA\JsonContent(ref="#/components/schemas/Rol")),
+     *     @OA\Parameter(name="id", in="path", description="ID de Rol", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Rol encontrada", @OA\JsonContent(ref="#/components/schemas/Rol")),
      *     @OA\Response(response=404, description="Rol No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Rol No Encontrado")))
      * )
      */
@@ -144,8 +144,8 @@ class RolController extends Controller
      *     summary="Eliminar persona por ID",
      *     tags={"Rol"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID de la persona", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona eliminada exitosamente", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="persona eliminada exitosamente"))),
+     *     @OA\Parameter(name="id", in="path", description="ID de Rol", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Rol eliminado exitosamente", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="persona eliminada exitosamente"))),
      *     @OA\Response(response=404, description="Rol No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Rol No Encontrado")))
      * )
      */

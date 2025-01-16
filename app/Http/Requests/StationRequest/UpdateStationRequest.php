@@ -30,7 +30,7 @@ class UpdateStationRequest extends UpdateRequest
             'description' => 'sometimes|string|max:50', // Limitar la longitud del tipo
             'status' => 'sometimes|boolean', // Opcional, pero si está presente debe ser booleano
             'route' => 'sometimes|image|mimes:jpg,jpeg,png,gif|max:2048', // Opcional, archivo debe ser imagen
-            'environment_id' => 'sometimes|integer|exists:environments,id', // Opcional, pero debe existir en la tabla 'environments'
+            'environment_id' => 'sometimes|integer|exists:environments,id,deleted_at,NULL', // Opcional, pero debe existir en la tabla 'environments'
         ];
     }
     

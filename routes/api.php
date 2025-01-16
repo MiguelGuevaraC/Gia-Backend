@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
-use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,14 +18,16 @@ Route::post('login', [AuthenticationController::class, 'login']);
 
 Route::group(["middleware" => ["auth:sanctum"]], function () {
 
-    require __DIR__ . '/Api/AuthApi.php';//AUTHENTICATE
-    require __DIR__ . '/Api/SearchApi.php';// SEARCH
-    require __DIR__ . '/Api/CompanyApi.php'; //CLIENTS
-    require __DIR__ . '/Api/PersonApi.php'; //PERSON
-    require __DIR__ . '/Api/UserApi.php'; //USER
-    require __DIR__ . '/Api/RolApi.php'; //ROL
+    require __DIR__ . '/Api/AuthApi.php';        //AUTHENTICATE
+    require __DIR__ . '/Api/SearchApi.php';      // SEARCH
+    require __DIR__ . '/Api/CompanyApi.php';     //CLIENTS
+    require __DIR__ . '/Api/PersonApi.php';      //PERSON
+    require __DIR__ . '/Api/UserApi.php';        //USER
+    require __DIR__ . '/Api/RolApi.php';         //ROL
     require __DIR__ . '/Api/EnvironmentApi.php'; //ENVIRONMENT
-    require __DIR__ . '/Api/StationApi.php'; //ROL
-    require __DIR__ . '/Api/PermissionApi.php'; //PERMISSIONS
-
+    require __DIR__ . '/Api/StationApi.php';     //ROL
+    require __DIR__ . '/Api/PermissionApi.php';  //PERMISSIONS
+    require __DIR__ . '/Api/EventApi.php';       //EVENTS
+    require __DIR__ . '/Api/ReservationApi.php'; //RESERVATIONS
+    require __DIR__ . '/Api/EntryApi.php';       //ENTRY
 });

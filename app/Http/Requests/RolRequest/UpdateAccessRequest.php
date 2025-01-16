@@ -28,7 +28,7 @@ class UpdateAccessRequest extends UpdateRequest
             'access' => [
                 'required',
                 'array',
-                'exists:permissions,id', // Valida que cada ID exista en la tabla permissions
+                'exists:permissions,id,deleted_at,NULL', // Valida que cada ID exista en la tabla permissions
             ],
         ];
     }

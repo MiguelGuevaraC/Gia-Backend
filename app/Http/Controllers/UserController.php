@@ -55,8 +55,8 @@ class UserController extends Controller
      *     summary="Obtener detalles de un usuario por ID",
      *     tags={"User"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID de la persona", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona encontrada", @OA\JsonContent(ref="#/components/schemas/User")),
+     *     @OA\Parameter(name="id", in="path", description="ID del Usuario", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Usuario encontrado", @OA\JsonContent(ref="#/components/schemas/User")),
      *     @OA\Response(response=404, description="Usuario No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Usuario No Encontrado")))
      * )
      */
@@ -169,8 +169,8 @@ class UserController extends Controller
      *     summary="Eliminar persona por ID",
      *     tags={"User"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID de la persona", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona eliminada exitosamente", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="persona eliminada exitosamente"))),
+     *     @OA\Parameter(name="id", in="path", description="ID de Usuario", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(response=200, description="Usuario eliminado exitosamente", @OA\JsonContent(type="object", @OA\Property(property="message", type="string", example="persona eliminada exitosamente"))),
      *     @OA\Response(response=404, description="Usuario No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Usuario No Encontrado")))
      * )
      */

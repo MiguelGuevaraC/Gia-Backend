@@ -11,6 +11,7 @@ class Event extends Model
     use SoftDeletes;
     protected $fillable = [
         'id',
+        'correlative',
         'name',
         'event_datetime',
         'comment',
@@ -18,6 +19,9 @@ class Event extends Model
         'nro_boxes',
         'status',
         'user_id',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
     
     protected $hidden = [

@@ -12,21 +12,25 @@ return new class extends Migration
      * @return void
      */
 
+ 
     public function up()
     {
-        Schema::create('entries', function (Blueprint $table) {
+        Schema::create('reservations', function (Blueprint $table) {
             $table->id();
             $table->string('correlative')->nullable();
-            $table->string('entry_datetime')->nullable();
-            $table->string('code_pay')->nullable();
-            $table->string('quantity')->default("1")->nullable();
-            $table->string('status_pay')->default('Pendiente')->nullable();
-            $table->string('status_entry')->default('No Ingresado')->nullable();
+            $table->string('name')->nullable();
+            $table->string('reservation_datetime')->nullable();
+            
+            $table->string('nro_people')->default("1")->nullable();
+            $table->string('status')->default('Reservado')->nullable();
+          
             $table->foreignId('user_id')->nullable()->unsigned()->constrained('users');
             $table->foreignId('event_id')->nullable()->unsigned()->constrained('events');
+            $table->foreignId('station_id')->nullable()->unsigned()->constrained('stations');
             $table->foreignId('person_id')->nullable()->unsigned()->constrained('people');
-            $table->softDeletes();
+
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -37,6 +41,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('reservervations');
     }
 };
