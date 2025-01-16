@@ -22,7 +22,7 @@ class StoreEnvironmentRequest extends StoreRequest
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000', // Permitir descripciones más largas
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
-            'status' => 'required|boolean', // Asegurar que sea true o false
+            'status' => 'required|string', // Asegurar que sea true o false
             'server_id' => 'nullable|integer', // Validar que exista en la tabla 'servers'
            'company_id' => 'required|integer|exists:companies,id,deleted_at,NULL',
 
