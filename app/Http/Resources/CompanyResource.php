@@ -30,6 +30,7 @@ class CompanyResource extends JsonResource
             'phone' => $this->phone ?? 'Sin Telefono',
             'email' => $this->email ?? 'Sin Correo',
             'route' => $this->route ?? "",
+            'status' => $this->status ?? "Sin estado",
         ];
     }
 

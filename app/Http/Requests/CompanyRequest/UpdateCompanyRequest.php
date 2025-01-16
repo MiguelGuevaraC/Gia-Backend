@@ -59,7 +59,7 @@ class UpdateCompanyRequest extends UpdateRequest
             'email.email' => 'El campo "correo electrónico" debe ser una dirección de correo válida.',
             'email.max' => 'El campo "correo electrónico" no puede tener más de 255 caracteres.',
 
-           // 'status.boolean' => 'El campo "estado" debe ser verdadero o falso.',
+           'status.string' => 'El campo "estado" debe ser una cadena de texto.',
 
             'route.image' => 'El archivo debe ser una imagen.',
             'route.mimes' => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',

@@ -25,6 +25,7 @@ class Rol extends Model
     ];
     const filters = [
         'name' => 'like',
+        'status' => '=',
     ];
 
     /**
