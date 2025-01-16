@@ -3096,6 +3096,66 @@
                 },
                 "type": "object"
             },
+            "Entry": {
+                "title": "Entry",
+                "description": "Entry model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "entry_datetime": {
+                        "description": "Fecha y hora de entrada",
+                        "type": "string",
+                        "example": "2025-01-16 14:30:00"
+                    },
+                    "code_pay": {
+                        "description": "Código de pago",
+                        "type": "string",
+                        "example": "ABC123"
+                    },
+                    "quantity": {
+                        "description": "Cantidad asociada al evento",
+                        "type": "string",
+                        "example": "10"
+                    },
+                    "status_pay": {
+                        "description": "Estado del pago",
+                        "type": "string",
+                        "example": "Pagado"
+                    },
+                    "status_entry": {
+                        "description": "Estado de la entrada",
+                        "type": "string",
+                        "example": "Entrada Confirmada"
+                    },
+                    "user_id": {
+                        "description": "ID del usuario",
+                        "type": "integer",
+                        "example": 42
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "person_id": {
+                        "description": "ID de la persona",
+                        "type": "integer",
+                        "example": 7
+                    },
+                    "person": {
+                        "$ref": "#/components/schemas/Person"
+                    },
+                    "event_id": {
+                        "description": "ID del evento relacionado",
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "event": {
+                        "$ref": "#/components/schemas/Event"
+                    }
+                },
+                "type": "object"
+            },
             "Environment": {
                 "title": "Environment",
                 "description": "Environment model",
@@ -3130,6 +3190,56 @@
                     },
                     "company": {
                         "$ref": "#/components/schemas/Company"
+                    }
+                },
+                "type": "object"
+            },
+            "Event": {
+                "title": "Event",
+                "description": "Event model",
+                "properties": {
+                    "id": {
+                        "description": "ID del evento",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre del evento",
+                        "type": "string",
+                        "example": "Evento Deportivo"
+                    },
+                    "event_datetime": {
+                        "description": "Fecha y hora del evento",
+                        "type": "string",
+                        "example": "2025-01-16 18:00:00"
+                    },
+                    "comment": {
+                        "description": "Comentario del evento",
+                        "type": "string",
+                        "example": "Evento importante del año"
+                    },
+                    "nro_reservas": {
+                        "description": "Número de reservas asociadas al evento",
+                        "type": "string",
+                        "example": "5"
+                    },
+                    "nro_boxes": {
+                        "description": "Número de boxes reservados para el evento",
+                        "type": "string",
+                        "example": "3"
+                    },
+                    "status": {
+                        "description": "Estado del evento",
+                        "type": "string",
+                        "example": "Activo"
+                    },
+                    "user_id": {
+                        "description": "ID del usuario asociado",
+                        "type": "integer",
+                        "example": 42
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
                     }
                 },
                 "type": "object"
