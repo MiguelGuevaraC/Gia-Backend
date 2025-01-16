@@ -31,9 +31,10 @@ class CompanyService
 
     public function updateCompany(Company $company, array $data): Company
     {
+        $ruta="https://develop.garzasoft.com/Gia-Backend/public";
         if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
             if ($company->route) {
-                $publicPath = env('APP_URL') . '/storage/';
+                $publicPath = $ruta . '/storage/';
                 $relativePath = str_replace($publicPath, '', $company->route);
                 Storage::disk('public')->delete($relativePath);
             }
@@ -41,7 +42,7 @@ class CompanyService
             $extension = $data['route']->getClientOriginalExtension();
             $fileName = "{$company->id}_{$timestamp}.{$extension}";
             $filePath = $data['route']->storeAs('companies', $fileName, 'public');
-            $data['route'] = env('APP_URL') . Storage::url($filePath);
+            $data['route'] = $ruta . Storage::url($filePath);
         }
         $company->update($data);
         return $company;
