@@ -17,13 +17,13 @@ class CompanyService
     public function createCompany(array $data): Company
     {
         $company = Company::create($data);
-    
+        $ruta="https://develop.garzasoft.com/Gia-Backend/public";
          if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
             $timestamp = now()->format('Ymd_His');
             $extension = $data['route']->getClientOriginalExtension();
             $fileName = "{$company->id}_{$timestamp}.{$extension}";
             $filePath = $data['route']->storeAs('companies', $fileName, 'public');
-            $company->update(['route' => Storage::url($filePath)]);
+            $company->update(['route' => $ruta.Storage::url($filePath)]);
         }
     
         return $company;

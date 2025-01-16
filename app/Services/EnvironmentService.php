@@ -15,13 +15,13 @@ class EnvironmentService
     public function createEnvironment(array $data): Environment
     {
         $environment = Environment::create($data);
-
+        $ruta="https://develop.garzasoft.com/Gia-Backend/public";
         if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
             $timestamp = now()->format('Ymd_His');
             $extension = $data['route']->getClientOriginalExtension();
             $fileName = "{$environment->id}_{$timestamp}.{$extension}";
             $filePath = $data['route']->storeAs('companies', $fileName, 'public');
-            $environment->update(['route' => Storage::url($filePath)]);
+            $environment->update(['route' => $ruta.Storage::url($filePath)]);
         }
         return $environment;
     }
