@@ -29,6 +29,7 @@ class IndexCompanyRequest extends IndexRequest
             'address' => 'nullable|string',
             'phone' => 'nullable|string',
             'email' => 'nullable|string',
+            'status' => 'nullable|string',
         ];
     }
 }

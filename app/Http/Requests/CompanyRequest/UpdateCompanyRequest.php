@@ -33,7 +33,7 @@ class UpdateCompanyRequest extends UpdateRequest
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:15', // Limitar a un tamaño más razonable para números de teléfono
             'email' => 'nullable|email|max:255', // Validar que sea un correo válido
-            'status' => 'nullable|boolean', // Asegurarse de que sea true o false
+            'status' => 'nullable|string', // Asegurarse de que sea true o false
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
         ];
     }
@@ -59,7 +59,7 @@ class UpdateCompanyRequest extends UpdateRequest
             'email.email' => 'El campo "correo electrónico" debe ser una dirección de correo válida.',
             'email.max' => 'El campo "correo electrónico" no puede tener más de 255 caracteres.',
 
-            'status.boolean' => 'El campo "estado" debe ser verdadero o falso.',
+           // 'status.boolean' => 'El campo "estado" debe ser verdadero o falso.',
 
             'route.image' => 'El archivo debe ser una imagen.',
             'route.mimes' => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',
