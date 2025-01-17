@@ -27,7 +27,7 @@ class UsersSeeders extends Seeder
             'business_name' => "",
 
             'address' => "",
-            'phone' => "",
+            'phone' => "999999999",
             'email' => "",
 
             'ocupation' => "Administrador",

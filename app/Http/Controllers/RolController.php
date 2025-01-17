@@ -127,6 +127,11 @@ class RolController extends Controller
 
         $validatedData = $request->validated();
 
+        if($id==1){
+            return response()->json([
+                'message' => 'Este Rol No puede ser Editado',
+            ], 422);
+        }
         $rol = $this->rolService->getRolById($id);
         if (!$rol) {
             return response()->json([
@@ -152,6 +157,11 @@ class RolController extends Controller
 
     public function destroy($id)
     {
+        if($id==1){
+            return response()->json([
+                'message' => 'Este Rol No puede ser Eliminado',
+            ], 422);
+        }
         $deleted = $this->rolService->destroyById($id);
 
         if (!$deleted) {

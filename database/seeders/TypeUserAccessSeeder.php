@@ -32,5 +32,19 @@ class TypeUserAccessSeeder extends Seeder
                 ]
             );
         }
+        $role= Rol::create(['name' => 'Administrador Gia']);
+
+        foreach ($validPermissions as $permission_id) {
+            $permission= Permission::find($permission_id);
+            Permission_rol::Create(
+                [
+                    'name_permission' => $permission->name,
+                    'name_rol' => $role->name,
+                    'type' => $role->type,
+                    'rol_id' => $role->id,
+                    'permission_id' => $permission->id,
+                ]
+            );
+        }
     }
 }

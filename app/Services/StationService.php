@@ -1,13 +1,17 @@
 <?php
 namespace App\Services;
 
-use App\Http\Resources\StationResource;
 use App\Models\Station;
-use Illuminate\Support\Facades\Http;
 
 class StationService
 {
 
+    protected $commonService;
+
+    public function __construct(CommonService $commonService)
+    {
+        $this->commonService = $commonService;
+    }
     public function getStationById(int $id): ?Station
     {
         return Station::find($id);
@@ -15,11 +19,14 @@ class StationService
 
     public function createStation(array $data): Station
     {
-        return Station::create($data);
+        $station        = Station::create($data);
+        $this->commonService->store_photo($data, $station, 'stations');
+        return $station;
     }
 
     public function updateStation($Station, array $data)
     {
+        $data['route'] = $this->commonService->update_photo($data, $Station, 'stations');
         $Station->update($data);
         return $Station;
     }
@@ -28,13 +35,10 @@ class StationService
     {
         $Station = Station::find($id);
 
-        if (!$Station) {
+        if (! $Station) {
             return false;
         }
         return $Station->delete(); // Devuelve true si la eliminación fue exitosa
     }
-
-   
-    
 
 }

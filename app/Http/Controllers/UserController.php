@@ -151,7 +151,11 @@ class UserController extends Controller
     {
 
         $validatedData = $request->validated();
-
+        if($id==1){
+            return response()->json([
+                'message' => 'Este Usuario No puede ser Editado',
+            ], 422);
+        }
         $user = $this->userService->getUserById($id);
         if (!$user) {
             return response()->json([
@@ -177,6 +181,11 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        if($id==1){
+            return response()->json([
+                'message' => 'Este Usuario No puede ser Eliminado',
+            ], 422);
+        }
         $deleted = $this->userService->destroyById($id);
 
         if (!$deleted) {

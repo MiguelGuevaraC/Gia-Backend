@@ -26,11 +26,6 @@ class RolService
 
     public function destroyById($id)
     {
-        // Lista de IDs que no pueden ser eliminados
-        if (in_array($id, [1, 2])) {
-            return false; //
-        }
-
         // Encuentra y elimina el registro si existe
         return Rol::find($id)?->delete() ?? false;
     }

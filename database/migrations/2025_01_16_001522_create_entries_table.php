@@ -11,7 +11,6 @@ return new class extends Migration
      *
      * @return void
      */
-
     public function up()
     {
         Schema::create('entries', function (Blueprint $table) {
@@ -37,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('events');
+        Schema::dropIfExists('entries');
     }
 };

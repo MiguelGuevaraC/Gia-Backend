@@ -40,6 +40,9 @@ class CompanyService
         if (! $company) {
             return false;
         }
+        if ($company->environments()->exists()) {
+            return 'No se puede eliminar porque tiene Ambientes relacionados.';
+        }
         return $company->delete(); // Devuelve true si la eliminación fue exitosa
     }
 

@@ -46,4 +46,10 @@ class Company extends Model
         'names' => 'desc',
 
     ];
+
+    public function environments()
+    {
+        return $this->hasMany(Environment::class, 'environment_id');
+    }
+
 }
