@@ -22,8 +22,8 @@ class StoreStationRequest extends StoreRequest
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:50', // Limitar la longitud del tipo
             'description' => 'nullable|string|max:50', // Limitar la longitud del tipo
-            'status' => 'required|string', // Asegurar que sea true o false
-            'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
+            'status' => 'nullable|string', // Asegurar que sea true o false
+
             'environment_id' => 'required|integer|exists:environments,id,deleted_at,NULL', // Validar que exista en la tabla 'environments'
         ];
     }
@@ -43,11 +43,7 @@ class StoreStationRequest extends StoreRequest
             'type.max' => 'El tipo no puede tener más de 50 caracteres.',
 
             'status.required' => 'El estado es obligatorio.',
-            'status.boolean' => 'El estado debe ser verdadero o falso.',
-
-            'route.image' => 'El archivo debe ser una imagen.',
-            'route.mimes' => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',
-            'route.max' => 'El archivo no puede ser mayor a 2 MB.',
+            'status.string' => 'El estado debe ser una cadena.',
 
             'environment_id.required' => 'El ambiente es obligatorio.',
             'environment_id.integer' => 'El identificador del ambiente debe ser un número entero.',

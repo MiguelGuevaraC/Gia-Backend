@@ -51,7 +51,6 @@ class StoreCompanyRequest extends StoreRequest
             'email.max' => 'El campo "correo electrónico" no puede tener más de 255 caracteres.',
 
             'status.required' => 'El campo "estado" es obligatorio.',
-          //  'status.boolean' => 'El campo "estado" debe ser verdadero o falso.',
 
             'route.image' => 'El archivo debe ser una imagen.',
             'route.mimes' => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',

@@ -46,7 +46,7 @@ class StoreEnvironmentRequest extends StoreRequest
             'route.max' => 'El archivo no puede ser mayor a 2 MB.',
     
             'status.required' => 'El estado es obligatorio.',
-            'status.boolean' => 'El estado debe ser verdadero o falso.',
+            'status.string' => 'El estado debe ser una cadena.',
     
             'server_id.integer' => 'El identificador del servidor debe ser un número entero.',
 

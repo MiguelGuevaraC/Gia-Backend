@@ -36,8 +36,9 @@ class CommonService
             $extension = $data['route']->getClientOriginalExtension();
             $fileName  = "{$object->id}_{$timestamp}.{$extension}";
             $filePath  = $data['route']->storeAs($name_folder, $fileName, 'public');
+            $ruta= $ruta . Storage::url($filePath);
         }
-        return $ruta . Storage::url($filePath);
+        return $ruta;
     }
     
      

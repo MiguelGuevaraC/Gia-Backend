@@ -28,7 +28,7 @@ class UpdateStationRequest extends UpdateRequest
             'name' => 'sometimes|string|max:255', // Opcional, pero si está presente debe cumplir con las reglas
             'type' => 'sometimes|string|max:255', // Opcional y limitado a 50 caracteres
             'description' => 'sometimes|string|max:50', // Limitar la longitud del tipo
-            'status' => 'sometimes|boolean', // Opcional, pero si está presente debe ser booleano
+            'status' => 'sometimes|string', // Opcional
             'route' => 'sometimes|image|mimes:jpg,jpeg,png,gif|max:2048', // Opcional, archivo debe ser imagen
             'environment_id' => 'sometimes|integer|exists:environments,id,deleted_at,NULL', // Opcional, pero debe existir en la tabla 'environments'
         ];
@@ -47,7 +47,7 @@ class UpdateStationRequest extends UpdateRequest
             'type.string' => 'El tipo debe ser una cadena de texto.',
             'type.max' => 'El tipo no puede tener más de 50 caracteres.',
     
-            'status.boolean' => 'El estado debe ser verdadero o falso.',
+            'status.string' => 'El estado debe ser una cadena.',
     
             'route.image' => 'El archivo debe ser una imagen.',
             'route.mimes' => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',
