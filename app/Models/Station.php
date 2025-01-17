@@ -11,6 +11,7 @@ class Station extends Model
     protected $fillable = [
         'id',
         'name',
+        'description',
         'type',
 
         'status',
@@ -32,6 +33,7 @@ class Station extends Model
         'type' => 'like',
         'status' => 'like',
         'environment.name' => 'like',
+        'environment_id' => '=',
     ];
 
     /**

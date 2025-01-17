@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('type')->nullable();
+            $table->string('description')->nullable();
 
             $table->string('status')->default('Activo')->nullable();
             $table->string('server_id')->nullable();

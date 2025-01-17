@@ -21,7 +21,7 @@ class StoreStationRequest extends StoreRequest
         return [
             'name' => 'required|string|max:255',
             'type' => 'required|string|max:50', // Limitar la longitud del tipo
-            'description' => 'required|string|max:50', // Limitar la longitud del tipo
+            'description' => 'nullable|string|max:50', // Limitar la longitud del tipo
             'status' => 'required|string', // Asegurar que sea true o false
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
             'environment_id' => 'required|integer|exists:environments,id,deleted_at,NULL', // Validar que exista en la tabla 'environments'
@@ -35,7 +35,6 @@ class StoreStationRequest extends StoreRequest
             'name.string' => 'El nombre debe ser una cadena de texto.',
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
 
-            'description.required' => 'La Descripción es obligatorio.',
             'description.string' => 'La Descripción debe ser una cadena de texto.',
             'description.max' => 'La Descripción no puede tener más de 255 caracteres.',
 

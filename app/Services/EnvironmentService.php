@@ -6,7 +6,12 @@ use Illuminate\Support\Facades\Storage;
 
 class EnvironmentService
 {
+    protected $commonService;
 
+    public function __construct(CommonService $commonService)
+    {
+        $this->commonService = $commonService;
+    }
     public function getEnvironmentById(int $id): ?Environment
     {
         return Environment::find($id);
@@ -15,31 +20,14 @@ class EnvironmentService
     public function createEnvironment(array $data): Environment
     {
         $environment = Environment::create($data);
-        $ruta="https://develop.garzasoft.com/Gia-Backend/public";
-        if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
-            $timestamp = now()->format('Ymd_His');
-            $extension = $data['route']->getClientOriginalExtension();
-            $fileName = "{$environment->id}_{$timestamp}.{$extension}";
-            $filePath = $data['route']->storeAs('companies', $fileName, 'public');
-            $environment->update(['route' => $ruta.Storage::url($filePath)]);
-        }
+        $this->commonService->store_photo($data, $environment, 'environments');
+
         return $environment;
     }
 
     public function updateEnvironment(Environment $environment, array $data): Environment
     {
-        $ruta="https://develop.garzasoft.com/Gia-Backend/public";
-        if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
-            $publicPath = $ruta . '/storage/';
-            $relativePath = str_replace($publicPath, '', $environment->route);
-            Storage::disk('public')->delete($relativePath);
-            $timestamp = now()->format('Ymd_His');
-            $extension = $data['route']->getClientOriginalExtension();
-            $fileName = "{$environment->id}_{$timestamp}.{$extension}";
-            $filePath = $data['route']->storeAs('environments', $fileName, 'public');
-            $data['route'] = $ruta . Storage::url($filePath);
-        }
-
+        $data['route'] = $this->commonService->update_photo($data, $environment, 'environments');
         $environment->update($data);
 
         return $environment;

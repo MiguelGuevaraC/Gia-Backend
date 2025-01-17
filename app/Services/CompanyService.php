@@ -1,13 +1,17 @@
 <?php
 namespace App\Services;
 
-use App\Http\Resources\CompanyResource;
 use App\Models\Company;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 
 class CompanyService
 {
+
+    protected $commonService;
+
+    public function __construct(CommonService $commonService)
+    {
+        $this->commonService = $commonService;
+    }
 
     public function getCompanyById(int $id): ?Company
     {
@@ -17,49 +21,26 @@ class CompanyService
     public function createCompany(array $data): Company
     {
         $company = Company::create($data);
-        $ruta="https://develop.garzasoft.com/Gia-Backend/public";
-         if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
-            $timestamp = now()->format('Ymd_His');
-            $extension = $data['route']->getClientOriginalExtension();
-            $fileName = "{$company->id}_{$timestamp}.{$extension}";
-            $filePath = $data['route']->storeAs('companies', $fileName, 'public');
-            $company->update(['route' => $ruta.Storage::url($filePath)]);
-        }
-    
+        $this->commonService->store_photo($data, $company, 'companies');
         return $company;
     }
 
     public function updateCompany(Company $company, array $data): Company
     {
-        $ruta="https://develop.garzasoft.com/Gia-Backend/public";
-        if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
-            if ($company->route) {
-                $publicPath = $ruta . '/storage/';
-                $relativePath = str_replace($publicPath, '', $company->route);
-                Storage::disk('public')->delete($relativePath);
-            }
-            $timestamp = now()->format('Ymd_His');
-            $extension = $data['route']->getClientOriginalExtension();
-            $fileName = "{$company->id}_{$timestamp}.{$extension}";
-            $filePath = $data['route']->storeAs('companies', $fileName, 'public');
-            $data['route'] = $ruta . Storage::url($filePath);
-        }
+
+        $data['route'] = $this->commonService->update_photo($data, $company, 'companies');
         $company->update($data);
         return $company;
     }
-    
 
     public function destroyById($id)
     {
         $company = Company::find($id);
 
-        if (!$company) {
+        if (! $company) {
             return false;
         }
         return $company->delete(); // Devuelve true si la eliminación fue exitosa
     }
-
-   
-    
 
 }

@@ -13,6 +13,7 @@ class StationResource extends JsonResource
      *     description="Station model",
      *     @OA\Property(property="id", type="integer", example=1),
      *     @OA\Property(property="name", type="string", example="Station A"),
+     *     @OA\Property(property="description", type="string", example="Description"),
      *     @OA\Property(property="type", type="string", example="Monitoring"),
      *     @OA\Property(property="status", type="boolean", example=true),
      *     @OA\Property(property="server_id", type="integer", example=15),
@@ -26,6 +27,7 @@ class StationResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name ?? 'Sin Nombre',
+            'description' => $this->description ?? 'Sin Descripción',
             'type' => $this->type ?? 'Sin Tipo',
             'status' => $this->status ?? 'Sin Estado',
             'server_id' => $this->server_id,
