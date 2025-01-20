@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Requests\RolRequest;
 
 use App\Http\Requests\UpdateRequest;
@@ -31,6 +30,7 @@ class UpdateRolRequest extends UpdateRequest
                 'required',
                 'string',
                 'max:255',
+                'regex:/^\d+$/',
                 Rule::unique('rols')->whereNull('deleted_at')->ignore($id), // Ignora el ID del registro actual
             ],
         ];
@@ -40,9 +40,10 @@ class UpdateRolRequest extends UpdateRequest
     {
         return [
             'name.required' => 'El campo "nombre" es obligatorio.',
-            'name.string' => 'El campo "nombre" debe ser una cadena de texto.',
-            'name.max' => 'El campo "nombre" no puede tener más de 255 caracteres.',
-            'name.unique' => 'El campo nombre ya ha sido registrado.', // Mensaje si ya existe el nombre
+            'name.string'   => 'El campo "nombre" debe ser una cadena de texto.',
+            'name.max'      => 'El campo "nombre" no puede tener más de 255 caracteres.',
+            'name.unique'   => 'El campo nombre ya ha sido registrado.', // Mensaje si ya existe el nombre
+            'name.regex'    => 'El campo : Nombre solo debe contener números.',
         ];
     }
 

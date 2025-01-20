@@ -24,7 +24,7 @@ class IndexUserRequest extends IndexRequest
     public function rules(): array
     {
         return [
-
+            'name' => 'nullable|string',
             'username' => 'nullable|string',
             'person$names' => 'nullable|string',
             'person$business_name' => 'nullable|string',

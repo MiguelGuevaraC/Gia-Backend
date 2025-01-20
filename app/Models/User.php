@@ -49,6 +49,7 @@ class User extends Authenticatable
 
     const filters = [
         'username' => 'like',
+        'name' => 'like',
         'person.name' => 'like',
         'person.business_name' => 'like',
     ];

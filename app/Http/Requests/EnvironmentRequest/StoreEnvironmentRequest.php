@@ -19,7 +19,7 @@ class StoreEnvironmentRequest extends StoreRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|regex:/^\d+$/',
             'description' => 'nullable|string|max:1000', // Permitir descripciones más largas
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
             'status' => 'required|string', // Asegurar que sea true o false
@@ -37,7 +37,8 @@ class StoreEnvironmentRequest extends StoreRequest
             'name.required' => 'El nombre es obligatorio.',
             'name.string' => 'El nombre debe ser una cadena de texto.',
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
-    
+            'name.regex'      => 'El campo : Nombre solo debe contener números.',
+            
             'description.string' => 'La descripción debe ser una cadena de texto.',
             'description.max' => 'La descripción no puede tener más de 1000 caracteres.',
     

@@ -25,7 +25,8 @@ class UserController extends Controller
      *     summary="Obtener información con filtros y ordenamiento",
      *     tags={"User"},
      *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="username", in="query", description="Filtrar por nombre de la categoria", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="username", in="query", description="Filtrar por username", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="name", in="query", description="Filtrar por nombre de usuario", required=false, @OA\Schema(type="string")),
      *     @OA\Parameter(name="person.name", in="query", description="Filtrar por nombre de la persona", required=false, @OA\Schema(type="string")),
      *     @OA\Parameter(name="person.business_name", in="query", description="Filtrar por nombre de la empresa", required=false, @OA\Schema(type="string")),
 

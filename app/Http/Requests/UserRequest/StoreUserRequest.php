@@ -43,7 +43,7 @@ class StoreUserRequest extends StoreRequest
             'business_name' => 'nullable|string|max:255',
     
             'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:15|regex:/^\+?[0-9\s\-]+$/',
+            'phone' => 'nullable|string|max:9|regex:/^\+?[0-9\s\-]+$/',
             'email' => 'nullable|string|max:255|email',
     
             'number_document' => [
@@ -88,7 +88,7 @@ class StoreUserRequest extends StoreRequest
             'address.string' => 'El campo "Dirección" debe ser un texto válido.',
             'address.max' => 'El campo "Dirección" no debe exceder los 255 caracteres.',
             'phone.string' => 'El campo "Teléfono" debe ser un texto válido.',
-            'phone.max' => 'El campo "Teléfono" no debe exceder los 15 caracteres.',
+            'phone.max' => 'El campo "Teléfono" no debe exceder los 9 caracteres.',
             'phone.regex' => 'El campo "Teléfono" debe contener solo números, espacios, guiones o un prefijo "+" válido.',
             'number_document.required' => 'El número de documento es obligatorio.',
             'number_document.exists' => 'El número de documento proporcionado no existe o está inactivo.',
