@@ -49,7 +49,7 @@ class Company extends Model
 
     public function environments()
     {
-        return $this->hasMany(Environment::class, 'environment_id');
+        return $this->hasMany(Environment::class);
     }
 
 }

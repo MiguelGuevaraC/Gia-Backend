@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rols', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique()->nullable();
+            $table->string('name')->nullable();
             $table->string('status')->default('Activo')->nullable();
             
             $table->timestamps();

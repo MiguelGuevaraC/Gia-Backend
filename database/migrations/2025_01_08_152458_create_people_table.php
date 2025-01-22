@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id(); // Genera una columna 'id' autoincremental
             $table->string('type_document')->nullable(); // Tipo de documento, puede ser nulo
             $table->string('type_person')->nullable(); // Tipo de Persona
-            $table->string('number_document')->unique(); // Número de documento, debe ser único
+            $table->string('number_document'); // Número de documento, debe ser único
             $table->string('names')->nullable(); // Nombres
             $table->string('father_surname')->nullable(); // Apellido del padre
             $table->string('mother_surname')->nullable(); // Apellido de la madre
