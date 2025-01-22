@@ -30,7 +30,7 @@ class UpdateRolRequest extends UpdateRequest
                 'required',
                 'string',
                 'max:255',
-                'regex:/^\d+$/',
+                'regex:/^(?=.*[a-zA-Z]).+$/',
                 Rule::unique('rols')->whereNull('deleted_at')->ignore($id), // Ignora el ID del registro actual
             ],
         ];

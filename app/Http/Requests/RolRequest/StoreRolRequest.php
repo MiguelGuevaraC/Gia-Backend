@@ -19,13 +19,13 @@ class StoreRolRequest extends StoreRequest
     public function rules()
     {
         return [
-            'name'   => [
-                'required',
-                'string',
-                'max:255',
-                'regex:/^\d+$/',
-                Rule::unique('rols')->whereNull('deleted_at'), // Asegura que el valor sea único, considerando deleted_at
-            ],
+            'name' => [
+    'required',
+    'string',
+    'max:255',
+    'regex:/^(?=.*[a-zA-Z]).+$/', // Asegura que haya al menos una letra en el valor
+    Rule::unique('rols')->whereNull('deleted_at'), // Asegura que el valor sea único, considerando deleted_at
+],
             'status' => 'nullable|string|max:255',
         ];
     }

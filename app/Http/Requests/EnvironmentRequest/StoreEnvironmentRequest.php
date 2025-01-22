@@ -19,7 +19,7 @@ class StoreEnvironmentRequest extends StoreRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255|regex:/^\d+$/',
+            'name' => 'required|string|max:255|regex:/^(?=.*[a-zA-Z]).+$/',
             'description' => 'nullable|string|max:1000', // Permitir descripciones más largas
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
             'status' => 'required|string', // Asegurar que sea true o false
