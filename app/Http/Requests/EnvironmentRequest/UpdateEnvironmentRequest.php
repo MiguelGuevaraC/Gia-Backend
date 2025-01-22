@@ -41,7 +41,7 @@ class UpdateEnvironmentRequest extends UpdateRequest
             'name.required' => 'El nombre es obligatorio.',
             'name.string' => 'El nombre debe ser una cadena de texto.',
             'name.max' => 'El nombre no puede tener más de 255 caracteres.',
-            'name.regex'      => 'El campo : Nombre solo debe contener números.',
+            'name.regex'      => 'El campo : Nombre no debe contener solo números.',
 
             'description.string' => 'La descripción debe ser una cadena de texto.',
             'description.max' => 'La descripción no puede tener más de 1000 caracteres.',

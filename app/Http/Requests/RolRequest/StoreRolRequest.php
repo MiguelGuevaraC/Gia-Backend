@@ -37,7 +37,7 @@ class StoreRolRequest extends StoreRequest
             'name.string'     => 'El campo "nombre" debe ser una cadena de texto.',
             'name.max'        => 'El campo "nombre" no puede tener más de 255 caracteres.',
             'name.unique'     => 'El campo nombre ya ha sido registrado.', // Mensaje si ya existe el nombre
-            'name.regex'      => 'El campo : Nombre solo debe contener números.',
+            'name.regex'      =>'El campo : Nombre no debe contener solo números.',
             'status.required' => 'El campo "estado" es obligatorio.',
             'status.string'   => 'El campo "estado" debe ser una cadena de texto.',
             'status.max'      => 'El campo "estado" no puede tener más de 255 caracteres.',
