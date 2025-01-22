@@ -41,13 +41,9 @@ class UserController extends Controller
     public function index(IndexUserRequest $request)
     {
 
-        $filters = $request->merge([
-            'person$names' => $request->get('username'),
-            'person$business_name' => $request->get('username'),
-        ])->all();
         return $this->getFilteredResults(
             User::class,
-            $filters,
+            $request,
             User::filters,
             User::sorts,
             UserResource::class
