@@ -35,18 +35,18 @@ class PersonResource extends JsonResource
     {
         return [
             'id' => $this->id?? '',
-            'type_document' => $this->type_document?? 'Sin Tipo Documento',
-            'type_person' => $this->type_person?? 'Sin Tipo Persona',
-            'number_document' => $this->number_document?? 'Sin Numbero Documento',
+            'type_document' => $this->type_document??  null,
+            'type_person' => $this->type_person??  null,
+            'number_document' => $this->number_document??  null,
             'names' => $this->names?? null,
             'father_surname' => $this->father_surname?? null,
             'mother_surname' => $this->mother_surname?? null,
             'business_name' => $this->business_name?? null,
-            'address' => $this->address?? 'Sin Dirección',
-            'phone' => $this->phone?? 'Sin Telefono',
-            'email' => $this->email?? 'Sin Email',
-            'occupation' => $this->occupation?? 'Sin Ocupación',
-            'status' => $this->status?? 'Sin Estado',
+            'address' => $this->address??  null,
+            'phone' => $this->phone??  null,
+            'email' => $this->email??  null,
+            'occupation' => $this->occupation??  null,
+            'status' => $this->status??  null,
 
         ];
     }

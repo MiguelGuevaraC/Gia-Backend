@@ -22,11 +22,11 @@ class UserOnlyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name ?? 'Sin Nombre',
-            'username' => $this->username ?? 'Sin Correo',
-            'person_id' => $this->person_id ?? 'Sin Persona ID',
-            'rol_id' => $this->rol_id ?? 'Sin Tipo Usuario ID',
-            'person' => $this->person ? new PersonResource($this->person) : 'Sin Persona',
+            'name' => $this->name ??   null,
+            'username' => $this->username ??  null,
+            'person_id' => $this->person_id ?? null,
+            'rol_id' => $this->rol_id ??  null,
+            'person' => $this->person ? new PersonResource($this->person) :  null,
         ];
 
     }

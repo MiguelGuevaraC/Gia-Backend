@@ -24,13 +24,13 @@ class CompanyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'ruc' => $this->ruc ?? 'Sin RUC',
-            'business_name' => $this->business_name ?? 'Sin Razón Social',
-            'address' => $this->address ?? 'Sin Dirección',
-            'phone' => $this->phone ?? 'Sin Telefono',
-            'email' => $this->email ?? 'Sin Correo',
-            'route' => $this->route ?? "",
-            'status' => $this->status ?? "Sin estado",
+            'ruc' => $this->ruc ?? null,
+            'business_name' => $this->business_name ?? null,
+            'address' => $this->address ?? null,
+            'phone' => $this->phone ?? null,
+            'email' => $this->email ?? null,
+            'route' => $this->route ?? null,
+            'status' => $this->status ?? null,
         ];
     }
 

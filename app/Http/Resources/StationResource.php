@@ -26,15 +26,15 @@ class StationResource extends JsonResource
     {
         return [
             'id'               => $this->id,
-            'name'             => $this->name ?? 'Sin Nombre',
-            'description'      => $this->description ?? 'Sin Descripción',
-            'type'             => $this->type ?? 'Sin Tipo',
-            'status'           => $this->status ?? 'Sin Estado',
-            'route'            => $this->route ?? 'Sin Ruta',
+            'name'             => $this->name ??   null,
+            'description'      => $this->description ??  null,
+            'type'             => $this->type ??  null,
+            'status'           => $this->status ??  null,
+            'route'            => $this->route ??  null,
             'server_id'        => $this->server_id,
             'date_reservation' => 'No hay reserva existente para esta mesa.',
             'environment_id'   => $this->environment_id,
-            'environment'      => $this->environment ? new EnvironmentResource($this->environment) : 'Sin Ambiente',
+            'environment'      => $this->environment ? new EnvironmentResource($this->environment) :  null,
         ];
     }
 

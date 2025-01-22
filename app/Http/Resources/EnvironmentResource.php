@@ -25,13 +25,13 @@ class EnvironmentResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name ?? 'Sin Nombre',
-            'description' => $this->description ?? 'Sin Descripción',
+            'name' => $this->name ??  null,
+            'description' => $this->description ??  null,
             'route' => $this->route,
             'status' => $this->status,
             'server_id' => $this->server_id,
             'company_id' => $this->company_id,
-            'company' => $this->company ? new CompanyResource($this->company) : 'Sin Empresa',
+            'company' => $this->company ? new CompanyResource($this->company) :  null,
         ];
     }
 

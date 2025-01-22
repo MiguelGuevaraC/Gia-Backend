@@ -45,7 +45,7 @@ class StoreUserRequest extends StoreRequest
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:9|regex:/^\+?[0-9\s\-]+$/',
             'email' => 'nullable|string|max:255|email',
-    
+            'rol_id' => 'required|integer|exists:rols,id,deleted_at,NULL',
             'number_document' => [
                 'required',
                 function ($attribute, $value, $fail) {
@@ -93,6 +93,10 @@ class StoreUserRequest extends StoreRequest
             'number_document.required' => 'El número de documento es obligatorio.',
             'number_document.exists' => 'El número de documento proporcionado no existe o está inactivo.',
             'username.unique' => 'El nombre de usuario ya ha sido registrado.', // Aquí
+
+            'rol_id.required' => 'El Rol es obligatoria.',
+            'rol_id.integer' => 'El identificador del rol debe ser un número entero.',
+            'rol_id.exists' => 'El Rol seleccionado no existe.',
         ];
     }
     

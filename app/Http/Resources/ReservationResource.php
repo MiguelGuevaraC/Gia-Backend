@@ -31,19 +31,19 @@ class ReservationResource extends JsonResource
     {
         return [
             'id'                   => $this->id,
-            'correlative'          => $this->correlative ?? 'Sin Correlativo',
-            'name'                 => $this->name ?? 'Sin Correlativo',
-            'reservation_datetime' => $this->reservation_datetime ?? 'Sin Fecha',
-            'nro_people'           => $this->nro_people ?? 'Sin Nro Personas',
-            'status'               => $this->status ?? 'Sin Estado',
-            'user_id'              => $this->user_id ?? 'Sin ID Usuario',
-            'user'                 => $this->user ? $this->user : 'Sin Usuario',
-            'person_id'            => $this->person_id ?? 'Sin ID Persona',
-            'person'               => $this->person ? new PersonResource($this->person) : 'Sin Persona',
-            'event_id'             => $this->event_id ?? 'Sin ID Persona',
-            'event'                => $this->event ? new EventResource($this->event) : 'Sin Evento',
-            'station_id'           => $this->station_id ?? 'Sin ID Estación',
-            'station'              => $this->station ? new $this->station : 'Sin Estación',
+            'correlative'          => $this->correlative ??  null,
+            'name'                 => $this->name ??  null,
+            'reservation_datetime' => $this->reservation_datetime ?? null,
+            'nro_people'           => $this->nro_people ??  null,
+            'status'               => $this->status ??  null,
+            'user_id'              => $this->user_id ??  null,
+            'user'                 => $this->user ? $this->user :  null,
+            'person_id'            => $this->person_id ??  null,
+            'person'               => $this->person ? new PersonResource($this->person) :  null,
+            'event_id'             => $this->event_id ??  null,
+            'event'                => $this->event ? new EventResource($this->event) :  null,
+            'station_id'           => $this->station_id ??  null,
+            'station'              => $this->station ? new $this->station :  null,
         ];
     }
 

@@ -30,17 +30,17 @@ class EntryResource extends JsonResource
     {
         return [
             'id'             => $this->id,
-            'entry_datetime' => $this->entry_datetime ?? 'Sin Fecha',
-            'code_pay'       => $this->code_pay ?? 'Sin Código',
-            'quantity'       => $this->quantity ?? 'Sin Cantidad',
-            'status_pay'     => $this->status_pay ?? 'Sin Estado de Pago',
-            'status_entry'   => $this->status_entry ?? 'Sin Estado de Entrada',
-            'user_id'        => $this->user_id ?? 'Sin ID Usuario',
-            'user'           => $this->user ? $this->user : 'Sin Usuario',
-            'person_id'      => $this->person_id ?? 'Sin ID Persona',
-            'person'         => $this->person ? new PersonResource($this->person) : 'Sin Persona',
-            'event_id'      => $this->event_id ?? 'Sin ID Persona',
-            'event'         => $this->event ? new EventResource($this->event) : 'Sin Evento',
+            'entry_datetime' => $this->entry_datetime ??  null,
+            'code_pay'       => $this->code_pay ??  null,
+            'quantity'       => $this->quantity ??  null,
+            'status_pay'     => $this->status_pay ??  null,
+            'status_entry'   => $this->status_entry ??  null,
+            'user_id'        => $this->user_id ??  null,
+            'user'           => $this->user ? $this->user :  null,
+            'person_id'      => $this->person_id ??  null,
+            'person'         => $this->person ? new PersonResource($this->person) :  null,
+            'event_id'      => $this->event_id ??  null,
+            'event'         => $this->event ? new EventResource($this->event) :  null,
         ];
     }
 
