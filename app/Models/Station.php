@@ -50,4 +50,23 @@ class Station extends Model
     {
         return $this->belongsTo(Environment::class, 'environment_id');
     }
+
+    public function getReservationDatetime()
+    {
+        $reservation = $this->belongsTo(Reservation::class, 'station_id')
+                            ->where('status', 'Reservado')
+                            ->latest('reservation_datetime') // Ordena por el campo de fecha de reserva
+                            ->first();
+    
+        // Retornar el valor de 'reservation_datetime' o un mensaje predeterminado
+        return $reservation ? $reservation->reservation_datetime : 'No hay reserva existente para esta mesa.';
+    }
+
+    function reservationactive() {
+        return $this->hasOne(Reservation::class, 'environment_id')
+                    ->where('status', 'Reservado')
+                    ->latest('reservation_datetime');  // Ordena por la fecha y toma la más reciente
+    }
+    
+    
 }

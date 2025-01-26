@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventResource extends JsonResource
@@ -26,14 +27,12 @@ class EventResource extends JsonResource
     {
         return [
             'id'             => $this->id,
-            'name'           => $this->name ??  null,
-            'event_datetime' => $this->event_datetime ??  null,
-            'comment'        => $this->comment ??  null,
-            'nro_reservas'   => $this->nro_reservas ??  null,
-            'nro_boxes'      => $this->nro_boxes ?? null,
-            'status'         => $this->status ??  null,
-            'user_id'        => $this->user_id ??  null,
-            'user'           => $this->user ? new UserOnlyResource($this->user) :  null,
+            'name'           => $this->name ?? null,
+            'event_datetime' => $this->event_datetime ?? null,
+            'comment'        => $this->comment ?? null,
+            'status'         => Carbon::parse($this->event_datetime)->isFuture() ? 'Próximo' : 'Finalizó',
+            'user_id'        => $this->user_id ?? null,
+            'user'           => $this->user ? new UserOnlyResource($this->user) : null,
         ];
     }
 

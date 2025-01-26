@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CompanySeeder::class);
         $this->call(EnvironmentsSeeder::class);
         $this->call(StationSeeder::class);
+        $this->call(EventSeeder::class);
+        $this->call(ReservaSeeder::class);
     }
 }

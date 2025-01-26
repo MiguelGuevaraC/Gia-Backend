@@ -31,19 +31,20 @@ class ReservationResource extends JsonResource
     {
         return [
             'id'                   => $this->id,
-            'correlative'          => $this->correlative ??  null,
-            'name'                 => $this->name ??  null,
+            'correlative'          => 'R001-' . str_pad($this->id, 9, '0', STR_PAD_LEFT),
+            'name'                 => $this->name ?? null,
             'reservation_datetime' => $this->reservation_datetime ?? null,
-            'nro_people'           => $this->nro_people ??  null,
-            'status'               => $this->status ??  null,
-            'user_id'              => $this->user_id ??  null,
-            'user'                 => $this->user ? $this->user :  null,
-            'person_id'            => $this->person_id ??  null,
-            'person'               => $this->person ? new PersonResource($this->person) :  null,
-            'event_id'             => $this->event_id ??  null,
-            'event'                => $this->event ? new EventResource($this->event) :  null,
-            'station_id'           => $this->station_id ??  null,
-            'station'              => $this->station ? new $this->station :  null,
+            'nroPeople'            => $this->nropeople ?? null,
+
+            'status'               => $this->status ?? null,
+            'user_id'              => $this->user_id ?? null,
+            'user'                 => $this->user ? $this->user : null,
+            'person_id'            => $this->person_id ?? null,
+            'person'               => $this->person ? new PersonResource($this->person) : null,
+            'event_id'             => $this->event_id ?? null,
+            'event'                => $this->event ? new EventResource($this->event) : null,
+            'station_id'           => $this->station_id ?? null,
+            'station'              => $this->station ? new $this->station : null,
         ];
     }
 
