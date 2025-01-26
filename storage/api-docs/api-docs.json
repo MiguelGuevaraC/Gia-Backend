@@ -1799,35 +1799,6 @@
                         }
                     },
                     {
-                        "name": "nro_reservas",
-                        "in": "query",
-                        "description": "Número de reservas (≥ 0)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 0
-                        }
-                    },
-                    {
-                        "name": "nro_boxes",
-                        "in": "query",
-                        "description": "Número de boxes (≥ 0)",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 0
-                        }
-                    },
-                    {
-                        "name": "status",
-                        "in": "query",
-                        "description": "Estado del evento",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "name": "user_id",
                         "in": "query",
                         "description": "ID del usuario",
@@ -1854,6 +1825,15 @@
                         "schema": {
                             "type": "string",
                             "format": "date"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Busqueda",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
@@ -1923,11 +1903,6 @@
                                         "description": "Comentario sobre el evento",
                                         "type": "string",
                                         "maxLength": 1000,
-                                        "nullable": true
-                                    },
-                                    "status": {
-                                        "description": "Estado del evento",
-                                        "type": "string",
                                         "nullable": true
                                     }
                                 },
@@ -2065,11 +2040,6 @@
                                         "description": "Comentario sobre el evento",
                                         "type": "string",
                                         "maxLength": 1000,
-                                        "nullable": true
-                                    },
-                                    "status": {
-                                        "description": "Estado del evento",
-                                        "type": "string",
                                         "nullable": true
                                     }
                                 },
@@ -4056,7 +4026,16 @@
                     {
                         "name": "username",
                         "in": "query",
-                        "description": "Filtrar por nombre de la categoria",
+                        "description": "Filtrar por username",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtrar por nombre de usuario",
                         "required": false,
                         "schema": {
                             "type": "string"
@@ -4636,16 +4615,6 @@
                         "type": "string",
                         "example": "Evento importante del año"
                     },
-                    "nro_reservas": {
-                        "description": "Número de reservas asociadas al evento",
-                        "type": "string",
-                        "example": "5"
-                    },
-                    "nro_boxes": {
-                        "description": "Número de boxes reservados para el evento",
-                        "type": "string",
-                        "example": "3"
-                    },
                     "status": {
                         "description": "Estado del evento",
                         "type": "string",
@@ -4909,6 +4878,10 @@
                         "type": "string",
                         "example": "Station A"
                     },
+                    "description": {
+                        "type": "string",
+                        "example": "Description"
+                    },
                     "type": {
                         "type": "string",
                         "example": "Monitoring"
@@ -4917,13 +4890,17 @@
                         "type": "boolean",
                         "example": true
                     },
+                    "route": {
+                        "type": "string",
+                        "example": "/environment/production"
+                    },
                     "server_id": {
                         "type": "integer",
                         "example": 15
                     },
-                    "route": {
-                        "type": "string",
-                        "example": "/station/a"
+                    "date_reservation": {
+                        "type": "integer",
+                        "example": "22 de Noviembre dell 2024"
                     },
                     "environment_id": {
                         "type": "integer",

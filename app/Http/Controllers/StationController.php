@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
@@ -66,7 +65,7 @@ class StationController extends Controller
 
         $station = $this->stationService->getStationById($id);
 
-        if (!$station) {
+        if (! $station) {
             return response()->json([
                 'error' => 'Station No Encontrado',
             ], 404);
@@ -162,7 +161,7 @@ class StationController extends Controller
         $validatedData = $request->validated();
 
         $station = $this->stationService->getStationById($id);
-        if (!$station) {
+        if (! $station) {
             return response()->json([
                 'error' => 'Station No Encontrado',
             ], 404);
@@ -190,9 +189,14 @@ class StationController extends Controller
     {
         $deleted = $this->stationService->destroyById($id);
 
-        if (!$deleted) {
+        if (! $deleted) {
             return response()->json([
                 'error' => 'Station No Encontrado.',
+            ], 404);
+        }
+        if ($deleted->reservations()->exists()) {
+            return response()->json([
+                'error' => 'Este elemento está vinculado a reservaciones.',
             ], 404);
         }
 

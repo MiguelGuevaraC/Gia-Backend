@@ -29,9 +29,9 @@ class Reservation extends Model
         'deleted_at',
     ];
     const filters = [
-        'reservation_datetime' => 'between',
-        'nro_people'           => '=',
-        'status'               => '=',
+        'reservation_datetime' => 'date',
+        'nro_people'           => 'like',
+        'status'               => 'like',
         'user_id'              => '=',
         'event_id'             => '=',
         'person_id'            => '=',

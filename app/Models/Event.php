@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends Model
 {
+    
     use SoftDeletes;
     protected $fillable = [
         'id',
@@ -30,7 +31,7 @@ class Event extends Model
     const filters = [
 
         'name'           => 'like',
-        'event_datetime' => 'between',
+        'event_datetime' => 'date',
         'comment'        => 'like',
         'nro_reservas'   => '=',
         'nro_boxes'      => '=',

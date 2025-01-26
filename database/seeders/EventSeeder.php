@@ -31,7 +31,7 @@ class EventSeeder extends Seeder
             ],
             [
                 'name'           => 'Fiesta Retro 80s',
-                'event_datetime' => '2025-03-20 21:00:00',
+                'event_datetime' => '2024-03-20 21:00:00',
                 'comment'        => 'Revive los 80s con música retro y vestimenta temática.',
     
                 'user_id'        => 1,

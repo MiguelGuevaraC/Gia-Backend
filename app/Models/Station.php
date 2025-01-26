@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -29,19 +28,19 @@ class Station extends Model
         'deleted_at',
     ];
     const filters = [
-        'name' => 'like',
-        'type' => 'like',
-        'status' => 'like',
+        'name'             => 'like',
+        'type'             => 'like',
+        'status'           => 'like',
         'environment.name' => 'like',
-        'environment_id' => '=',
+        'environment_id'   => '=',
     ];
 
     /**
      * Campos de ordenación disponibles.
      */
     const sorts = [
-        'id' => 'desc',
-        'name' => 'desc',
+        'id'          => 'desc',
+        'name'        => 'desc',
         'description' => 'desc',
 
     ];
@@ -54,26 +53,24 @@ class Station extends Model
     public function getReservationDatetime()
     {
         $reservation = $this->hasMany(Reservation::class, 'station_id')
-                            ->where('status', 'Reservado')
-                            ->latest('reservation_datetime') // Ordena por el campo de fecha de reserva
-                            ->first();
-    
+            ->whereDate('reservation_datetime', '>', now()->toDateString())
+            ->latest('reservation_datetime') // Ordena por el campo de fecha de reserva
+            ->first();
+
         // Retornar el valor de 'reservation_datetime' o un mensaje predeterminado
         return $reservation ? $reservation->reservation_datetime : 'No hay reserva existente para esta mesa.';
     }
 
-  // Modelo Station
-public function reservations()
-{
-    return $this->hasMany(Reservation::class, 'station_id');
-}
+    // Modelo Station
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class, 'station_id');
+    }
 
 // Método para obtener reservas activas
-public function reservationsactive()
-{
-    return $this->reservations()->where('status', 'Reservado');
-}
+    public function reservationsactive()
+    {
+        return $this->reservations()->whereDate('reservation_datetime', '>', now()->toDateString());
+    }
 
-    
-    
 }

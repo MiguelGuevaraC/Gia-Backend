@@ -25,7 +25,7 @@ class UpdateReservationRequest extends UpdateRequest
 {
     return [
         'name'                 => 'required|string|max:255',
-        'reservation_datetime' => 'nullable|string|max:255',
+        'reservation_datetime' => 'required|date',
         'nro_people'           => 'nullable|string|max:255',
         'status'               => 'nullable|string|max:255',
         'event_id'             => 'nullable|string|max:255|exists:events,id,deleted_at,NULL',  // Verifica si el event_id existe en la tabla events
@@ -41,8 +41,9 @@ public function messages()
         'name.string'                 => 'El nombre debe ser una cadena de texto.',
         'name.max'                    => 'El nombre no puede tener más de 255 caracteres.',
 
-        'reservation_datetime.string' => 'La fecha de reserva debe ser una cadena de texto.',
-        'reservation_datetime.max'    => 'La fecha de reserva no puede tener más de 255 caracteres.',
+        'reservation_datetime.required'               => 'La fecha de reserva es obligatorio.',
+        'reservation_datetime.date' => 'La fecha de reserva debe ser una fecha.',
+
 
         'nro_people.string'           => 'El número de personas debe ser una cadena de texto.',
         'nro_people.max'              => 'El número de personas no puede tener más de 255 caracteres.',

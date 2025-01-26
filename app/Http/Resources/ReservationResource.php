@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReservationResource extends JsonResource
@@ -36,7 +37,8 @@ class ReservationResource extends JsonResource
             'reservation_datetime' => $this->reservation_datetime ?? null,
             'nroPeople'            => $this->nro_people ?? null,
 
-            'status'               => $this->status ?? null,
+            'status'               => $this->reservation_datetime ? (Carbon::parse($this->reservation_datetime)->isFuture() ? 'Reservado' : 'Finalizó') : null,
+
             'user_id'              => $this->user_id ?? null,
             'user'                 => $this->user ? $this->user : null,
             'person_id'            => $this->person_id ?? null,

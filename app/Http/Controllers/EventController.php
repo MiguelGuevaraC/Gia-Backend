@@ -27,12 +27,12 @@ class EventController extends Controller
  *     @OA\Parameter(name="name", in="query", description="Filtrar por nombre", required=false, @OA\Schema(type="string", maxLength=255)),
  *     @OA\Parameter(name="event_datetime", in="query", description="Fecha y hora del evento (YYYY-MM-DD)", required=false, @OA\Schema(type="string", format="date")),
  *     @OA\Parameter(name="comment", in="query", description="Filtrar por comentarios", required=false, @OA\Schema(type="string", maxLength=1000)),
- *     @OA\Parameter(name="nro_reservas", in="query", description="Número de reservas (≥ 0)", required=false, @OA\Schema(type="integer", minimum=0)),
- *     @OA\Parameter(name="nro_boxes", in="query", description="Número de boxes (≥ 0)", required=false, @OA\Schema(type="integer", minimum=0)),
- *     @OA\Parameter(name="status", in="query", description="Estado del evento", required=false, @OA\Schema(type="string")),
+ 
  *     @OA\Parameter(name="user_id", in="query", description="ID del usuario", required=false, @OA\Schema(type="string")),
  *     @OA\Parameter(name="from", in="query", description="Fecha de inicio", required=false, @OA\Schema(type="string", format="date")),
  *     @OA\Parameter(name="to", in="query", description="Fecha de fin", required=false, @OA\Schema(type="string", format="date")),
+  *     @OA\Parameter(name="search", in="query", description="Busqueda", required=false, @OA\Schema(type="string")),
+ 
  *     @OA\Response(response=200, description="Eventos obtenidos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Event"))),
  *     @OA\Response(response=422, description="Error de validación", @OA\JsonContent(@OA\Property(property="error", type="string")))
  * )
@@ -92,7 +92,7 @@ class EventController extends Controller
  *                 @OA\Property(property="name", type="string", maxLength=255, description="Nombre del evento"),
  *                 @OA\Property(property="event_datetime", type="string", format="date", description="Fecha y hora del evento (YYYY-MM-DD)"),
  *                 @OA\Property(property="comment", type="string", maxLength=1000, description="Comentario sobre el evento", nullable=true),
- *                 @OA\Property(property="status", type="string", description="Estado del evento", nullable=true)
+
  *             )
  *         )
  *     ),
@@ -130,7 +130,6 @@ class EventController extends Controller
  *                 @OA\Property(property="name", type="string", maxLength=255, description="Nombre del evento"),
  *                 @OA\Property(property="event_datetime", type="string", format="date", description="Fecha y hora del evento (YYYY-MM-DD)"),
  *                 @OA\Property(property="comment", type="string", maxLength=1000, description="Comentario sobre el evento", nullable=true),
- *                 @OA\Property(property="status", type="string", description="Estado del evento", nullable=true)
  *             )
  *         )
  *     ),
