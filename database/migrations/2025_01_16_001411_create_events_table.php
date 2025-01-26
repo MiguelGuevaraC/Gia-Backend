@@ -24,6 +24,8 @@ return new class extends Migration
 
             $table->string('status')->default('Próximo')->nullable();
             $table->foreignId('user_id')->nullable()->unsigned()->constrained('users');
+            $table->foreignId('company_id')->nullable()->unsigned()->constrained('companies');
+            
             $table->timestamps();
             $table->softDeletes();
         });

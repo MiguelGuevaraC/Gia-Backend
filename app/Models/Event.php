@@ -14,7 +14,7 @@ class Event extends Model
         'name',
         'event_datetime',
         'comment',
-
+        'company_id',
         'status',
         'user_id',
         'created_at',
@@ -37,6 +37,7 @@ class Event extends Model
         'nro_boxes'      => '=',
         'status'         => 'like',
         'user_id'        => '=',
+        'company_id'        => '=',
     ];
 
     /**
@@ -51,6 +52,9 @@ class Event extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
 
 }

@@ -29,7 +29,7 @@ class IndexEventRequest extends IndexRequest
             'comment'        => 'nullable|string|max:1000', // Permitir comentarios opcionales
             'status'         => 'nullable|string',
             'user_id'        => 'nullable|string',
-
+            'company_id'        => 'nullable|string',
         ];
     }
 }

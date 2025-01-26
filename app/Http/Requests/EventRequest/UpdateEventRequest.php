@@ -28,6 +28,7 @@ class UpdateEventRequest extends UpdateRequest
             'event_datetime' => 'required|date',            // Debe ser una fecha válida
             'comment'        => 'nullable|string|max:1000', // Permitir comentarios opcionales
             'status'         => 'nullable|string',          // Asegurar que sea true o false
+            'company_id' => 'required|integer|exists:companies,id,deleted_at,NULL',
         ];
     }
 
@@ -47,6 +48,10 @@ class UpdateEventRequest extends UpdateRequest
             'comment.max'             => 'El comentario no puede tener más de 1000 caracteres.',
 
             'status.string'           => 'El estado debe ser una cadena.',
+
+            'company_id.required' => 'La compañía es obligatoria.',
+            'company_id.integer' => 'El identificador de la compañía debe ser un número entero.',
+            'company_id.exists' => 'La compañía seleccionada no existe.',
 
         ];
     }

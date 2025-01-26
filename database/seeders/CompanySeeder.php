@@ -26,7 +26,16 @@ class CompanySeeder extends Seeder
             'route'=> 'https://develop.garzasoft.com/Gia-Backend/public/storage/companies/4_20250117_085741.jpg',
             'status'=> 'Activo',
         ]);
-
+        DB::table('companies')->insert([
+            'id' => 2,
+            'ruc'=> '11111111112',
+            'business_name'=> 'MR SOFT',
+            'address'=> 'AV.',
+            'phone'=> '999999999',
+            'email'=> 'mrsoft@test.com',
+            'route'=> 'https://develop.garzasoft.com/Gia-Backend/public/storage/environments/9_20250117_031726.png',
+            'status'=> 'Activo',
+        ]);
 
     }
 }

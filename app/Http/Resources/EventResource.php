@@ -19,6 +19,8 @@ class EventResource extends JsonResource
      *     @OA\Property(property="status", type="string", example="Activo", description="Estado del evento"),
      *     @OA\Property(property="user_id", type="integer", example=42, description="ID del usuario asociado"),
      *      @OA\Property(property="user", ref="#/components/schemas/User1"),
+     *      @OA\Property(property="company_id", type="integer", example=42, description="ID del usuario asociado"),
+     *      @OA\Property(property="company", ref="#/components/schemas/Company"),
      * )
      */
 
@@ -33,6 +35,9 @@ class EventResource extends JsonResource
 
             'user_id'        => $this->user_id ?? null,
             'user'           => $this->user ? new UserOnlyResource($this->user) : null,
+
+            'company_id'        => $this->company_id ?? null,
+            'company'           => $this->company ? new CompanyResource($this->company) : null,
         ];
     }
 

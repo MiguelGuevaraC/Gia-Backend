@@ -19,35 +19,35 @@ class EventSeeder extends Seeder
                 'name'           => 'Fiesta Electrónica Neon',
                 'event_datetime' => '2025-02-10 22:00:00',
                 'comment'        => 'Evento especial con DJ internacionales y luces neon.',
-                
+                'company_id'     => 1,
                 'user_id'        => 1,
             ],
             [
                 'name'           => 'Noche de Reggaetón',
                 'event_datetime' => '2025-03-05 23:00:00',
                 'comment'        => 'Reggaetón toda la noche con los mejores DJs locales.',
-      
+                'company_id'     => 1,
                 'user_id'        => 1,
             ],
             [
                 'name'           => 'Fiesta Retro 80s',
                 'event_datetime' => '2024-03-20 21:00:00',
                 'comment'        => 'Revive los 80s con música retro y vestimenta temática.',
-    
+                'company_id'     => 2,
                 'user_id'        => 1,
             ],
             [
                 'name'           => 'Salsa y Bachata Night',
                 'event_datetime' => '2025-04-15 20:00:00',
                 'comment'        => 'Aprende a bailar salsa y bachata con nuestros instructores.',
-  
+                'company_id'     => 1,
                 'user_id'        => 1,
             ],
             [
                 'name'           => 'Festival de Música Urbana',
                 'event_datetime' => '2025-05-10 22:30:00',
                 'comment'        => 'Lo mejor del trap y reggaetón en un solo lugar.',
-    
+                'company_id'     => 2,
                 'user_id'        => 1,
             ],
         ];
