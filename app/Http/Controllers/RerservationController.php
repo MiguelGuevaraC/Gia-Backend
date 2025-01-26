@@ -64,12 +64,12 @@ class RerservationController extends Controller
         })->count(); // Reservas de tipo BOX
 
                                                               // Contar mesas libres, considerando que STATION no tiene relación con reservation
-        $environmentId = $request->get('enviroment_id' ?? 1); // El ID de tu ambiente (puedes cambiar este valor según lo necesites)
+        $event_id = $request->get('event_id' ?? 1); // El ID de tu ambiente (puedes cambiar este valor según lo necesites)
 
-        $mesasLibres = Station::whereDoesntHave('reservations', function($query) use ($environmentId) {
+        $mesasLibres = Station::whereDoesntHave('reservations', function($query) use ($event_id) {
             $query->where('status', 'Reservado');
-            $query->whereHas('environment', function($subQuery) use ($environmentId) {
-                $subQuery->where('id', $environmentId); // Filtra por environment_id
+            $query->whereHas('event', function($subQuery) use ($event_id) {
+                $subQuery->where('id', $event_id); // Filtra por environment_id
             });
         })->count(); // Mesas sin reservas activas en el environment dado
 
