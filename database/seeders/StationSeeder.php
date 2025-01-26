@@ -35,9 +35,9 @@ class StationSeeder extends Seeder
         ]);
         DB::table('stations')->insert([
             'id'             => 3,
-            'name'           => "MESA 03",
-            'description'    => "Mesa para 5 personas",
-            'type'           => "MESA",
+            'name'           => "BOX 01",
+            'description'    => "BOX Y ...",
+            'type'           => "BOX",
             'status'         => "Disponible",
             'route'          => "https://develop.garzasoft.com/Gia-Backend/public/storage/environments/1_20250112_015731.jpg",
             'environment_id' => 2,

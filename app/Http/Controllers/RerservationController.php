@@ -51,11 +51,11 @@ class RerservationController extends Controller
             ReservationResource::class
         );
 
-        // Obtener las reservas de los resultados
-        $reservations = $results->items();
+                                                    // Obtener las reservas de los resultados
+        $reservations = collect($results->items()); // Convertimos el array en una colección
 
-                                               // Calcular las cantidades de las reservas basadas en los resultados
-        $totalReservas = count($reservations); // Total de reservas
+                                                 // Calcular las cantidades de las reservas basadas en los resultados
+        $totalReservas = $reservations->count(); // Total de reservas
         $reservasMesa  = $reservations->filter(function ($reservation) {
             return $reservation->type === 'MESA';
         })->count(); // Reservas de tipo MESA
@@ -63,8 +63,14 @@ class RerservationController extends Controller
             return $reservation->type === 'BOX';
         })->count(); // Reservas de tipo BOX
 
-                                                                                // Contar mesas libres, considerando que STATION no tiene relación con reservation
-        $mesasLibres = Station::whereDoesntHave('reservationsactive')->count(); // Mesas sin reservas
+                                                              // Contar mesas libres, considerando que STATION no tiene relación con reservation
+        $environmentId = $request->get('enviroment_id' ?? 1); // El ID de tu ambiente (puedes cambiar este valor según lo necesites)
+        $mesasLibres   = Station::whereDoesntHave('reservationsactive', function ($query) use ($environmentId) {
+            $query->where('status', 'Reservado');
+            $query->whereHas('environment', function ($subQuery) use ($environmentId) {
+                $subQuery->where('id', $environmentId);
+            });
+        })->count(); // Mesas sin reservas activas en el environment dado
 
         // Devolver la respuesta con las métricas y los resultados
         return response()->json([

@@ -62,11 +62,17 @@ class Station extends Model
         return $reservation ? $reservation->reservation_datetime : 'No hay reserva existente para esta mesa.';
     }
 
-    function reservationactive() {
-        return $this->hasOne(Reservation::class, 'environment_id')
-                    ->where('status', 'Reservado')
-                    ->latest('reservation_datetime');  // Ordena por la fecha y toma la más reciente
-    }
+  // Modelo Station
+// Modelo Station
+public function reservationsactive($environmentId)
+{
+    return $this->reservations()->where('status', 'Reservado')
+                                ->whereHas('environment', function($query) use ($environmentId) {
+                                    $query->where('id', $environmentId); // Filtra por environment_id
+                                });
+}
+
+
     
     
 }
