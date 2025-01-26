@@ -63,15 +63,16 @@ class Station extends Model
     }
 
   // Modelo Station
-// Modelo Station
-public function reservationsactive($environmentId)
+public function reservations()
 {
-    return $this->reservations()->where('status', 'Reservado')
-                                ->whereHas('environment', function($query) use ($environmentId) {
-                                    $query->where('id', $environmentId); // Filtra por environment_id
-                                });
+    return $this->hasMany(Reservation::class, 'station_id');
 }
 
+// Método para obtener reservas activas
+public function reservationsactive()
+{
+    return $this->reservations()->where('status', 'Reservado');
+}
 
     
     
