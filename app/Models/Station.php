@@ -53,7 +53,7 @@ class Station extends Model
 
     public function getReservationDatetime()
     {
-        $reservation = $this->belongsTo(Reservation::class, 'station_id')
+        $reservation = $this->hasMany(Reservation::class, 'station_id')
                             ->where('status', 'Reservado')
                             ->latest('reservation_datetime') // Ordena por el campo de fecha de reserva
                             ->first();
