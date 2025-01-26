@@ -67,10 +67,6 @@ class Station extends Model
         return $this->hasMany(Reservation::class, 'station_id');
     }
 
-// Método para obtener reservas activas
-    public function reservationsactive()
-    {
-        return $this->reservations()->whereDate('reservation_datetime', '>', now()->toDateString());
-    }
+
 
 }

@@ -56,22 +56,24 @@ class RerservationController extends Controller
 
                                                  // Calcular las cantidades de las reservas basadas en los resultados
         $totalReservas = $reservations->count(); // Total de reservas
-        $reservasMesa  = $reservations->filter(function ($reservation) {
-            return $reservation->type === 'MESA';
+        $reservasMesa = $reservations->filter(function ($reservation) {
+            return $reservation->station && $reservation->station->type === 'MESA';
         })->count(); // Reservas de tipo MESA
+        
         $reservasBox = $reservations->filter(function ($reservation) {
-            return $reservation->type === 'BOX';
+            return $reservation->station && $reservation->station->type === 'BOX';
         })->count(); // Reservas de tipo BOX
+        
 
                                                               // Contar mesas libres, considerando que STATION no tiene relación con reservation
         $event_id = $request->get('event_id' ?? 1); // El ID de tu ambiente (puedes cambiar este valor según lo necesites)
-
-        $mesasLibres = Station::whereDoesntHave('reservations', function($query) use ($event_id) {
-            $query->where('status', 'Reservado');
-            $query->whereHas('event', function($subQuery) use ($event_id) {
-                $subQuery->where('id', $event_id); // Filtra por environment_id
-            });
-        })->count(); // Mesas sin reservas activas en el environment dado
+        
+        $mesasLibres = Station::whereDoesntHave('reservations', function ($query) {
+            $query->whereDate('reservation_datetime', '>', now()->toDateString()); // Reservas con fecha futura (activas)
+        })->count(); // Cuenta las mesas sin reservas activas
+        
+        
+        
 
         // Devolver la respuesta con las métricas y los resultados
         return response()->json([
