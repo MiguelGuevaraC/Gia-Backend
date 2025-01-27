@@ -5,6 +5,7 @@ use App\Http\Requests\ReservationRequest\IndexReservationRequest;
 use App\Http\Requests\ReservationRequest\StoreReservationRequest;
 use App\Http\Requests\ReservationRequest\UpdateReservationRequest;
 use App\Http\Resources\ReservationResource;
+use App\Models\Event;
 use App\Models\Reservation;
 use App\Models\Station;
 use App\Services\ReservationService;
@@ -68,13 +69,18 @@ class RerservationController extends Controller
         $reservasBox  = $reservations->where('station.type', 'BOX')->count();
 
         // Contar mesas libres para hoy, filtrando por event_id si es necesario
-        $mesasLibres = Station::whereDoesntHave('reservations', function ($query) use ($event_id, $reservationDatetime) {
-            $query->whereDate('reservation_datetime', '=', $reservationDatetime);
-            if ($event_id) {
-                $query->whereHas('event', fn($subQuery) => $subQuery->where('id', $event_id));
-            }
+        $event = Event::find($event_id); // Obtener el evento primero
 
+        $mesasLibres = Station::whereHas('environment', function ($query) use ($event) {
+            if ($event) {
+                $query->whereHas('company', function ($subQuery) use ($event) {
+                    $subQuery->where('id', $event->company_id); // Filtrar por la compañía del evento
+                });
+            }
+        })->whereDoesntHave('reservations', function ($query) use ($reservationDatetime) {
+            $query->whereDate('reservation_datetime', '=', $reservationDatetime);
         })->count();
+        
 
         return response()->json([
             'data'          => $reservations,

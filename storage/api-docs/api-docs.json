@@ -4627,6 +4627,14 @@
                     },
                     "user": {
                         "$ref": "#/components/schemas/User1"
+                    },
+                    "company_id": {
+                        "description": "ID del usuario asociado",
+                        "type": "integer",
+                        "example": 42
+                    },
+                    "company": {
+                        "$ref": "#/components/schemas/Company"
                     }
                 },
                 "type": "object"
