@@ -35,6 +35,7 @@ class ReservationResource extends JsonResource
             'correlative'          => 'R001-' . str_pad($this->id, 9, '0', STR_PAD_LEFT),
             'name'                 => $this->name ?? null,
             'reservation_datetime' => $this->reservation_datetime ?? null,
+            
             'nroPeople'            => $this->nro_people ?? null,
 
             'status'               => $this->reservation_datetime ? (Carbon::parse($this->reservation_datetime)->isFuture() ? 'Reservado' : 'Finalizó') : null,

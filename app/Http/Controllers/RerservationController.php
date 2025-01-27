@@ -41,49 +41,49 @@ class RerservationController extends Controller
  * )
  */
 
- public function index(IndexReservationRequest $request)
- {
-     // Obtener el ID del evento y la fecha seleccionada (hoy si no se especifica)
-     $event_id = $request->get('event_id');
-     $reservationDatetime = $request->get('reservation_datetime', today()->toDateString());
- 
-     // Obtener los resultados filtrados
-     $results = $this->getFilteredResults(
-         Reservation::class,
-         $request,
-         Reservation::filters,
-         Reservation::sorts,
-         ReservationResource::class
-     );
- 
-     // Filtrar las reservas por la fecha seleccionada
-     $reservations = collect($results->items())->filter(function ($reservation) use ($reservationDatetime, $event_id) {
-         $isToday = Carbon::parse($reservation->reservation_datetime)->isSameDay(Carbon::parse($reservationDatetime));
-         $matchesEvent = $event_id ? $reservation->event->id == $event_id : true;
-         return $isToday && $matchesEvent;
-     });
- 
-     // Contar reservas de tipo MESA y BOX
-     $reservasMesa = $reservations->where('station.type', 'MESA')->count();
-     $reservasBox = $reservations->where('station.type', 'BOX')->count();
- 
-     // Contar mesas libres para hoy, filtrando por event_id si es necesario
-     $mesasLibres = Station::whereDoesntHave('reservations', function ($query) use ($event_id, $reservationDatetime) {
-         $query->whereDate('reservation_datetime', '=', Carbon::parse($reservationDatetime)->toDateString());
-         if ($event_id) $query->whereHas('event', fn($subQuery) => $subQuery->where('id', $event_id));
-     })->count();
- 
-     return response()->json([
-         'data' => $reservations,
-         'totalReservas' => $reservations->count(),
-         'reservasMesa' => $reservasMesa,
-         'reservasBox' => $reservasBox,
-         'mesasLibres' => $mesasLibres,
-     ]);
- }
- 
- 
- 
+    public function index(IndexReservationRequest $request)
+    {
+        // Obtener el ID del evento y la fecha seleccionada (hoy si no se especifica)
+        $event_id            = $request->get('event_id');
+        $reservationDatetime = $request->get('reservation_datetime', today()->toDateString());
+
+        // Obtener los resultados filtrados
+        $results = $this->getFilteredResults(
+            Reservation::class,
+            $request,
+            Reservation::filters,
+            Reservation::sorts,
+            ReservationResource::class
+        );
+
+        // Filtrar las reservas por la fecha seleccionada
+        $reservations = collect($results->items())->filter(function ($reservation) use ($reservationDatetime, $event_id) {
+            $isToday      = Carbon::parse($reservation->reservation_datetime)->isSameDay(Carbon::parse($reservationDatetime));
+            $matchesEvent = $event_id ? $reservation->event->id == $event_id : true;
+            return $isToday && $matchesEvent;
+        });
+
+        // Contar reservas de tipo MESA y BOX
+        $reservasMesa = $reservations->where('station.type', 'MESA')->count();
+        $reservasBox  = $reservations->where('station.type', 'BOX')->count();
+
+        // Contar mesas libres para hoy, filtrando por event_id si es necesario
+        $mesasLibres = Station::whereDoesntHave('reservations', function ($query) use ($event_id, $reservationDatetime) {
+            $query->whereDate('reservation_datetime', '=', $reservationDatetime);
+            if ($event_id) {
+                $query->whereHas('event', fn($subQuery) => $subQuery->where('id', $event_id));
+            }
+
+        })->count();
+
+        return response()->json([
+            'data'          => $reservations,
+            'totalReservas' => $reservations->count(),
+            'reservasMesa'  => $reservasMesa,
+            'reservasBox'   => $reservasBox,
+            'mesasLibres'   => $mesasLibres,
+        ]);
+    }
 
     /**
      * @OA\Get(
