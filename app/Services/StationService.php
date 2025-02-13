@@ -26,7 +26,9 @@ class StationService
 
     public function updateStation($Station, array $data)
     {
-        $data['route'] = $this->commonService->update_photo($data, $Station, 'stations');
+        if (isset($data['route'])) {
+            $data['route'] = $this->commonService->update_photo($data, $Station, 'stations');
+        }
         $Station->update($data);
         return $Station;
     }

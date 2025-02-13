@@ -28,7 +28,9 @@ class CompanyService
     public function updateCompany(Company $company, array $data): Company
     {
 
-        $data['route'] = $this->commonService->update_photo($data, $company, 'companies');
+        if (isset($data['route'])) {
+            $data['route'] = $this->commonService->update_photo($data, $company, 'companies');
+        }
         $company->update($data);
         return $company;
     }

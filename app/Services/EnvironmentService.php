@@ -27,9 +27,10 @@ class EnvironmentService
 
     public function updateEnvironment(Environment $environment, array $data): Environment
     {
-        $data['route'] = $this->commonService->update_photo($data, $environment, 'environments');
+        if (isset($data['route'])) {
+            $data['route'] = $this->commonService->update_photo($data, $environment, 'environments');
+        }
         $environment->update($data);
-
         return $environment;
     }
 
