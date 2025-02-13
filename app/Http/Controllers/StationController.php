@@ -38,7 +38,7 @@ class StationController extends Controller
 
     public function index(IndexStationRequest $request)
     {
-
+        Station::updateStatus();
         return $this->getFilteredResults(
             Station::class,
             $request,
