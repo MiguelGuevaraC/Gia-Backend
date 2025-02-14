@@ -40,6 +40,7 @@ class UserService
             'username'  => $data['username'],
             'password'  => bcrypt($data['password']),
             'person_id' => $person->id,
+            'rol_id' => $data['rol_id'],
         ]);
     }
 

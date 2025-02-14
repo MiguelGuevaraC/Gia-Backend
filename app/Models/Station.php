@@ -54,19 +54,20 @@ class Station extends Model
     public static function updateStatus()
     {
         DB::statement("
-        UPDATE stations
-        LEFT JOIN (
-            SELECT DISTINCT station_id
-            FROM reservations
-            WHERE DATE(reservation_datetime) = CURDATE()
-        ) AS r ON stations.id = r.station_id
-        SET stations.status =
-            CASE
-                WHEN r.station_id IS NOT NULL THEN 'Ocupada'
-                WHEN r.station_id IS NULL AND stations.status = 'Ocupada' THEN 'Disponible'
+            UPDATE stations
+            LEFT JOIN (
+                SELECT DISTINCT station_id
+                FROM reservations
+                WHERE DATE(reservation_datetime) = CURDATE()
+            ) AS r ON stations.id = r.station_id
+            SET stations.status = CASE
+                WHEN r.station_id IS NOT NULL THEN 'Reservado'
+                WHEN r.station_id IS NULL AND stations.status = 'Reservado' THEN 'Disponible'
+                ELSE stations.status
             END
-    ");
+        ");
     }
+    
 
     public function getReservationDatetime()
     {
@@ -100,7 +101,7 @@ class Station extends Model
             ->first();
 
         // Retornar el valor de 'reservation_datetime' o un mensaje predeterminado
-        return $reservation ? "Ocupada" : 'Disponible';
+        return $reservation ? "Reservado" : 'Disponible';
     }
 
     // Modelo Station

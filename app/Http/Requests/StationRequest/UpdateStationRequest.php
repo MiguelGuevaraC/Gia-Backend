@@ -5,6 +5,8 @@ namespace App\Http\Requests\StationRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\UpdateRequest;
+use App\Models\Station;
+
 class UpdateStationRequest extends UpdateRequest
 {
     /**
@@ -27,8 +29,19 @@ class UpdateStationRequest extends UpdateRequest
         return [
             'name' => 'sometimes|string|max:255', // Opcional, pero si está presente debe cumplir con las reglas
             'type' => 'sometimes|string|max:255', // Opcional y limitado a 50 caracteres
-            'description' => 'sometimes|string|max:50', // Limitar la longitud del tipo
-            'status' => 'sometimes|string', // Opcional
+            'description' => 'sometimes|string|max:300', // Limitar la longitud del tipo
+           'status' => [
+            'sometimes',
+            'string',
+            function ($attribute, $value, $fail) {
+                $id = $this->route('id'); // Obtiene el ID de la estación desde la ruta
+                $station = Station::find($id); // Busca la estación en la base de datos
+                
+                if ($station && $station->status === 'Reservado' && $value !== 'Reservado') {
+                    $fail('No se puede cambiar el estado de una estación Reservado a otro estado.');
+                }
+            },
+        ],
             'route' => 'sometimes|image|mimes:jpg,jpeg,png,gif|max:2048', // Opcional, archivo debe ser imagen
             'environment_id' => 'sometimes|integer|exists:environments,id,deleted_at,NULL', // Opcional, pero debe existir en la tabla 'environments'
         ];
