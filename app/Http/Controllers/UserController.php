@@ -199,5 +199,11 @@ class UserController extends Controller
             'message' => 'Persona eliminada exitosamente',
         ], 200);
     }
-
+    public function view_token_email()
+    {
+        $token           = "1234";
+        $name_aplication = "Gia Lounge";
+        return view('emails.token', ['token' => $token,
+            'name_aplication'                    => $name_aplication]);
+    }
 }

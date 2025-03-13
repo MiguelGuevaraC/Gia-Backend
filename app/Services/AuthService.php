@@ -135,7 +135,7 @@ class AuthService
     {
         $token = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT); // Token de 4 dígitos
 
-        Cache::put("email_verification_token:{$data['email']}", $token, 300);
+        Cache::put("email_verification_token:{$data['email']}", $token, 600);
 
         if ($data['send_by'] == 'api') {
             return $this->sendTokenByApi($data['phone'], $token);

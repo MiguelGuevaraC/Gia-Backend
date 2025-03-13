@@ -14,7 +14,7 @@ class SendTokenMail extends Mailable
     use Queueable, SerializesModels;
 
     public $token;
-
+    public $name_aplication;
     /**
      * Crea una nueva instancia del mailable.
      *
@@ -23,6 +23,7 @@ class SendTokenMail extends Mailable
     public function __construct($token)
     {
         $this->token = $token;
+        $this->name_aplication = 'Gia Lounge';
     }
 
     /**
@@ -34,6 +35,8 @@ class SendTokenMail extends Mailable
     {
         return $this->view('emails.token') // Vista del correo
                     ->subject('Tu Token de Verificación') // Asunto del correo
-                    ->with(['token' => $this->token]); // Datos enviados a la vista
+                    ->with(['token' => $this->token,
+                    'name_aplication' =>  $this->name_aplication
+                ]); // Datos enviados a la vista
     }
 }
