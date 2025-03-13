@@ -82,7 +82,6 @@ class AuthService
             'person' => $user?->person,
         ];
     }
-
     public function logout(): JsonResponse
     {
         try {
