@@ -31,3 +31,5 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     require __DIR__ . '/Api/ReservationApi.php'; //RESERVATIONS
     require __DIR__ . '/Api/EntryApi.php';       //ENTRY
 });
+
+require __DIR__ . '/Api/WebApi.php';       //APLICATIVO MOVIL
