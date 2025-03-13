@@ -32,4 +32,5 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     require __DIR__ . '/Api/EntryApi.php';       //ENTRY
 });
 
-require __DIR__ . '/Api/WebApi.php';       //APLICATIVO MOVIL
+Route::post('send-token', [AuthenticationController::class, 'send_token_sign_up']);
+Route::post('sign-up', [AuthenticationController::class, 'validate_mail']);
