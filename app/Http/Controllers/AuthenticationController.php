@@ -203,56 +203,63 @@ class AuthenticationController extends Controller
         ]);
     }
 
-    /**
-     * @OA\Post(
-     *     path="/Gia-Backend/public/api/validatetoken",
-     *     summary="Enviar código de verificación por correo",
-     *     tags={"Sale"},
-     *     security={{"bearerAuth":{}}},
-     *  @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             @OA\Property(property="moviment_id", type="integer", example=101)
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Código enviado correctamente",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="success")
-     *         )
-     *     )
-     * )
-     */
-
-    public function validate_mail(StoreUserAppRequest $request): JsonResponse
-    {
-
-        if ($request->header('UUID') !== 'ZXCV-CVBN-VBNM') {
-            return response()->json(['status' => 'unauthorized'], 401);
-        }
-        if (! $this->authService->validate_token($request->email, $request->token_form)) {
-            return response()->json(['message' => 'Su token ha vencido, Debe generar nuevo token'], 422);
-        }
-        $data                  = $request->validated();
-        $data['type_document'] = "DNI";
-        $data['type_person']   = "USUARIO";
-        $data['username']   = $request->email;
-        $data['rol_id']   = "2"; //usuario
-        $user                  = $this->userService->createUser($data);
-        Cache::forget("email_verification_token:{$request->email}");
-        return response()->json($user, 200);
-    }
-
+/**
+ * @OA\Post(
+ *     path="/Gia-Backend/public/api/send-token",
+ *     summary="Envía un código de verificación por correo",
+ *     tags={"Authentication"},
+ *     security={{"bearerAuth":{}}},
+ *     @OA\RequestBody(required=true, @OA\JsonContent(
+ *         @OA\Property(property="names", type="string", example="Miguel Guevara"),
+ *         @OA\Property(property="email", type="string", format="email", example="guevaracajusolmiguel@gmail.com"),
+ *         @OA\Property(property="phone", type="string", example="903017426")
+ *     )),
+ *     @OA\Response(response=200, description="Código enviado", @OA\JsonContent(@OA\Property(property="message", type="string", example="Código Enviado Exitosamente"))),
+ *     @OA\Response(response=401, description="No autorizado", @OA\JsonContent(@OA\Property(property="status", type="string", example="unauthorized")))
+ * )
+ */
     public function send_token_sign_up(SendTokenAppRequest $request)
     {
         if ($request->header('UUID') !== 'ZXCV-CVBN-VBNM') {
             return response()->json(['status' => 'unauthorized'], 401);
         }
-        $data            = $request->validated();
-        $data['send_by'] = "email";
-        $this->authService->sendToken($data);
-        return "Código Enviado Exitosamente";
+
+        $this->authService->sendToken(array_merge($request->validated(), ['send_by' => "email"]));
+        return response()->json(['message' => 'Código Enviado Exitosamente'], 200);
+    }
+
+/**
+ * @OA\Post(
+ *     path="/Gia-Backend/public/api/validate-mail",
+ *     summary="Valida token y crea usuario",
+ *     tags={"Authentication"},
+ *     security={{"bearerAuth":{}}},
+ *     @OA\RequestBody(required=true, @OA\JsonContent(
+ *         @OA\Property(property="names", type="string", example="Miguel Guevara"),
+ *         @OA\Property(property="email", type="string", format="email", example="guevaracajusolmiguel@gmail.com"),
+ *         @OA\Property(property="phone", type="string", example="903017426"),
+ *         @OA\Property(property="password", type="string", format="password", example="#MiguelMiguel123"),
+ *         @OA\Property(property="token_form", type="string", example="6800")
+ *     )),
+ *     @OA\Response(response=200, description="Usuario creado", @OA\JsonContent(ref="#/components/schemas/User")),
+ *     @OA\Response(response=401, description="No autorizado", @OA\JsonContent(@OA\Property(property="status", type="string", example="unauthorized"))),
+ *     @OA\Response(response=422, description="Token inválido", @OA\JsonContent(@OA\Property(property="message", type="string", example="Su token ha vencido, Debe generar nuevo token")))
+ * )
+ */
+    public function validate_mail(StoreUserAppRequest $request): JsonResponse
+    {
+        if ($request->header('UUID') !== 'ZXCV-CVBN-VBNM') {
+            return response()->json(['status' => 'unauthorized'], 401);
+        }
+
+        if (! $this->authService->validate_token($request->email, $request->token_form)) {
+            return response()->json(['message' => 'Su token ha vencido, Debe generar nuevo token'], 422);
+        }
+
+        $data = array_merge($request->validated(), ['type_document' => "DNI", 'type_person' => "USUARIO", 'username' => $request->email, 'rol_id' => 2]);
+        Cache::forget("email_verification_token:{$request->email}");
+
+        return response()->json($this->userService->createUser($data), 200);
     }
 
 }
