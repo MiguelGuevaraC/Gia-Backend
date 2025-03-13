@@ -1,13 +1,15 @@
 <?php
-
 namespace App\Services;
 
+use App\Mail\SendTokenMail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class AuthService
 {
@@ -20,27 +22,27 @@ class AuthService
      */
     public function login(string $username, string $password): array
     {
-        
+
         // Busca al usuario por correo
         $user = User::where('username', $username)->first();
 
         // Si el usuario no existe, retornamos un error genérico sin dar pistas sobre la existencia
-        if (!$user) {
+        if (! $user) {
             return [
-                'status' => false,
+                'status'  => false,
                 'message' => "Credenciales inválidas", // Mensaje más general
-                'user' => null,
-                'token' => null,
+                'user'    => null,
+                'token'   => null,
             ];
         }
 
         // Verifica si la contraseña es correcta
-        if (!Hash::check($password, $user->password)) {
+        if (! Hash::check($password, $user->password)) {
             return [
-                'status' => false,
+                'status'  => false,
                 'message' => "Credenciales inválidas", // Mensaje más general
-                'user' => null,
-                'token' => null,
+                'user'    => null,
+                'token'   => null,
             ];
         }
 
@@ -55,32 +57,31 @@ class AuthService
 
         // Retorna la respuesta con el token y usuario
         return [
-            'status' => true,
+            'status'  => true,
             'message' => 'Logueado Exitosamente',
-            'token' => $token,
-            'user' => $user,
+            'token'   => $token,
+            'user'    => $user,
         ];
     }
 
     public function authenticate(): array
     {
 
-        $user = auth()->user();
+        $user   = auth()->user();
         $status = true;
 
-        if (!$user) {
+        if (! $user) {
             $status = false;
-            $user = null;
+            $user   = null;
         }
 
         // Llama al método login para realizar la autenticación
         return [
             'status' => true,
-            'user' => $user,
+            'user'   => $user,
             'person' => $user?->person,
         ];
     }
-
 
     public function logout(): JsonResponse
     {
@@ -110,5 +111,37 @@ class AuthService
         return response()->json([
             "message" => "Se cerró sesión Exitosamente",
         ]);
+    }
+
+    public function validate_token($email, $token_form)
+    {
+        $cachedToken = Cache::get("email_verification_token:{$email}");
+        if ($cachedToken !== $token_form) {
+            return false;
+        }
+        return true;
+    }
+    public function sendTokenByApi($number_phone, $token)
+    {
+        return "envio de codigo por telefono";
+    }
+
+    public function sendTokenByEmail($names, $email, $token)
+    {
+        Mail::to($email)->send(new SendTokenMail($token));
+    }
+
+    public function sendToken($data)
+    {
+        $token = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT); // Token de 4 dígitos
+
+        Cache::put("email_verification_token:{$data['email']}", $token, 300);
+
+        if ($data['send_by'] == 'api') {
+            return $this->sendTokenByApi($data['phone'], $token);
+        }
+        if ($data['send_by'] == 'email') {
+            return $this->sendTokenByEmail($data['names'],$data['email'], $token);
+        }
     }
 }

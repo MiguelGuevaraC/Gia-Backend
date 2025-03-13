@@ -157,7 +157,7 @@ class RolController extends Controller
 
     public function destroy($id)
     {
-        if($id==1){
+        if($id==1 || $id==2){
             return response()->json([
                 'message' => 'Este Rol No puede ser Eliminado',
             ], 422);

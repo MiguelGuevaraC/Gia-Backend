@@ -1,23 +1,28 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthenticationRequest\LoginRequest;
+use App\Http\Requests\UserRequest\SendTokenAppRequest;
+use App\Http\Requests\UserRequest\StoreUserAppRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\AuthService;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class AuthenticationController extends Controller
 {
 
     protected $authService;
+    protected $userService;
 
-    public function __construct(AuthService $authService)
+    public function __construct(AuthService $authService, UserService $userService)
     {
         $this->authService = $authService;
+        $this->userService = $userService;
     }
 
     /**
@@ -113,7 +118,7 @@ class AuthenticationController extends Controller
             $authData = $this->authService->login($request->username, $request->password);
 
             // Verifica si el usuario es null
-            if (!$authData['user']) {
+            if (! $authData['user']) {
                 return response()->json([
                     'error' => $authData['message'],
                 ], 422);
@@ -121,8 +126,8 @@ class AuthenticationController extends Controller
 
             // Retorna la respuesta con el token y el recurso del usuario
             return response()->json([
-                'token' => $authData['token'],
-                'user' => new UserResource($authData['user']),
+                'token'   => $authData['token'],
+                'user'    => new UserResource($authData['user']),
                 'message' => $authData['message'],
             ]);
         } catch (\Exception $e) {
@@ -185,17 +190,69 @@ class AuthenticationController extends Controller
         $result = $this->authService->authenticate();
 
         // Si la autenticación falla, devuelve el mensaje de error
-        if (!$result['status']) {
+        if (! $result['status']) {
             return response()->json(['error' => $result['message']], 422);
         }
         $token = $request->bearerToken();
 
         // Si la autenticación es exitosa, devuelve el token, el usuario y la persona
         return response()->json([
-            'token' => $token,
-            'user' => new UserResource($result['user']),
+            'token'   => $token,
+            'user'    => new UserResource($result['user']),
             'message' => 'Autenticado',
         ]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/Gia-Backend/public/api/validatetoken",
+     *     summary="Enviar código de verificación por correo",
+     *     tags={"Sale"},
+     *     security={{"bearerAuth":{}}},
+     *  @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="moviment_id", type="integer", example=101)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Código enviado correctamente",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="string", example="success")
+     *         )
+     *     )
+     * )
+     */
+
+    public function validate_mail(StoreUserAppRequest $request): JsonResponse
+    {
+
+        if ($request->header('UUID') !== 'ZXCV-CVBN-VBNM') {
+            return response()->json(['status' => 'unauthorized'], 401);
+        }
+        if (! $this->authService->validate_token($request->email, $request->token_form)) {
+            return response()->json(['message' => 'Su token ha vencido, Debe generar nuevo token'], 422);
+        }
+        $data                  = $request->validated();
+        $data['type_document'] = "DNI";
+        $data['type_person']   = "USUARIO";
+        $data['username']   = $request->email;
+        $data['rol_id']   = "2"; //usuario
+        $user                  = $this->userService->createUser($data);
+        Cache::forget("email_verification_token:{$request->email}");
+        return response()->json($user, 200);
+    }
+
+    public function send_token_sign_up(SendTokenAppRequest $request)
+    {
+        if ($request->header('UUID') !== 'ZXCV-CVBN-VBNM') {
+            return response()->json(['status' => 'unauthorized'], 401);
+        }
+        $data            = $request->validated();
+        $data['send_by'] = "email";
+        $this->authService->sendToken($data);
+        return "Código Enviado Exitosamente";
     }
 
 }

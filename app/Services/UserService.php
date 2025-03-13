@@ -16,9 +16,11 @@ class UserService
     {
         // Verificar si la persona existe; si no, crearla
 
+        $identifier = isset($data['number_document']) ? ['number_document' => $data['number_document']] : ['email' => $data['email'] ?? null];
+
         $person = Person::firstOrCreate(
-            ['number_document' => $data['number_document']], // Condición para encontrar una persona existente
-            [                                                // Solo los campos que no se repiten en el 'firstOrCreate'
+            $identifier, // Condición para encontrar una persona existente
+            [            // Solo los campos que no se repiten en el 'firstOrCreate'
                 'names'          => $data['names'] ?? null,
                 'father_surname' => $data['father_surname'] ?? null,
                 'mother_surname' => $data['mother_surname'] ?? null,
@@ -30,9 +32,12 @@ class UserService
                 'email'          => $data['email'] ?? null,
             ]
         );
-        $name = $data['type_document'] === 'DNI'
-        ? $data['names'] . ' ' . $data['father_surname'] . ' ' . $data['mother_surname']
-        : $data['business_name'];
+
+        $name = isset($data['type_document']) && $data['type_document'] === 'DNI'
+        ? (isset($data['names']) ? $data['names'] : '') . ' ' .
+        (isset($data['father_surname']) ? $data['father_surname'] : '') . ' ' .
+        (isset($data['mother_surname']) ? $data['mother_surname'] : '')
+        : (isset($data['business_name']) ? $data['business_name'] : '');
 
         // Crear y devolver el usuario, asociándolo con la persona encontrada o creada
         return User::create([
@@ -40,7 +45,7 @@ class UserService
             'username'  => $data['username'],
             'password'  => bcrypt($data['password']),
             'person_id' => $person->id,
-            'rol_id' => $data['rol_id'],
+            'rol_id'    => $data['rol_id'],
         ]);
     }
 
