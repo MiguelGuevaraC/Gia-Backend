@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthenticationRequest\LoginRequest;
 use App\Http\Requests\UserRequest\SendTokenAppRequest;
 use App\Http\Requests\UserRequest\StoreUserAppRequest;
+use App\Http\Resources\UserOnlyResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\AuthService;
@@ -257,9 +258,14 @@ class AuthenticationController extends Controller
         }
 
         $data = array_merge($request->validated(), ['type_document' => "DNI", 'type_person' => "USUARIO", 'username' => $request->email, 'rol_id' => 2]);
-        Cache::forget("email_verification_token:{$request->email}");
+        $user = $this->userService->createUser($data);
 
-        return response()->json($this->userService->createUser($data), 200);
+        if ($user) {                                               // Verifica si la creación del usuario fue exitosa
+            Cache::forget("{$request->email}");                        // Elimina el cache
+            return response()->json(new UserOnlyResource($user), 200); // Retorna el usuario creado
+        }
+
+        return response()->json(['error' => 'No se pudo crear el usuario'], 500);
     }
 
 }
