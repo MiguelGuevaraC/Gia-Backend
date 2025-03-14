@@ -28,14 +28,14 @@ class UpdateEventRequest extends UpdateRequest
             'event_datetime' => 'required|date',            // Debe ser una fecha válida
             'comment'        => 'nullable|string|max:1000', // Permitir comentarios opcionales
             'status'         => 'nullable|string',          // Asegurar que sea true o false
-            'company_id' => 'required|integer|exists:companies,id,deleted_at,NULL',
+            'company_id'     => 'required|integer|exists:companies,id,deleted_at,NULL',
+            'route'          => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
         ];
     }
 
     public function messages()
     {
         return [
-            'id.integer'              => 'El ID debe ser un número entero.',
 
             'name.required'           => 'El nombre es obligatorio.',
             'name.string'             => 'El nombre debe ser una cadena de texto.',
@@ -49,9 +49,13 @@ class UpdateEventRequest extends UpdateRequest
 
             'status.string'           => 'El estado debe ser una cadena.',
 
-            'company_id.required' => 'La compañía es obligatoria.',
-            'company_id.integer' => 'El identificador de la compañía debe ser un número entero.',
-            'company_id.exists' => 'La compañía seleccionada no existe.',
+            'company_id.required'     => 'La compañía es obligatoria.',
+            'company_id.integer'      => 'El identificador de la compañía debe ser un número entero.',
+            'company_id.exists'       => 'La compañía seleccionada no existe.',
+
+            'route.image'             => 'El archivo debe ser una imagen.',
+            'route.mimes'             => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',
+            'route.max'               => 'El archivo no puede ser mayor a 2 MB.',
 
         ];
     }

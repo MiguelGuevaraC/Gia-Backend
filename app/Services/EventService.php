@@ -6,7 +6,12 @@ use Illuminate\Support\Facades\Storage;
 
 class EventService
 {
+    protected $commonService;
 
+    public function __construct(CommonService $commonService)
+    {
+        $this->commonService = $commonService;
+    }
     public function getEventById(int $id): ?Event
     {
         return Event::find($id);
@@ -18,14 +23,16 @@ class EventService
         $data['user_id'] = auth()->id(); // Obtiene el ID del usuario logueado
     
         $event = Event::create($data);
+        $this->commonService->store_photo($data, $event, 'events');
     
         return $event;
     }
 
     public function updateEvent(Event $environment, array $data): Event
     {
-     
-
+        if (isset($data['route'])) {
+            $data['route'] = $this->commonService->update_photo($data, $environment, 'events');
+        }
         $environment->update($data);
 
         return $environment;

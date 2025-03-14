@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->dateTime('event_datetime')->nullable();
             $table->string('comment')->nullable();
-
+            $table->string('route')->nullable();
             $table->string('status')->default('Próximo')->nullable();
             $table->foreignId('user_id')->nullable()->unsigned()->constrained('users');
             $table->foreignId('company_id')->nullable()->unsigned()->constrained('companies');

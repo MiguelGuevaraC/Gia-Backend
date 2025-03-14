@@ -32,12 +32,12 @@ class EventResource extends JsonResource
             'event_datetime' => $this->event_datetime ?? null,
             'comment'        => $this->comment ?? null,
             'status'         => $this->event_datetime ? (Carbon::parse($this->event_datetime)->isFuture() ? 'Próximo' : 'Finalizó') : null,
-
+            'route'          => $this->route ?? null,
             'user_id'        => $this->user_id ?? null,
             'user'           => $this->user ? new UserOnlyResource($this->user) : null,
 
-            'company_id'        => $this->company_id ?? null,
-            'company'           => $this->company ? new CompanyResource($this->company) : null,
+            'company_id'     => $this->company_id ?? null,
+            'company'        => $this->company ? new CompanyResource($this->company) : null,
         ];
     }
 

@@ -13,6 +13,7 @@ class Event extends Model
         'correlative',
         'name',
         'event_datetime',
+        'route',
         'comment',
         'company_id',
         'status',

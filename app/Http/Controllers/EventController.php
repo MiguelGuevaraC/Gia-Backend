@@ -27,12 +27,12 @@ class EventController extends Controller
  *     @OA\Parameter(name="name", in="query", description="Filtrar por nombre", required=false, @OA\Schema(type="string", maxLength=255)),
  *     @OA\Parameter(name="event_datetime", in="query", description="Fecha y hora del evento (YYYY-MM-DD)", required=false, @OA\Schema(type="string", format="date")),
  *     @OA\Parameter(name="comment", in="query", description="Filtrar por comentarios", required=false, @OA\Schema(type="string", maxLength=1000)),
- 
+
  *     @OA\Parameter(name="user_id", in="query", description="ID del usuario", required=false, @OA\Schema(type="string")),
  *     @OA\Parameter(name="from", in="query", description="Fecha de inicio", required=false, @OA\Schema(type="string", format="date")),
  *     @OA\Parameter(name="to", in="query", description="Fecha de fin", required=false, @OA\Schema(type="string", format="date")),
-  *     @OA\Parameter(name="search", in="query", description="Busqueda", required=false, @OA\Schema(type="string")),
- 
+ *     @OA\Parameter(name="search", in="query", description="Busqueda", required=false, @OA\Schema(type="string")),
+
  *     @OA\Response(response=200, description="Eventos obtenidos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Event"))),
  *     @OA\Response(response=422, description="Error de validación", @OA\JsonContent(@OA\Property(property="error", type="string")))
  * )
@@ -141,7 +141,6 @@ class EventController extends Controller
 
     public function update(UpdateEventRequest $request, $id)
     {
-
         $validatedData = $request->validated();
 
         $event = $this->eventService->getEventById($id);
@@ -171,16 +170,16 @@ class EventController extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->eventService->destroyById($id);
+        $event = $this->eventService->getEventById($id);
 
-        if (! $deleted) {
+        if (! $event) {
             return response()->json([
                 'error' => 'Evento No Encontrado.',
             ], 404);
         }
-
+        $deleted = $this->eventService->destroyById($id);
         return response()->json([
-            'message' => 'Event eliminado exitosamente',
+            'message' => 'Evento eliminado exitosamente',
         ], 200);
     }
 }

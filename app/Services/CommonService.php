@@ -18,6 +18,7 @@ class CommonService
             $filePath  = $data['route']->storeAs($name_folder, $fileName, 'public');
             $object->update(['route' => $ruta . Storage::url($filePath)]);
         }
+
     }
 
     public function update_photo(array $data, Object $object, String $name_folder): string
