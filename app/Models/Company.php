@@ -1,8 +1,7 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -30,26 +29,40 @@ class Company extends Model
         'deleted_at',
     ];
     const filters = [
-        'ruc'=> 'like',
-        'business_name'=> 'like',
-        'address'=> 'like',
-        'phone'=> 'like',
-        'email'=> 'like',
+        'ruc'           => 'like',
+        'business_name' => 'like',
+        'address'       => 'like',
+        'phone'         => 'like',
+        'email'         => 'like',
     ];
 
     /**
      * Campos de ordenación disponibles.
      */
     const sorts = [
-        'id' => 'desc',
+        'id'            => 'desc',
         'business_name' => 'desc',
-        'names' => 'desc',
+        'names'         => 'desc',
 
     ];
 
     public function environments()
     {
         return $this->hasMany(Environment::class);
+    }
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    public function upcomingEvents()
+    {
+        return $this->hasMany(Event::class)->where('event_datetime', '>=', Carbon::now());
+    }
+
+    public function pastEvents()
+    {
+        return $this->hasMany(Event::class)->where('event_datetime', '<', Carbon::now());
     }
 
 }
