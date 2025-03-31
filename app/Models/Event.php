@@ -58,4 +58,9 @@ class Event extends Model
         return $this->belongsTo(Company::class, 'company_id');
     }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
 }

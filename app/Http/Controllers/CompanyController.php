@@ -1,11 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CompanyRequest\IndexCompanyRequest;
 use App\Http\Requests\CompanyRequest\StoreCompanyRequest;
 use App\Http\Requests\CompanyRequest\UpdateCompanyRequest;
+use App\Http\Resources\CompanyAppResource;
 use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use App\Services\CompanyService;
@@ -31,7 +31,7 @@ class CompanyController extends Controller
      *     @OA\Parameter(name="address", in="query", description="Filtrar por dirección", required=false, @OA\Schema(type="string")),
      *     @OA\Parameter(name="phone", in="query", description="Filtrar por telefono", required=false, @OA\Schema(type="string")),
      *     @OA\Parameter(name="email", in="query", description="Filtrar por email", required=false, @OA\Schema(type="string")),
-     
+
      *     @OA\Parameter(name="from", in="query", description="Fecha de inicio", required=false, @OA\Schema(type="string", format="date")),
      *     @OA\Parameter(name="to", in="query", description="Fecha de fin", required=false, @OA\Schema(type="string", format="date")),
      *     @OA\Response(response=200, description="Lista de Empresas", @OA\JsonContent(ref="#/components/schemas/Company")),
@@ -53,6 +53,37 @@ class CompanyController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/Gia-Backend/public/api/company-list",
+     *     summary="Obtener información con filtros y ordenamiento",
+     *     tags={"Company"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="ruc", in="query", description="Filtrar por ruc de la empresa", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="business_name", in="query", description="Filtrar razón social", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="address", in="query", description="Filtrar por dirección", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="phone", in="query", description="Filtrar por telefono", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="email", in="query", description="Filtrar por email", required=false, @OA\Schema(type="string")),
+
+     *     @OA\Parameter(name="from", in="query", description="Fecha de inicio", required=false, @OA\Schema(type="string", format="date")),
+     *     @OA\Parameter(name="to", in="query", description="Fecha de fin", required=false, @OA\Schema(type="string", format="date")),
+     *     @OA\Response(response=200, description="Lista de Empresas", @OA\JsonContent(ref="#/components/schemas/Company")),
+     *     @OA\Response(response=422, description="Validación fallida", @OA\JsonContent(type="object", @OA\Property(property="error", type="string")))
+     * )
+     */
+
+    public function list(IndexCompanyRequest $request)
+    {
+
+        return $this->getFilteredResults(
+            Company::class,
+            $request,
+            Company::filters,
+            Company::sorts,
+            CompanyAppResource::class
+        );
+    }
+
+    /**
+     * @OA\Get(
      *     path="/Gia-Backend/public/api/company/{id}",
      *     summary="Obtener detalles de un company por ID",
      *     tags={"Company"},
@@ -68,7 +99,7 @@ class CompanyController extends Controller
 
         $company = $this->companyService->getCompanyById($id);
 
-        if (!$company) {
+        if (! $company) {
             return response()->json([
                 'error' => 'Company No Encontrado',
             ], 404);
@@ -97,7 +128,7 @@ class CompanyController extends Controller
      *                 @OA\Property(property="phone", type="string", example="987654321"),
      *                 @OA\Property(property="email", type="string", example="contacto@empresa.com"),
      *                 @OA\Property(property="status", type="boolean", example=true),
-      *                 @OA\Property(property="route", type="string", description="Archivo de la imagen", format="binary"),
+     *                 @OA\Property(property="route", type="string", description="Archivo de la imagen", format="binary"),
      *             )
      *         )
      *     ),
@@ -153,7 +184,7 @@ class CompanyController extends Controller
         $validatedData = $request->validated();
 
         $company = $this->companyService->getCompanyById($id);
-        if (!$company) {
+        if (! $company) {
             return response()->json([
                 'error' => 'Company No Encontrado',
             ], 404);
@@ -181,7 +212,7 @@ class CompanyController extends Controller
     {
         $deleted = $this->companyService->destroyById($id);
 
-        if (!$deleted) {
+        if (! $deleted) {
             return response()->json([
                 'error' => 'Company No Encontrado.',
             ], 404);

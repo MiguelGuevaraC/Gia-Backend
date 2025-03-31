@@ -27,7 +27,6 @@ class UpdateReservationRequest extends UpdateRequest
         'name'                 => 'required|string|max:255',
         'reservation_datetime' => 'required|date',
         'nro_people'           => 'nullable|string|max:255',
-        'status'               => 'nullable|string|max:255',
         'event_id'             => 'nullable|string|max:255|exists:events,id,deleted_at,NULL',  // Verifica si el event_id existe en la tabla events
         'station_id'           => 'nullable|string|max:255|exists:stations,id,deleted_at,NULL', // Verifica si el station_id existe en la tabla stations
         'person_id'            => 'nullable|string|max:255|exists:people,id,deleted_at,NULL',   // Verifica si el person_id existe en la tabla persons

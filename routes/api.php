@@ -14,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('login', [AuthenticationController::class, 'login']);
+Route::post('login', [AuthenticationController::class, 'login_admin']);
+
+Route::post('login-app', [AuthenticationController::class, 'login_app']);
+// Route::post('login-admin', [AuthenticationController::class, 'login_admin']);
 
 Route::group(["middleware" => ["auth:sanctum"]], function () {
 

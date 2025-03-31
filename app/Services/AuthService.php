@@ -20,7 +20,7 @@ class AuthService
      * @param string $password
      * @return array
      */
-    public function login(string $username, string $password): array
+    public function login_app(string $username, string $password): array
     {
 
         // Busca al usuario por correo
@@ -31,6 +31,60 @@ class AuthService
             return [
                 'status'  => false,
                 'message' => "Credenciales inválidas", // Mensaje más general
+                'user'    => null,
+                'token'   => null,
+            ];
+        }
+
+        // Verifica si la contraseña es correcta
+        if (! Hash::check($password, $user->password)) {
+            return [
+                'status'  => false,
+                'message' => "Credenciales inválidas", // Mensaje más general
+                'user'    => null,
+                'token'   => null,
+            ];
+        }
+
+        // Autentica al usuario
+        Auth::login($user);
+
+        // Crea un token de autenticación
+        $token = $user->createToken('auth_token', ['expires' => now()->addHour()])->plainTextToken;
+
+        // Oculta el campo de contraseña antes de retornar los datos
+        $user->makeHidden('password');
+
+        // Retorna la respuesta con el token y usuario
+        return [
+            'status'  => true,
+            'message' => 'Logueado Exitosamente',
+            'token'   => $token,
+            'user'    => $user,
+        ];
+    }
+
+    public function login_admin(string $username, string $password): array
+    {
+
+        // Busca al usuario por correo
+        $user = User::where('username', $username)->first();
+
+        // Si el usuario no existe, retornamos un error genérico sin dar pistas sobre la existencia
+        if (! $user) {
+            return [
+                'status'  => false,
+                'message' => "Credenciales inválidas", // Mensaje más general
+                'user'    => null,
+                'token'   => null,
+            ];
+        }
+
+        // Si el usuario no existe, retornamos un error genérico sin dar pistas sobre la existencia
+        if ($user->rol_id == 2) {
+            return [
+                'status'  => false,
+                'message' => "Su Tipo Usuario No puede Acceder al portal Administrativo", // Mensaje más general
                 'user'    => null,
                 'token'   => null,
             ];
@@ -140,7 +194,7 @@ class AuthService
             return $this->sendTokenByApi($data['phone'], $token);
         }
         if ($data['send_by'] == 'email') {
-            return $this->sendTokenByEmail($data['names'],$data['email'], $token);
+            return $this->sendTokenByEmail($data['names'], $data['email'], $token);
         }
     }
 }

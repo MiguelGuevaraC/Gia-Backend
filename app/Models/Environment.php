@@ -50,4 +50,9 @@ class Environment extends Model
     {
         return $this->belongsTo(Company::class,'company_id');
     }
+
+    public function stations()
+    {
+        return $this->hasMany(Station::class);
+    }
 }

@@ -103,7 +103,9 @@ class EventController extends Controller
 
     public function store(StoreEventRequest $request)
     {
-        $event = $this->eventService->createEvent($request->validated());
+        $data           = $request->validated();
+        $data['status'] = 'Reservado';
+        $event          = $this->eventService->createEvent($data);
         return new EventResource($event);
     }
 
@@ -168,18 +170,17 @@ class EventController extends Controller
      * )
      **/
 
-    public function destroy($id)
-    {
-        $event = $this->eventService->getEventById($id);
-
-        if (! $event) {
-            return response()->json([
-                'error' => 'Evento No Encontrado.',
-            ], 404);
-        }
-        $deleted = $this->eventService->destroyById($id);
-        return response()->json([
-            'message' => 'Evento eliminado exitosamente',
-        ], 200);
-    }
+     public function destroy($id)
+     {
+         $event = $this->eventService->getEventById($id);
+         if (!$event) {
+             return response()->json(['error' => 'Evento no encontrado.'], 404);
+         }
+         if ($event->reservations()->exists()) {
+             return response()->json(['error' => 'El evento tiene reservas asociadas y no se puede eliminar.'], 400);
+         }
+         $this->eventService->destroyById($id);
+         return response()->json(['message' => 'Evento eliminado exitosamente.'], 200);
+     }
+     
 }

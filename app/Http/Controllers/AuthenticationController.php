@@ -59,7 +59,7 @@ class AuthenticationController extends Controller
     }
     /**
      * @OA\Post(
-     *     path="/Gia-Backend/public/api/login",
+     *     path="/Gia-Backend/public/api/login-web",
      *     summary="Login user",
      *     tags={"Authentication"},
      *     description="Authenticate user and generate access token",
@@ -109,14 +109,14 @@ class AuthenticationController extends Controller
      * )
      */
 
-    public function login(LoginRequest $request): JsonResponse
+    public function login_app(LoginRequest $request): JsonResponse
     {
 
         try {
 
             $data = $request->only(['username', 'password']);
             // Llama al servicio de autenticación
-            $authData = $this->authService->login($request->username, $request->password);
+            $authData = $this->authService->login_app($request->username, $request->password);
 
             // Verifica si el usuario es null
             if (! $authData['user']) {
@@ -138,6 +138,89 @@ class AuthenticationController extends Controller
             ], 422);
         }
     }
+
+     /**
+     * @OA\Post(
+     *     path="/Gia-Backend/public/api/login-admin",
+     *     summary="Login user",
+     *     tags={"Authentication"},
+     *     description="Authenticate user and generate access token",
+     * security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User credentials",
+     *         @OA\JsonContent(
+     *             required={"username", "password", "branchOffice_id"},
+     *             @OA\Property(property="username", type="string", example="admin"),
+     *             @OA\Property(property="password", type="string", format="password", example="password"),
+
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User authenticated successfully",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="token", type="string", description="token del usuario"),
+     *             @OA\Property(
+     *             property="user",
+     *             type="object",
+     *             description="User",
+     *             ref="#/components/schemas/User"
+     *          ),
+     *             @OA\Property(
+     *                 property="message",
+     *                 type="string",
+     *                 description="Message Response"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="User not found or password incorrect",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string", description="Error message")
+     *         )
+     *     ),
+     *       @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated.",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="msg", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     * )
+     */
+
+     public function login_admin(LoginRequest $request): JsonResponse
+     {
+ 
+         try {
+ 
+             $data = $request->only(['username', 'password']);
+             // Llama al servicio de autenticación
+             $authData = $this->authService->login_admin($request->username, $request->password);
+ 
+             // Verifica si el usuario es null
+             if (! $authData['user']) {
+                 return response()->json([
+                     'error' => $authData['message'],
+                 ], 422);
+             }
+ 
+             // Retorna la respuesta con el token y el recurso del usuario
+             return response()->json([
+                 'token'   => $authData['token'],
+                 'user'    => new UserResource($authData['user']),
+                 'message' => $authData['message'],
+             ]);
+         } catch (\Exception $e) {
+             // Captura cualquier excepción y retorna el mensaje de error
+             return response()->json([
+                 'error' => $e->getMessage(),
+             ], 422);
+         }
+     }
+
 
     /**
      * @OA\Get(
