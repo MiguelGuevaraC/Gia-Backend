@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -23,7 +22,7 @@ class User extends Authenticatable
         'username',
         'status',
         'password',
-        'person_id',  
+        'person_id',
         'rol_id',
 
     ];
@@ -48,9 +47,9 @@ class User extends Authenticatable
     ];
 
     const filters = [
-        'username' => 'like',
-        'name' => 'like',
-        'person.name' => 'like',
+        'username'             => 'like',
+        'name'                 => 'like',
+        'person.name'          => 'like',
         'person.business_name' => 'like',
     ];
 
@@ -60,7 +59,7 @@ class User extends Authenticatable
     const sorts = [
 
         'username' => 'desc',
-        'id' => 'desc',
+        'id'       => 'desc',
     ];
 
     public function person()
@@ -72,4 +71,6 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Rol::class, 'rol_id');
     }
+ 
+
 }

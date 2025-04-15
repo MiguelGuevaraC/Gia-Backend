@@ -13,7 +13,9 @@ class Permission extends Model
         'id',
         'name',
         'type',
+        'link',
         'status',
+        'group_option_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -28,6 +30,8 @@ class Permission extends Model
         'name' => 'like',
         'type' => 'like',
         'status' => 'like',
+        'link' => 'like',
+        'group_option_id' => '=',
     ];
 
     /**
@@ -42,5 +46,9 @@ class Permission extends Model
     public function roles()
     {
         return $this->belongsToMany(Rol::class, 'permission_rols', 'permission_id', 'rol_id');
+    }
+    public function groupoption()
+    {
+        return $this->belongsTo(GroupOption::class, 'group_option_id');
     }
 }

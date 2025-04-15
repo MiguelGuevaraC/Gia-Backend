@@ -1,8 +1,10 @@
 <?php
-
 namespace App\Http\Resources;
 
+use App\Models\GroupOption;
+use App\Models\Permission;
 use Illuminate\Http\Resources\Json\JsonResource;
+
 
 class UserResource extends JsonResource
 {
@@ -22,15 +24,47 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
+        $menu = $this->menu($this->rol->permissions()->pluck('permission_id'));
         return [
-            'id' => $this->id,
-            'name' => $this->name ?? null,
-            'username' => $this->username ?? null,
-            'person_id' => $this->person_id ??  null,
-            'rol_id' => $this->rol_id ??  null,
-            'person' => $this->person ? new PersonResource($this->person) :  null,
-            'rol' => $this->rol ? new RolResource($this->rol) :  null,
+            'id'        => $this->id,
+            'name'      => $this->name ?? null,
+            'username'  => $this->username ?? null,
+            'person_id' => $this->person_id ?? null,
+            'rol_id'    => $this->rol_id ?? null,
+            'person'    => $this->person ? new PersonResource($this->person) : null,
+            'rol'       => $this->rol ? new RolResource($this->rol) : null,
+            'menu'      => $menu,
         ];
 
     }
+
+    public function menu($data)
+    {
+        $rolePermissionIds = $data;
+ 
+        $groupOptions = GroupOption::with(['permissions' => function ($query) use ($rolePermissionIds) {
+            $query->whereIn('permissions.id', $rolePermissionIds);
+        }])->get();
+    
+        $result = $groupOptions->map(function ($group) {
+            return [
+                'group_option_id' => $group->id,
+                'group_option_name' => $group->name, // si tiene un campo nombre
+                'permissions' => $group->permissions->map(function ($permission) {
+                    return [
+                        'id' => $permission->id,
+                        'name' => $permission->name,
+                        'slug' => $permission->slug,
+                    ];
+                }),
+            ];
+        });
+    
+        return $result;
+    }
+    
+    
+    
+    
+
 }

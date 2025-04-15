@@ -141,7 +141,7 @@ class AuthenticationController extends Controller
 
      /**
      * @OA\Post(
-     *     path="/Gia-Backend/public/api/login-admin",
+     *     path="/Gia-Backend/public/api/login",
      *     summary="Login user",
      *     tags={"Authentication"},
      *     description="Authenticate user and generate access token",

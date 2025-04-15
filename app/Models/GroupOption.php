@@ -1,17 +1,17 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Rol extends Model
+class GroupOption extends Model
 {
     use SoftDeletes;
     protected $fillable = [
         'id',
         'name',
+        'link',
+        'icon',
         'status',
         'created_at',
         'updated_at',
@@ -24,30 +24,23 @@ class Rol extends Model
         'deleted_at',
     ];
     const filters = [
-        'name' => 'like',
-        'status' => '=',
+        'name'   => 'like',
+        'status' => 'like',
+        'link'   => 'like',
+        'icon'   => 'like',
     ];
 
     /**
      * Campos de ordenación disponibles.
      */
     const sorts = [
-        'id' => 'desc',
+        'id'   => 'desc',
+        'type' => 'desc',
         'name' => 'desc',
     ];
 
     public function permissions()
     {
-        return $this->belongsToMany(Permission::class, 'permission_rols', 'rol_id', 'permission_id');
+        return $this->hasMany(Permission::class);
     }
-
- 
-    
-
-
-    public function permissionByRol()
-    {
-        return $this->hasMany(Permission_rol::class);
-    }
-
 }
