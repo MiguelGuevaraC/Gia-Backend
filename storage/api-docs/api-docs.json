@@ -261,6 +261,105 @@
                 ]
             }
         },
+        "/Gia-Backend/public/api/login-web": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login user",
+                "description": "Authenticate user and generate access token",
+                "operationId": "4b43aaf20ad6733c2b2b8e7c90937c45",
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "username",
+                                    "password",
+                                    "branchOffice_id"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string",
+                                        "example": "admin"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User authenticated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "token del usuario",
+                                            "type": "string"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "message": {
+                                            "description": "Message Response",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "User not found or password incorrect",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "description": "Error message",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/Gia-Backend/public/api/login": {
             "post": {
                 "tags": [
@@ -268,7 +367,7 @@
                 ],
                 "summary": "Login user",
                 "description": "Authenticate user and generate access token",
-                "operationId": "631423d189bd40b0ed755b031862f143",
+                "operationId": "4055095a0820cfc583944ff5021f70a1",
                 "requestBody": {
                     "description": "User credentials",
                     "required": true,
@@ -417,6 +516,171 @@
                                         "msg": {
                                             "type": "string",
                                             "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/send-token": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Envía un código de verificación por correo",
+                "operationId": "3ac1de688f3a70b3d6d07db307417a3b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "names": {
+                                        "type": "string",
+                                        "example": "Miguel Guevara"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "guevaracajusolmiguel@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "903017426"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Código enviado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Código Enviado Exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/validate-mail": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Valida token y crea usuario",
+                "operationId": "9271712079301b527ddd9ad134e84c0a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "names": {
+                                        "type": "string",
+                                        "example": "Miguel Guevara"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "guevaracajusolmiguel@gmail.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "903017426"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "#MiguelMiguel123"
+                                    },
+                                    "token_form": {
+                                        "type": "string",
+                                        "example": "6800"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario creado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Token inválido",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Su token ha vencido, Debe generar nuevo token"
                                         }
                                     },
                                     "type": "object"
@@ -616,6 +880,114 @@
                                         "error": {
                                             "type": "string",
                                             "example": "La persona ya tiene un company asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/company-list": {
+            "get": {
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "66bdd6eb44d1f2a03b4592913d66d2f3",
+                "parameters": [
+                    {
+                        "name": "ruc",
+                        "in": "query",
+                        "description": "Filtrar por ruc de la empresa",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "business_name",
+                        "in": "query",
+                        "description": "Filtrar razón social",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "address",
+                        "in": "query",
+                        "description": "Filtrar por dirección",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Filtrar por telefono",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Filtrar por email",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Empresas",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Company"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
@@ -2663,6 +3035,713 @@
                 ]
             }
         },
+        "/Gia-Backend/public/api/product": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Obtener información con filtros y ordenamiento",
+                "operationId": "16efd5e995dc456d59e24c97c738a8c3",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtrar por nombre",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Filtrar por descripción",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "precio",
+                        "in": "query",
+                        "description": "Filtrar por precio",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por estado",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de productos",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Crear product",
+                "operationId": "b8f117bcece536ea8b25797a7423749d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un product asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/product/{id}": {
+            "get": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Obtener detalles de un product por ID",
+                "operationId": "8c4c7d238b4d43d3f418b8ed2fba1785",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la empresa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Producto No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Producto No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Actualizar Product",
+                "operationId": "bbbd86a95fc141d7b997c61694dea934",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la empresa que se desea actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ProductRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Product"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un product asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Eliminar product por ID",
+                "operationId": "a35cdcd8152351b22e9e5de1e98b2f1a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la compañía que se desea eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product No Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Product No Encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/promotion": {
+            "get": {
+                "tags": [
+                    "Promotion"
+                ],
+                "summary": "Obtener información de promociones con filtros y ordenamiento",
+                "operationId": "598fcb21bd386b2309f373ad8295f895",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Filtrar por nombre",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Filtrar por descripción",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "precio",
+                        "in": "query",
+                        "description": "Filtrar por precio",
+                        "required": false,
+                        "schema": {
+                            "type": "number",
+                            "format": "float"
+                        }
+                    },
+                    {
+                        "name": "date_start",
+                        "in": "query",
+                        "description": "Filtrar por fecha de inicio",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "date_end",
+                        "in": "query",
+                        "description": "Filtrar por fecha de fin",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "stock",
+                        "in": "query",
+                        "description": "Filtrar por stock",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "Filtrar por estado (activo, inactivo)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "Filtrar desde esta fecha (creación)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "Filtrar hasta esta fecha (creación)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de Promociones",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Promotion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validación fallida",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Promotion"
+                ],
+                "summary": "Crear promotion",
+                "operationId": "81af84a8141af9a87831768475ba6939",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PromotionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Promotion creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Promotion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un promotion asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/Gia-Backend/public/api/promotion/{id}": {
+            "get": {
+                "tags": [
+                    "Promotion"
+                ],
+                "summary": "Obtener detalles de un promotion por ID",
+                "operationId": "3ae2474e17509969005ffc7bc0473eaa",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la empresa",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Promotion encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Promotion"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Promocion No Encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Promocion No Encontrado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Promotion"
+                ],
+                "summary": "Actualizar Promotion",
+                "operationId": "45192e969a17559235f7126bd7e95696",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la empresa que se desea actualizar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PromotionRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Promotion actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Promotion"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Error de validación",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "La persona ya tiene un promotion asociado."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Promotion"
+                ],
+                "summary": "Eliminar promotion por ID",
+                "operationId": "eb6ad567309158334aae0123184ab01d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la compañía que se desea eliminar",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Promotion eliminada exitosamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Promotion eliminada exitosamente"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Promotion No Encontrada",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Promotion No Encontrada"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "No autorizado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "No autorizado"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/Gia-Backend/public/api/reservation": {
             "get": {
                 "tags": [
@@ -4458,6 +5537,136 @@
     },
     "components": {
         "schemas": {
+            "ProductRequest": {
+                "required": [
+                    "name",
+                    "description"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre del producto",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "description": "Descripción del producto",
+                        "type": "string"
+                    },
+                    "precio": {
+                        "description": "Precio del producto",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "route": {
+                        "description": "Imagen del producto (jpg, jpeg, png, gif, máx 2MB)",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "PromotionRequest": {
+                "required": [
+                    "name",
+                    "description",
+                    "precio",
+                    "date_start",
+                    "date_end",
+                    "stock"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "Nombre de la promoción",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "description": "Descripción de la promoción",
+                        "type": "string"
+                    },
+                    "precio": {
+                        "description": "Precio de la promoción",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "date_start": {
+                        "description": "Fecha de inicio",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "date_end": {
+                        "description": "Fecha de fin",
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "stock": {
+                        "description": "Cantidad en stock",
+                        "type": "integer"
+                    },
+                    "status": {
+                        "description": "Estado de la promoción (activo, inactivo)",
+                        "type": "string"
+                    },
+                    "route": {
+                        "description": "Imagen del producto (jpg, jpeg, png, gif, máx 2MB)",
+                        "type": "string",
+                        "format": "binary"
+                    }
+                },
+                "type": "object"
+            },
+            "CompanyApp": {
+                "title": "CompanyApp",
+                "description": "Company model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "ruc": {
+                        "type": "string",
+                        "example": "20123456789",
+                        "nullable": true
+                    },
+                    "business_name": {
+                        "type": "string",
+                        "example": "Tech Solutions S.A.",
+                        "nullable": true
+                    },
+                    "address": {
+                        "type": "string",
+                        "example": "Av. Principal 123, Lima",
+                        "nullable": true
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "987654321",
+                        "nullable": true
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "info@techsolutions.com",
+                        "nullable": true
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "/company/123",
+                        "nullable": true
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "Activo",
+                        "nullable": true
+                    },
+                    "environments": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EnvironmentApp"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "Company": {
                 "title": "Company",
                 "description": "Company model",
@@ -4553,6 +5762,49 @@
                 },
                 "type": "object"
             },
+            "EnvironmentApp": {
+                "title": "EnvironmentApp",
+                "description": "Environment Application model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Sistema de Gestión",
+                        "nullable": true
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Descripción de la aplicación",
+                        "nullable": true
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "/environment/123"
+                    },
+                    "status": {
+                        "type": "string",
+                        "example": "Activo"
+                    },
+                    "server_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "company_id": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "stations": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "Environment": {
                 "title": "Environment",
                 "description": "Environment model",
@@ -4584,6 +5836,60 @@
                     "company_id": {
                         "type": "integer",
                         "example": 3
+                    },
+                    "company": {
+                        "$ref": "#/components/schemas/Company"
+                    }
+                },
+                "type": "object"
+            },
+            "EventApp": {
+                "title": "EventApp",
+                "description": "Event model",
+                "properties": {
+                    "id": {
+                        "description": "ID del evento",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre del evento",
+                        "type": "string",
+                        "example": "Evento Deportivo"
+                    },
+                    "event_datetime": {
+                        "description": "Fecha y hora del evento",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-01-16 18:00:00"
+                    },
+                    "comment": {
+                        "description": "Comentario del evento",
+                        "type": "string",
+                        "example": "Evento importante del año"
+                    },
+                    "status": {
+                        "description": "Estado del evento basado en la fecha",
+                        "type": "string",
+                        "example": "Próximo"
+                    },
+                    "route": {
+                        "description": "Ruta del evento",
+                        "type": "string",
+                        "example": "/eventos/1"
+                    },
+                    "user_id": {
+                        "description": "ID del usuario asociado",
+                        "type": "integer",
+                        "example": 42
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User1"
+                    },
+                    "company_id": {
+                        "description": "ID de la empresa asociada",
+                        "type": "integer",
+                        "example": 42
                     },
                     "company": {
                         "$ref": "#/components/schemas/Company"
@@ -4778,6 +6084,84 @@
                 },
                 "type": "object"
             },
+            "Product": {
+                "title": "Product",
+                "description": "Product model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Producto 1"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Descripción del producto"
+                    },
+                    "precio": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 99.99
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "/product/1"
+                    }
+                },
+                "type": "object"
+            },
+            "Promotion": {
+                "title": "Promotion",
+                "description": "Promotion model",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Promo Verano"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "20% de descuento en todos los productos"
+                    },
+                    "date_start": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-01"
+                    },
+                    "date_end": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-08-31"
+                    },
+                    "stock": {
+                        "type": "integer",
+                        "example": 100
+                    },
+                    "route": {
+                        "type": "string",
+                        "example": "/promotions/1"
+                    },
+                    "product_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-07-15T12:34:56Z"
+                    }
+                },
+                "type": "object"
+            },
             "Reservation": {
                 "title": "Reservation",
                 "description": "Modelo de reservación",
@@ -4964,12 +6348,49 @@
                         "$ref": "#/components/schemas/Person"
                     },
                     "rol_id": {
-                        "description": "Rol Id",
+                        "description": "Role Id",
                         "type": "integer",
                         "example": "1"
                     },
                     "rol": {
                         "$ref": "#/components/schemas/Rol"
+                    },
+                    "menu": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/GroupOption"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "GroupOption": {
+                "title": "GroupOption",
+                "description": "Modelo que representa un grupo de opciones",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Nombre del grupo de opciones",
+                        "type": "string",
+                        "example": "Usuarios"
+                    },
+                    "link": {
+                        "description": "Ruta o enlace asociado al grupo",
+                        "type": "string",
+                        "example": "/usuarios"
+                    },
+                    "icon": {
+                        "description": "Ícono para el grupo de opciones",
+                        "type": "string",
+                        "example": "fas fa-users"
+                    },
+                    "status": {
+                        "description": "Estado del grupo",
+                        "type": "string",
+                        "example": "activo"
                     }
                 },
                 "type": "object"
@@ -5017,6 +6438,14 @@
         {
             "name": "Person",
             "description": "Person"
+        },
+        {
+            "name": "Product",
+            "description": "Product"
+        },
+        {
+            "name": "Promotion",
+            "description": "Promotion"
         },
         {
             "name": "Reservation",

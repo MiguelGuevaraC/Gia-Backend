@@ -4,6 +4,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @OA\Schema(
+ *     schema="GroupOption",
+ *     title="GroupOption",
+ *     description="Modelo que representa un grupo de opciones",
+ *     type="object",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="Usuarios", description="Nombre del grupo de opciones"),
+ *     @OA\Property(property="link", type="string", example="/usuarios", description="Ruta o enlace asociado al grupo"),
+ *     @OA\Property(property="icon", type="string", example="fas fa-users", description="Ícono para el grupo de opciones"),
+ *     @OA\Property(property="status", type="string", example="activo", description="Estado del grupo"),
+ * )
+ */
+
+ 
 class GroupOption extends Model
 {
     use SoftDeletes;

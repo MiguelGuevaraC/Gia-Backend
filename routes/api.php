@@ -33,6 +33,9 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     require __DIR__ . '/Api/EventApi.php';       //EVENTS
     require __DIR__ . '/Api/ReservationApi.php'; //RESERVATIONS
     require __DIR__ . '/Api/EntryApi.php';       //ENTRY
+    require __DIR__ . '/Api/ProductApi.php';       //PRODUCT
+    require __DIR__ . '/Api/PromotionApi.php';       //PROMOTION
+
 });
 
 Route::post('send-token', [AuthenticationController::class, 'send_token_sign_up']);

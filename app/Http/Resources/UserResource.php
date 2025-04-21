@@ -9,19 +9,19 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
-     * @OA\Schema(
-     *     schema="User",
-     *     title="User",
-     *     description="User model",
-     *     @OA\Property( property="id", type="integer", example="1" ),
-     *     @OA\Property( property="email", type="string", example="miguel@gmail.com" ),
-
-     *     @OA\Property(property="person_id",type="integer",description="Person Id", example="1"),
-     *     @OA\Property(property="person", ref="#/components/schemas/Person"),
-     *     @OA\Property(property="rol_id",type="integer",description="Rol Id", example="1"),
-     *     @OA\Property(property="rol", ref="#/components/schemas/Rol")
-     * )
-     */
+ * @OA\Schema(
+ *     schema="User",
+ *     title="User",
+ *     description="User model",
+ *     @OA\Property(property="id", type="integer", example="1"),
+ *     @OA\Property(property="email", type="string", example="miguel@gmail.com"),
+ *     @OA\Property(property="person_id", type="integer", description="Person Id", example="1"),
+ *     @OA\Property(property="person", ref="#/components/schemas/Person"),
+ *     @OA\Property(property="rol_id", type="integer", description="Role Id", example="1"),
+ *     @OA\Property(property="rol", ref="#/components/schemas/Rol"),
+ *     @OA\Property(property="menu", type="array", items=@OA\Items(ref="#/components/schemas/GroupOption"))
+ * )
+ */
     public function toArray($request)
     {
         $menu = $this->menu($this->rol->permissions()->pluck('permission_id'));
@@ -48,13 +48,16 @@ class UserResource extends JsonResource
     
         $result = $groupOptions->map(function ($group) {
             return [
-                'group_option_id' => $group->id,
-                'group_option_name' => $group->name, // si tiene un campo nombre
+                'id' => $group->id,
+                'name' => $group->name, // si tiene un campo nombre
+                'icon' => $group->icon, 
+                'link' => $group->link, 
                 'permissions' => $group->permissions->map(function ($permission) {
                     return [
                         'id' => $permission->id,
                         'name' => $permission->name,
-                        'slug' => $permission->slug,
+                        'type' => $permission->type,
+                        'link' => $permission->link,
                     ];
                 }),
             ];
