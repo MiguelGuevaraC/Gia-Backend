@@ -30,7 +30,8 @@ class PromotionService
         if (isset($data['route'])) {
             $data['route'] = $this->commonService->update_photo($data, $Promotion, 'Promotions');
         }
-        $Promotion->update($data);
+        $filteredData = array_intersect_key($data, $Promotion->getAttributes());
+        $Promotion->update($filteredData);
         return $Promotion;
     }
 

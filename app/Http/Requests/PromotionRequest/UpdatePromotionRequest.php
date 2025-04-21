@@ -26,12 +26,12 @@ class UpdatePromotionRequest extends UpdateRequest
         return [
             'name'        => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'precio'      => 'required|numeric|min:0',
+            'precio'      => 'nullable|numeric|min:0',
             'date_start'  => 'required|date',
             'date_end'    => 'required|date|after_or_equal:date_start',
-            'stock'       => 'required|integer|min:0',
+            'stock'       => 'nullable|integer|min:0',
             'status'      => 'nullable|string|in:Activo,Inactivo',
-            'product_id'  => 'required|exists:promotions,id', // Validación del ID del producto
+            'product_id'  => 'nullable|exists:promotions,id', // Validación del ID del producto
         ];
     }
 

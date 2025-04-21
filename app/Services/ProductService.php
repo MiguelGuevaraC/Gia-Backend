@@ -30,7 +30,8 @@ class ProductService
         if (isset($data['route'])) {
             $data['route'] = $this->commonService->update_photo($data, $Product, 'Products');
         }
-        $Product->update($data);
+        $filteredData = array_intersect_key($data, $Product->getAttributes());
+        $Product->update($filteredData);
         return $Product;
     }
 
