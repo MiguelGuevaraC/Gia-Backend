@@ -51,6 +51,39 @@ class PromotionController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/Gia-Backend/public/api/promotion-app",
+     *     summary="Obtener información de promociones con filtros y ordenamiento",
+     *     tags={"Promotion"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="name", in="query", description="Filtrar por nombre", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="description", in="query", description="Filtrar por descripción", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="precio", in="query", description="Filtrar por precio", required=false, @OA\Schema(type="number", format="float")),
+     *     @OA\Parameter(name="date_start", in="query", description="Filtrar por fecha de inicio", required=false, @OA\Schema(type="string", format="date")),
+     *     @OA\Parameter(name="date_end", in="query", description="Filtrar por fecha de fin", required=false, @OA\Schema(type="string", format="date")),
+     *     @OA\Parameter(name="stock", in="query", description="Filtrar por stock", required=false, @OA\Schema(type="integer")),
+     *     @OA\Parameter(name="status", in="query", description="Filtrar por estado (activo, inactivo)", required=false, @OA\Schema(type="string")),
+     *     @OA\Parameter(name="from", in="query", description="Filtrar desde esta fecha (creación)", required=false, @OA\Schema(type="string", format="date")),
+     *     @OA\Parameter(name="to", in="query", description="Filtrar hasta esta fecha (creación)", required=false, @OA\Schema(type="string", format="date")),
+     *     @OA\Response(response=200, description="Lista de Promociones", @OA\JsonContent(ref="#/components/schemas/Promotion")),
+     *     @OA\Response(response=422, description="Validación fallida", @OA\JsonContent(type="object", @OA\Property(property="error", type="string")))
+     * )
+     */
+    public function index_app(IndexPromotionRequest $request)
+    {
+        $promotion = Promotion::whereDate('date_start', '<=', now())
+            ->whereDate('date_end', '>=', now())
+            ->where('stock', '>', 0);
+        return $this->getFilteredResults(
+            $promotion,
+            $request,
+            Promotion::filters,
+            Promotion::sorts,
+            PromotionResource::class
+        );
+    }
+
+    /**
+     * @OA\Get(
      *     path="/Gia-Backend/public/api/promotion/{id}",
      *     summary="Obtener detalles de un promotion por ID",
      *     tags={"Promotion"},
