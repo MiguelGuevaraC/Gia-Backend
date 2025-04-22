@@ -17,18 +17,20 @@ class ReservationService
     public function createReservation(array $data): Reservation
     {
         $data['user_id'] = auth()->id();
-
+        $precioreservaton= $data['precio_reservation']; // Eliminamos para evitar error en el fillable
         // Extraer los detalles antes de crear la reserva
         $details = $data['details'] ?? []; // esto debería ser un array de detalles
         unset($data['details']); // Eliminamos para evitar error en el fillable
+        unset($data['precio_reservation']);
+
         $reservation = Reservation::create($data);
 
         DetailReservation::create([
             'cant' => 1,
             'name' => 'Servicio Reserva',
             'type' => 'reserva',
-            'precio' => $data['precio_reservation'],
-            'precio_total' => $data['precio_reservation'],
+            'precio' => $precioreservaton,
+            'precio_total' => $precioreservaton,
             'status' => 'Activo',
             'promotion_id' => null,
             'reservation_id' => $reservation->id,

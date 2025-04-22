@@ -36,6 +36,7 @@ class Station extends Model
         'status'           => 'like',
         'environment.name' => 'like',
         'environment_id'   => '=',
+        'environment.company_id'   => '=',
         'price'=> '=',
         'sort'=> '=',
     ];

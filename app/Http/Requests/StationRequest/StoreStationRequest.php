@@ -3,6 +3,8 @@
 namespace App\Http\Requests\StationRequest;
 
 use App\Http\Requests\StoreRequest;
+use App\Models\Station;
+use Illuminate\Validation\Validator;
 
 class StoreStationRequest extends StoreRequest
 {
@@ -30,6 +32,30 @@ class StoreStationRequest extends StoreRequest
             'environment_id' => 'required|integer|exists:environments,id,deleted_at,NULL', // Validar que exista en la tabla 'environments'
         ];
     }
+
+    public function withValidator(Validator $validator)
+{
+    $validator->after(function ($validator) {
+        $type = $this->input('type');
+        $sort = $this->input('sort');
+        $id   = $this->route('id'); // Asume que la ruta tiene un {id}
+
+        if ($type && $sort !== null) {
+            $query = Station::where('type', $type)->where('sort', $sort);
+            if ($id) $query->where('id', '!=', $id);
+
+            if ($query->exists()) {
+                $validator->errors()->add('sort', "El orden {$sort} ya está registrado para el tipo {$type}.");
+            }
+
+            $ultimo = Station::where('type', $type)->max('sort');
+
+            if ($sort > 1 && $sort != ($ultimo + 1)) {
+                $validator->errors()->add('sort', "El siguiente orden disponible para el tipo {$type} es ".($ultimo + 1).".");
+            }
+        }
+    });
+}
 
     public function messages()
     {
