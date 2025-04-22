@@ -24,6 +24,9 @@ class StoreStationRequest extends StoreRequest
             'description' => 'nullable|string|max:50', // Limitar la longitud del tipo
             'status' => 'nullable|string', // Asegurar que sea true o false
 
+            'price' => 'nullable|numeric|min:0',
+            'sort' => 'nullable|numeric',
+
             'environment_id' => 'required|integer|exists:environments,id,deleted_at,NULL', // Validar que exista en la tabla 'environments'
         ];
     }
@@ -48,6 +51,10 @@ class StoreStationRequest extends StoreRequest
             'environment_id.required' => 'El ambiente es obligatorio.',
             'environment_id.integer' => 'El identificador del ambiente debe ser un número entero.',
             'environment_id.exists' => 'El ambiente seleccionado no existe.',
+
+            'price.numeric' => 'El campo precio debe ser un número.',
+            'price.min' => 'El precio no puede ser menor que 0.',
+            'sort.numeric' => 'El campo orden debe ser un número.',
         ];
     }
 

@@ -32,6 +32,10 @@ class IndexStationRequest extends IndexRequest
 
             'environment$name' => 'nullable|string',
             'environment_id' => 'nullable|string',
+
+            'precio' => 'nullable|string',
+            'sort' => 'nullable|string',
+
         ];
     }
 }

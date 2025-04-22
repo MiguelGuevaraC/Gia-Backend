@@ -30,6 +30,9 @@ class UpdateStationRequest extends UpdateRequest
             'name' => 'sometimes|string|max:255', // Opcional, pero si está presente debe cumplir con las reglas
             'type' => 'sometimes|string|max:255', // Opcional y limitado a 50 caracteres
             'description' => 'sometimes|string|max:300', // Limitar la longitud del tipo
+            'price' => 'nullable|numeric|min:0',
+            'sort' => 'nullable|numeric',
+
            'status' => [
             'sometimes',
             'string',
@@ -68,6 +71,10 @@ class UpdateStationRequest extends UpdateRequest
     
             'environment_id.integer' => 'El identificador del ambiente debe ser un número entero.',
             'environment_id.exists' => 'El ambiente seleccionado no existe.',
+
+            'price.numeric' => 'El campo precio debe ser un número.',
+            'price.min' => 'El precio no puede ser menor que 0.',
+            'sort.numeric' => 'El campo orden debe ser un número.',
         ];
     }
     

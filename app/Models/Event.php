@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Event extends Model
 {
-    
+
     use SoftDeletes;
     protected $fillable = [
         'id',
@@ -15,6 +15,8 @@ class Event extends Model
         'event_datetime',
         'route',
         'comment',
+        'pricetable',
+        'pricebox',
         'company_id',
         'status',
         'user_id',
@@ -38,7 +40,9 @@ class Event extends Model
         'nro_boxes'      => '=',
         'status'         => 'like',
         'user_id'        => '=',
-        'company_id'        => '=',
+        'company_id'     => '=',
+        'pricetable'     => '=',
+        'pricebox'       => '=',
     ];
 
     /**

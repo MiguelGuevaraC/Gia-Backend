@@ -3,7 +3,7 @@ namespace App\Http\Requests\AuthenticationRequest;
 
 use App\Http\Requests\StoreRequest;
 
-class LoginRequest extends StoreRequest
+class LoginRequestWeb extends StoreRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,7 @@ class LoginRequest extends StoreRequest
         return [
             "username" => [
                 "required",
-                'exists:users,username',
+                'exists:users,username', 'email',
             ],
             "password" => [
                 "required",

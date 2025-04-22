@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -18,7 +16,7 @@ class Promotion extends Model
         'date_end',
         'stock',
         'route',
-
+        'status',
         'product_id',
         'created_at',
         'updated_at',
@@ -31,21 +29,21 @@ class Promotion extends Model
         'deleted_at',
     ];
     const filters = [
-        'name'=> 'like',
-        'description'=> 'like',
-     
-        'precio'=> '=',
-        'date_start'=> 'date',
-        'date_end'=> 'date',
-        'stock'=> '=',
+        'name'        => 'like',
+        'description' => 'like',
 
+        'precio'      => '=',
+        'date_start'  => 'date',
+        'date_end'    => 'date',
+        'stock'       => '=',
+        'status'      => '=',
     ];
 
     /**
      * Campos de ordenación disponibles.
      */
     const sorts = [
-        'id'            => 'desc',
+        'id' => 'desc',
     ];
     public function product()
     {

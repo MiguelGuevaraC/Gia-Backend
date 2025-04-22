@@ -32,7 +32,9 @@ class PromotionResource extends JsonResource
             'date_start' => $this->date_start ?? null,
             'date_end' => $this->date_end ?? null,
             'stock' => $this->stock ?? null,
+            'status' => $this->status ?? null,
             'route' => $this?->product?->route ?? null,
+            
             'product_id' => $this->product_id ?? null,
             'created_at' => $this->created_at ?? null,
         ];

@@ -61,4 +61,8 @@ class Reservation extends Model
     {
         return $this->belongsTo(Station::class, 'station_id');
     }
+    public function detailReservations()
+    {
+        return $this->hasMany(DetailReservation::class);
+    }
 }

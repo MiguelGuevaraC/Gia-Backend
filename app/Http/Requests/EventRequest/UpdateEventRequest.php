@@ -30,6 +30,9 @@ class UpdateEventRequest extends UpdateRequest
             'status'         => 'nullable|string',          // Asegurar que sea true o false
             'company_id'     => 'required|integer|exists:companies,id,deleted_at,NULL',
             'route'          => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
+
+            'pricebox' => 'required|numeric|min:0',
+            'pricetable' => 'required|numeric|min:0',
         ];
     }
 
@@ -56,6 +59,14 @@ class UpdateEventRequest extends UpdateRequest
             'route.image'             => 'El archivo debe ser una imagen.',
             'route.mimes'             => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',
             'route.max'               => 'El archivo no puede ser mayor a 2 MB.',
+
+            'pricebox.required' => 'El campo precio de box es obligatorio.',
+            'pricebox.numeric' => 'El campo precio de box debe ser un número.',
+            'pricebox.min' => 'El precio de box no puede ser menor que 0.',
+        
+            'pricetable.required' => 'El campo precio de mesa es obligatorio.',
+            'pricetable.numeric' => 'El campo precio de mesa debe ser un número.',
+            'pricetable.min' => 'El precio de mesa no puede ser menor que 0.',
 
         ];
     }

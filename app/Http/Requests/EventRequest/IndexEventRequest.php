@@ -30,6 +30,10 @@ class IndexEventRequest extends IndexRequest
             'status'         => 'nullable|string',
             'user_id'        => 'nullable|string',
             'company_id'        => 'nullable|string',
+
+            'pricebox'        => 'nullable|string',
+            'pricetable'        => 'nullable|string',
+
         ];
     }
 }

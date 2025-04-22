@@ -16,6 +16,10 @@ class EventResource extends JsonResource
      *     @OA\Property(property="event_datetime", type="string", example="2025-01-16 18:00:00", description="Fecha y hora del evento"),
      *     @OA\Property(property="comment", type="string", example="Evento importante del año", description="Comentario del evento"),
 
+     *     @OA\Property(property="pricebox", type="string", example="Precio Box", description="Precio Box"),
+     *     @OA\Property(property="pricetable", type="string", example="Precio Mesas", description="Precio Mesas"),
+
+
      *     @OA\Property(property="status", type="string", example="Activo", description="Estado del evento"),
      *     @OA\Property(property="user_id", type="integer", example=42, description="ID del usuario asociado"),
      *      @OA\Property(property="user", ref="#/components/schemas/User1"),
@@ -33,6 +37,9 @@ class EventResource extends JsonResource
             'comment'        => $this->comment ?? null,
             'status'         => $this->event_datetime ? (Carbon::parse($this->event_datetime)->isFuture() ? 'Próximo' : 'Finalizó') : null,
             'route'          => $this->route ?? null,
+            'pricebox'       => $this->pricebox ?? null,
+            'pricetable'     => $this->pricetable ?? null,
+
             'user_id'        => $this->user_id ?? null,
             'user'           => $this->user ? new UserOnlyResource($this->user) : null,
 

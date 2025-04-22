@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthenticationRequest\LoginRequest;
+use App\Http\Requests\AuthenticationRequest\LoginRequestWeb;
 use App\Http\Requests\UserRequest\SendTokenAppRequest;
 use App\Http\Requests\UserRequest\StoreUserAppRequest;
 use App\Http\Resources\UserOnlyResource;
@@ -109,7 +110,7 @@ class AuthenticationController extends Controller
      * )
      */
 
-    public function login_app(LoginRequest $request): JsonResponse
+    public function login_app(LoginRequestWeb $request): JsonResponse
     {
 
         try {

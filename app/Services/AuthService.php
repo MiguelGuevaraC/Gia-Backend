@@ -46,6 +46,16 @@ class AuthService
             ];
         }
 
+        if ($user->rol_id == 1) {
+            return [
+                'status'  => false,
+                'message' => "Su Tipo Usuario No puede Acceder al portal App", // Mensaje más general
+                'user'    => null,
+                'token'   => null,
+            ];
+        }
+
+
         // Autentica al usuario
         Auth::login($user);
 

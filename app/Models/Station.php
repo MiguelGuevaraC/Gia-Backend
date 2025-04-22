@@ -18,6 +18,8 @@ class Station extends Model
         'server_id',
         'route',
         'environment_id',
+        'price',
+        'sort',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -34,6 +36,8 @@ class Station extends Model
         'status'           => 'like',
         'environment.name' => 'like',
         'environment_id'   => '=',
+        'price'=> '=',
+        'sort'=> '=',
     ];
 
     /**

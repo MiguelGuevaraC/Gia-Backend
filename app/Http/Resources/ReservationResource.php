@@ -48,6 +48,7 @@ class ReservationResource extends JsonResource
             'event'                => $this->event ? new EventResource($this->event) : null,
             'station_id'           => $this->station_id ?? null,
             'station'              => $this->station ? $this->station : null,
+            'detailReservations'              => $this->detailReservations ? $this->detailReservations : null,
         ];
     }
 
