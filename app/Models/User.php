@@ -71,6 +71,40 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Rol::class, 'rol_id');
     }
- 
+
+    public function isFlagData()
+    {
+        foreach (['phone', 'email', 'number_document', 'names', 'father_surname', 'mother_surname'] as $campo) {
+            if (empty($this->person->{$campo})) {
+                return 0;
+            }
+        }
+        return 1;
+    }
+    
+    public function textFlagData()
+    {
+        $campos = [
+            'phone'           => 'teléfono',
+            'email'           => 'correo electrónico',
+            'number_document' => 'documento',
+            'names'           => 'nombres',
+            'father_surname'  => 'apellido paterno',
+            'mother_surname'  => 'apellido materno',
+        ];
+    
+        $faltantes = [];
+    
+        foreach ($campos as $campo => $descripcion) {
+            if (empty($this->person->{$campo})) {
+                $faltantes[] = $descripcion;
+            }
+        }
+    
+        return empty($faltantes)
+            ? 'Datos Completos'
+            : 'Faltan los siguientes datos: ' . implode(', ', $faltantes);
+    }
+    
 
 }

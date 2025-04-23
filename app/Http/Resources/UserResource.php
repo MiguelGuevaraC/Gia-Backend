@@ -31,6 +31,8 @@ class UserResource extends JsonResource
             'username'  => $this->username ?? null,
             'person_id' => $this->person_id ?? null,
             'rol_id'    => $this->rol_id ?? null,
+            'isFlagData'      => $this->isFlagData() ?? null,
+            'textFlagData'      => $this->textFlagData() ?? null,
             'person'    => $this->person ? new PersonResource($this->person) : null,
             'rol'       => $this->rol ? new RolResource($this->rol) : null,
             'menu'      => $menu,
