@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,18 +24,20 @@ class PromotionResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name ?? null,
-            'description' => $this->description ?? null,
-            'precio' => $this->precio ?? null,
-            'date_start' => $this->date_start ?? null,
-            'date_end' => $this->date_end ?? null,
-            'stock' => $this->stock ?? null,
-            'status' => $this->status ?? null,
-            'route' => $this?->product?->route ?? null,
-            
-            'product_id' => $this->product_id ?? null,
-            'created_at' => $this->created_at ?? null,
+            'id'             => $this->id,
+            'name'           => $this->name ?? null,
+            'description'    => $this->description ?? null,
+            'precio'         => $this->precio ?? null,
+            'date_start'     => $this->date_start ?? null,
+            'date_end'       => $this->date_end ?? null,
+            'stock'          => $this->stock ?? null,
+            'stock_restante' => $this->stock_restante ?? null,
+
+            'status'         => $this->status ?? null,
+            'route'          => $this?->product?->route ?? null,
+
+            'product_id'     => $this->product_id ?? null,
+            'created_at'     => $this->created_at ?? null,
         ];
     }
 }

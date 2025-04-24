@@ -20,6 +20,7 @@ class PromotionService
     public function createPromotion(array $data): Promotion
     {
         $data['status']='Activo';
+        $data['stock_restante']=$data['stock'];
         $Promotion = Promotion::create($data);
         $this->commonService->store_photo($data, $Promotion, 'Promotions');
         return $Promotion;

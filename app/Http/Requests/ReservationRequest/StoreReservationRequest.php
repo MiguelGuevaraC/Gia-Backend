@@ -47,8 +47,8 @@ class StoreReservationRequest extends StoreRequest
                         continue; // Ya validado por 'exists'
                     }
 
-                    if ($promotion->stock < $detail['cant']) {
-                        $validator->errors()->add("details.$index.cant", "La promoción '{$promotion->name}' no tiene suficiente stock. Disponible: {$promotion->stock}.");
+                    if ($promotion->stock_restante < $detail['cant']) {
+                        $validator->errors()->add("details.$index.cant", "La promoción '{$promotion->name}' no tiene suficiente stock. No se puede realizar su Reserva.");
                     }
                 }
             }

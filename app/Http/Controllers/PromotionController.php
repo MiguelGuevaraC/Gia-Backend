@@ -72,7 +72,7 @@ class PromotionController extends Controller
     {
         $promotion = Promotion::whereDate('date_start', '<=', now())
             ->whereDate('date_end', '>=', now())
-            ->where('stock', '>', 0);
+            ->where('stock_restante', '>', 0);
         return $this->getFilteredResults(
             $promotion,
             $request,

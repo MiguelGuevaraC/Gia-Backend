@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Promotion extends Model
 {
@@ -15,6 +16,7 @@ class Promotion extends Model
         'date_start',
         'date_end',
         'stock',
+        'stock_restante',
         'route',
         'status',
         'product_id',
@@ -49,4 +51,20 @@ class Promotion extends Model
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
+
+    public function recalculateStockPromotion()
+    {
+        $stockUsado = DB::table('detail_reservations as dr')
+            ->join('reservations as r', 'dr.reservation_id', '=', 'r.id')
+            ->where('dr.promotion_id', $this->id)
+            ->whereNotIn('r.status', ['Caducada','Anulada'])
+            ->whereNull('dr.deleted_at')
+            ->sum('dr.cant');
+    
+        $stockInicial = $this->stock;
+    
+        $nuevoStock = max($stockInicial - $stockUsado, 0); // evita negativos
+        $this->update(['stock_restante' => $nuevoStock]);
+    }
+    
 }

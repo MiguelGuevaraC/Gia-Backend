@@ -31,7 +31,7 @@ class ReservationService
             'type' => 'reserva',
             'precio' => $precioreservaton,
             'precio_total' => $precioreservaton,
-            'status' => 'Activo',
+            'status' => 'Pendiente Pago',
             'promotion_id' => null,
             'reservation_id' => $reservation->id,
         ]);

@@ -37,6 +37,17 @@ class Reservation extends Model
         'person_id'            => '=',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($movement) {
+
+
+        });
+
+    }
+
     /**
      * Campos de ordenación disponibles.
      */

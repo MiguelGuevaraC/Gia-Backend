@@ -40,6 +40,15 @@ class DetailReservation extends Model
         'promotion_id' => '=',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saved(function ($detailReservation) {
+            $detailReservation?->promotion?->recalculateStockPromotion();
+        });
+
+    }
     /**
      * Campos de ordenación disponibles.
      */
@@ -58,4 +67,7 @@ class DetailReservation extends Model
     {
         return $this->belongsTo(Promotion::class, 'promotion_id');
     }
+
+
+    
 }
