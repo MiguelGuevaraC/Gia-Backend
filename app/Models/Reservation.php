@@ -14,6 +14,7 @@ class Reservation extends Model
         'reservation_datetime',
         'nro_people',
         'status',
+        'expires_at',
         'user_id',
         'event_id',
         'station_id',

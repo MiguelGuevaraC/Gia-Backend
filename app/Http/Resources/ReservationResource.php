@@ -38,7 +38,8 @@ class ReservationResource extends JsonResource
 
             'nroPeople'            => $this->nro_people ?? null,
 
-            'status'               => $this->reservation_datetime ? (Carbon::parse($this->reservation_datetime)->isFuture() ? 'Reservado' : 'Finalizó') : null,
+            // 'status'               => $this->reservation_datetime ? (Carbon::parse($this->reservation_datetime)->isFuture() ? 'Reservado' : 'Finalizó') : null,
+            'status'               => $this->status ?? null,
 
             'total'                => $this->detailReservations()->sum('precio_total') ?? null,
 
@@ -52,6 +53,9 @@ class ReservationResource extends JsonResource
             'station'              => $this->station ? $this->station : null,
             'detailReservations'   => $this->detailReservations ? $this->detailReservations : null,
             'created_at'           => $this->created_at->format('Y-m-d H:i:s'),
+            'expires_at'           => $this->expires_at != null
+            ? Carbon::parse($this->expires_at)->format('Y-m-d H:i:s')
+            : null,
         ];
     }
 
