@@ -39,6 +39,7 @@ class StoreReservationRequest extends StoreRequest
         $validator->after(function ($validator) {
             if ($this->filled('details')) {
                 foreach ($this->input('details') as $index => $detail) {
+                    // Validación de stock
                     $promotion = Promotion::where('id', $detail['id'])
                         ->whereNull('deleted_at')
                         ->first();
@@ -50,12 +51,31 @@ class StoreReservationRequest extends StoreRequest
                     // Ejecutar la actualización del stock antes de la validación
                     $promotion->recalculateStockPromotion();
 
-                    // Luego, validar si el stock restante es suficiente
                     if ($promotion->stock_restante < $detail['cant']) {
-                        $validator->errors()->add("details.$index.cant", "La promoción '{$promotion->name}' no tiene suficiente stock. No se puede agregar la cantidad seleccionada.");
+                        $validator->errors()->add("details.$index.cant", "La promoción '{$promotion->name}' no tiene suficiente stock.");
                     }
+
                 }
             }
+
+            if ($this->filled('event_id')) {
+                $mesaOcupada = \App\Models\Reservation::where('event_id', $this->input('event_id'))
+                    ->where('station_id', $this->input('station_id'))
+                    ->where('status', '!=', 'Caducado')
+                    ->with(['station', 'event']) // Cargar relaciones
+                    ->first();
+
+                if ($mesaOcupada) {
+                    $nombreMesa   = optional($mesaOcupada->station)->name ?? 'Mesa desconocida';
+                    $nombreEvento = optional($mesaOcupada->event)->name ?? 'Evento desconocido';
+
+                    $validator->errors()->add(
+                        "details.$index.station_id",
+                        "La mesa '{$nombreMesa}' ya está ocupada en el evento '{$nombreEvento}'."
+                    );
+                }
+            }
+
         });
     }
 
