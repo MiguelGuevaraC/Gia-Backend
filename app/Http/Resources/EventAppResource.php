@@ -35,6 +35,8 @@ class EventAppResource extends JsonResource
             'comment'        => $this->comment ?? null,
             'pricebox'       => $this->pricebox ?? null,
             'pricetable'     => $this->pricetable ?? null,
+            'activeStations'     => $this->activeStations() ?? null,
+
             'status'         => $this->event_datetime ? (Carbon::parse($this->event_datetime)->isFuture() ? 'Próximo' : 'Finalizó') : null,
             'route'          => $this->route ?? null,
         ];

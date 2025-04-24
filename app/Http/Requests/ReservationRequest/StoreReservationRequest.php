@@ -22,7 +22,7 @@ class StoreReservationRequest extends StoreRequest
             'name'                 => 'required|string|max:255',
             'reservation_datetime' => 'required|date',
             'nro_people'           => 'nullable|string|max:255',
-            'precio_reservation' => 'required|numeric|min:0',
+            'precio_reservation'   => 'required|numeric|min:0',
 
             'event_id'             => 'required|string|max:255|exists:events,id,deleted_at,NULL',
             'station_id'           => 'required|string|max:255|exists:stations,id,deleted_at,NULL',
@@ -47,8 +47,12 @@ class StoreReservationRequest extends StoreRequest
                         continue; // Ya validado por 'exists'
                     }
 
+                    // Ejecutar la actualización del stock antes de la validación
+                    $promotion->recalculateStockPromotion();
+
+                    // Luego, validar si el stock restante es suficiente
                     if ($promotion->stock_restante < $detail['cant']) {
-                        $validator->errors()->add("details.$index.cant", "La promoción '{$promotion->name}' no tiene suficiente stock. No se puede realizar su Reserva.");
+                        $validator->errors()->add("details.$index.cant", "La promoción '{$promotion->name}' no tiene suficiente stock. No se puede agregar la cantidad seleccionada.");
                     }
                 }
             }
@@ -80,9 +84,9 @@ class StoreReservationRequest extends StoreRequest
             'person_id.max'                 => 'El identificador de la persona no puede superar los 255 caracteres.',
             'person_id.exists'              => 'La persona seleccionada no existe en la base de datos.',
 
-            'precio_reservation.required' => 'El campo precio de reserva es obligatorio.',
-            'precio_reservation.numeric' => 'El campo precio de reserva debe ser un número.',
-            'precio_reservation.min' => 'El precio de reserva no puede ser menor que 0.',
+            'precio_reservation.required'   => 'El campo precio de reserva es obligatorio.',
+            'precio_reservation.numeric'    => 'El campo precio de reserva debe ser un número.',
+            'precio_reservation.min'        => 'El precio de reserva no puede ser menor que 0.',
         ];
     }
 

@@ -57,14 +57,19 @@ class Promotion extends Model
         $stockUsado = DB::table('detail_reservations as dr')
             ->join('reservations as r', 'dr.reservation_id', '=', 'r.id')
             ->where('dr.promotion_id', $this->id)
-            ->whereNotIn('r.status', ['Caducada','Anulada'])
+            ->whereNotIn('r.status', ['Caducado'])
             ->whereNull('dr.deleted_at')
             ->sum('dr.cant');
+            
     
         $stockInicial = $this->stock;
     
         $nuevoStock = max($stockInicial - $stockUsado, 0); // evita negativos
-        $this->update(['stock_restante' => $nuevoStock]);
+
+        $promotion= Promotion::find( $this->id);
+        // $this->update(['stock_restante' => $nuevoStock]);
+        $promotion->stock_restante=$nuevoStock;
+        $promotion->save();
     }
     
 }

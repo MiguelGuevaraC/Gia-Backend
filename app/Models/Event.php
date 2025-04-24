@@ -66,5 +66,27 @@ class Event extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+    public function reservations_actives()
+    {
+        return $this->hasMany(Reservation::class)->with(['station'])->whereNot('status', 'Caducado');
+    }
+
+    public function activeStations()
+    {
+        return $this->reservations()
+            ->where('status', '!=', 'Caducado')
+            ->with('station')
+            ->get()
+            ->filter(fn($r) => $r->station)     // Asegurarse que tenga estación
+            ->unique(fn($r) => $r->station->id) // Solo una reserva por estación
+            ->map(function ($reservation) {
+                return [
+                    'nro_recepcion' => $reservation->id,
+                    'status_recepcion'        => $reservation->status,
+                    'station'       => $reservation->station,
+                ];
+            })
+            ->values();
+    }
 
 }

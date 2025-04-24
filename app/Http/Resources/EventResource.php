@@ -39,6 +39,7 @@ class EventResource extends JsonResource
             'route'          => $this->route ?? null,
             'pricebox'       => $this->pricebox ?? null,
             'pricetable'     => $this->pricetable ?? null,
+            'activeStations'     => $this->activeStations() ?? null,
 
             'user_id'        => $this->user_id ?? null,
             'user'           => $this->user ? new UserOnlyResource($this->user) : null,

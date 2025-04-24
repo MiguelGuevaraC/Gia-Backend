@@ -40,13 +40,21 @@ class PromotionController extends Controller
     public function index(IndexPromotionRequest $request)
     {
 
-        return $this->getFilteredResults(
+        $promotions = $this->getFilteredResults(
             Promotion::class,
             $request,
             Promotion::filters,
             Promotion::sorts,
             PromotionResource::class
         );
+
+        if ($promotions instanceof \Illuminate\Pagination\LengthAwarePaginator) {
+            $promotions = $promotions->getCollection();
+        }
+        $promotions->each(function ($promotion) {
+            $promotion->recalculateStockPromotion();
+        });
+        return $promotions;
     }
 
     /**
@@ -70,16 +78,24 @@ class PromotionController extends Controller
      */
     public function index_app(IndexPromotionRequest $request)
     {
-        $promotion = Promotion::whereDate('date_start', '<=', now())
-            ->whereDate('date_end', '>=', now())
-            ->where('stock_restante', '>', 0);
-        return $this->getFilteredResults(
-            $promotion,
+        // Obtener las promociones filtradas utilizando getFilteredResults
+        $promotions = $this->getFilteredResults(
+            Promotion::whereDate('date_start', '<=', now())
+                ->whereDate('date_end', '>=', now()),
+                // ->where('stock_restante', '>', 0),
             $request,
             Promotion::filters,
             Promotion::sorts,
             PromotionResource::class
         );
+
+        if ($promotions instanceof \Illuminate\Pagination\LengthAwarePaginator) {
+            $promotions = $promotions->getCollection();
+        }
+        $promotions->each(function ($promotion) {
+            $promotion->recalculateStockPromotion();
+        });
+        return $promotions;
     }
 
     /**
