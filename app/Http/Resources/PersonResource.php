@@ -42,6 +42,7 @@ class PersonResource extends JsonResource
             'father_surname' => $this->father_surname?? null,
             'mother_surname' => $this->mother_surname?? null,
             'business_name' => $this->business_name?? null,
+            'date_birth' => $this->date_birth?? null,
             'address' => $this->address??  null,
             'phone' => $this->phone??  null,
             'email' => $this->email??  null,

@@ -18,6 +18,8 @@ class Person extends Model
         'mother_surname',
         'business_name',
 
+        'date_birth',
+
         'address',
         'phone',
         'email',

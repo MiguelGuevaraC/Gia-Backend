@@ -22,17 +22,18 @@ class UpdatePersonRequest extends UpdateRequest
      *
      * @return array<string, mixed>
      */
-    public function rules($id)
+    public function rules()
     {
         $id = $this->route('id'); // Obtén el ID de la ruta, que se asume que es el ID del usuario
     
         return [
-            'type_document' => 'required|string|max:50',
-            'type_person' => 'required|string|in:NATURAL,JURIDICA', // Opciones válidas
+            'type_document' => 'nullable|string|max:50',
+            'type_person' => 'nullable|string|in:NATURAL,JURIDICA', // Opciones válidas
             'number_document' => "required|string|max:20|unique:people,number_document,{$id},id,deleted_at,NULL",
             'names' => 'required|string|max:255',
             'father_surname' => 'nullable|string|max:255',
             'mother_surname' => 'nullable|string|max:255',
+            'date_birth' => 'nullable|date',
             'business_name' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|regex:/^\d{9,15}$/', // Acepta números de 9 a 15 dígitos

@@ -32,7 +32,7 @@ class DetailReservationResource extends JsonResource
             'status'         => $this->status ?? null,
             'reservation_id' => $this->reservation_id ?? null,
             'promotion_id'   => $this->promotion_id ?? null,
-            'promotion'   => new PromotionResource($this->promotion)  ?? null,
+            'promotion'      => new PromotionResource($this->promotion) ?? null,
             'precio_total'   => $this->precio_total ?? null,
         ];
     }
