@@ -8,6 +8,7 @@ use App\Http\Requests\StationRequest\UpdateStationRequest;
 use App\Http\Resources\StationResource;
 use App\Models\Station;
 use App\Services\StationService;
+use Illuminate\Http\Request;
 
 class StationController extends Controller
 {
@@ -36,17 +37,37 @@ class StationController extends Controller
  * )
  */
 
-    public function index(IndexStationRequest $request)
-    {
-        Station::updateStatus();
-        return $this->getFilteredResults(
-            Station::class,
-            $request,
-            Station::filters,
-            Station::sorts,
-            StationResource::class
-        );
-    }
+ public function index(IndexStationRequest $request)
+ {
+     $eventId = $request->get('event_id');
+
+ 
+     // Obtiene el query filtrado y ordenado (sin ejecutar aún)
+     $result = $this->getFilteredResults(
+         Station::class,
+         $request,
+         Station::filters,
+         Station::sorts,
+         StationResource::class
+     );
+ 
+     // Obtener la colección
+     $stations = $result->getCollection();
+ 
+     // Si se pasó el ID del evento, marcar disponibilidad
+     if ($eventId) {
+ 
+         $stations->transform(function ($station)use ($eventId)  {
+           
+             $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado'
+             : 'Disponible';
+             return $station;
+         });
+     }
+ 
+     return StationResource::collection($stations);
+ }
+ 
 
     /**
      * @OA\Get(
@@ -60,19 +81,27 @@ class StationController extends Controller
      * )
      */
 
-    public function show($id)
-    {
-
-        $station = $this->stationService->getStationById($id);
-
-        if (! $station) {
-            return response()->json([
-                'error' => 'Station No Encontrado',
-            ], 404);
-        }
-
-        return new StationResource($station);
-    }
+     public function show(Request $request, $id)
+     {
+         $station = $this->stationService->getStationById($id);
+     
+         if (! $station) {
+             return response()->json([
+                 'error' => 'Estación no encontrada',
+             ], 404);
+         }
+     
+         $eventId = $request->get('event_id');
+     
+         if ($eventId) {
+            
+            $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado'
+            : 'Disponible';
+         }
+    
+         return new StationResource($station);
+     }
+     
 
     /**
      * @OA\Post(

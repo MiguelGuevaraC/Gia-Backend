@@ -24,7 +24,7 @@ class IndexStationRequest extends IndexRequest
     public function rules(): array
     {
         return [
-
+'event_id' => 'nullable|string',
             'name' => 'nullable|string',
             'type' => 'nullable|string',
             'descriptioni' => 'nullable|string',

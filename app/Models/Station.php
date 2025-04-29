@@ -31,14 +31,14 @@ class Station extends Model
         'deleted_at',
     ];
     const filters = [
-        'name'             => 'like',
-        'type'             => 'like',
-        'status'           => 'like',
-        'environment.name' => 'like',
-        'environment_id'   => '=',
-        'environment.company_id'   => '=',
-        'price'=> '=',
-        'sort'=> '=',
+        'name'                   => 'like',
+        'type'                   => 'like',
+        'status'                 => 'like',
+        'environment.name'       => 'like',
+        'environment_id'         => '=',
+        'environment.company_id' => '=',
+        'price'                  => '=',
+        'sort'                   => '=',
     ];
 
     /**
@@ -72,7 +72,6 @@ class Station extends Model
             END
         ");
     }
-    
 
     public function getReservationDatetime()
     {
@@ -113,6 +112,14 @@ class Station extends Model
     public function reservations()
     {
         return $this->hasMany(Reservation::class, 'station_id');
+    }
+
+    public function isAvailableForEvent($eventId)
+    {
+        return $this->reservations()
+            ->where('event_id', $eventId)
+            ->where('status', '!=', 'Caducado')
+            ->exists();
     }
 
 }
