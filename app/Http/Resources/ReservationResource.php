@@ -51,7 +51,9 @@ class ReservationResource extends JsonResource
             'event'                => $this->event ? new EventResource($this->event) : null,
             'station_id'           => $this->station_id ?? null,
             'station'              => $this->station ? $this->station : null,
-            'detailReservations'   => $this->detailReservations ? $this->detailReservations : null,
+          'detailReservations' => $this->detailReservations
+    ? DetailReservationResource::collection($this->detailReservations)
+    : null,
             'created_at'           => $this->created_at->format('Y-m-d H:i:s'),
             'expires_at'           => $this->expires_at != null
             ? Carbon::parse($this->expires_at)->format('Y-m-d H:i:s')
