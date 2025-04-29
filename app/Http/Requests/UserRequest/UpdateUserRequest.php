@@ -25,7 +25,7 @@ class UpdateUserRequest extends UpdateRequest
     
         return [
             'username' => [
-                'required',
+                'nullable',
                 'string',
                 Rule::unique('users')->whereNull('deleted_at')->ignore($id), // Ignora el ID del usuario en la ruta
             ],
@@ -42,8 +42,8 @@ class UpdateUserRequest extends UpdateRequest
             'address' => 'nullable|string|max:255',
             'phone' => 'nullable|string|max:15|regex:/^\+?[0-9\s\-]+$/',
             'email' => 'nullable|string|max:255|email',
-            'rol_id' => 'required|integer|exists:rols,id,deleted_at,NULL',
-            
+            'rol_id' => 'nullable|integer|exists:rols,id,deleted_at,NULL',
+            'date_birth' => 'nullable|date',
             'number_document' => [
                 'required',
                 function ($attribute, $value, $fail) use ($id) {

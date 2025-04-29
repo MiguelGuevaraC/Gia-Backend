@@ -54,26 +54,14 @@ class UserService
                                  // Encontrar a la persona asociada al usuario
         $person = $User->person; // Relación 'person' entre Usuario y Persona
 
-        $name = $person->type_document === 'DNI'
-        ? $person->names . ' ' . $person->father_surname . ' ' . $person->mother_surname
-        : $person->business_name;
-
         // Verificar si la persona existe
         if ($person) {
 
             // Actualizar los datos de la persona con los valores proporcionados
-            $person->update([
-                'names'           => $name ?? $person->names,
-                'number_document' => $data['number_document'] ?? $person->number_document,
-                'father_surname'  => $data['father_surname'] ?? $person->father_surname,
-                'mother_surname'  => $data['mother_surname'] ?? $person->mother_surname,
-                'type_document'   => $data['type_document'] ?? $person->type_document,
-                'type_person'     => $data['type_person'] ?? $person->type_person,
-                'business_name'   => $data['business_name'] ?? $person->business_name,
-                'address'         => $data['address'] ?? $person->address,
-                'phone'           => $data['phone'] ?? $person->phone,
-                'email'           => $data['email'] ?? $person->email,
-            ]);
+            $filteredData = array_intersect_key($data, $person->getAttributes());
+            $person->update($filteredData);
+
+            $User->name= $person->names;
         } else {
             // Si no se encuentra la persona asociada al usuario, lanzar un error o manejarlo
             throw new \Exception('Persona no encontrada para el usuario con ID: ' . $User->id);
