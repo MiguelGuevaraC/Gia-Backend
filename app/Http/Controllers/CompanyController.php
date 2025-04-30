@@ -217,6 +217,9 @@ class CompanyController extends Controller
                 'error' => 'Company No Encontrado.',
             ], 404);
         }
+        if ($deleted->environments()->exists()) {
+            return 'No se puede eliminar porque tiene Ambientes relacionados.';
+        }
 
         $deleted = $this->companyService->destroyById($id);
 
