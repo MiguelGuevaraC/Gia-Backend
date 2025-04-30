@@ -210,13 +210,15 @@ class CompanyController extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->companyService->destroyById($id);
+        $deleted = $this->companyService->getCompanyById($id);
 
         if (! $deleted) {
             return response()->json([
                 'error' => 'Company No Encontrado.',
             ], 404);
         }
+
+        $deleted = $this->companyService->destroyById($id);
 
         return response()->json([
             'message' => 'Company eliminado exitosamente',

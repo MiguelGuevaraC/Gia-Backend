@@ -61,7 +61,8 @@ class RerservationController extends Controller
         $reservations = collect($results->items())->filter(function ($reservation) use ($reservationDatetime, $event_id) {
             $isToday      = Carbon::parse($reservation->reservation_datetime)->isSameDay(Carbon::parse($reservationDatetime));
             $matchesEvent = $event_id ? $reservation->event->id == $event_id : true;
-            return $isToday && $matchesEvent;
+            // return $isToday && $matchesEvent;
+            return $matchesEvent ;
         });
 
         // Contar reservas de tipo MESA y BOX
@@ -219,14 +220,14 @@ class RerservationController extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->reservaService->destroyById($id);
+        $deleted = $this->reservaService->getReservationById($id);
 
         if (! $deleted) {
             return response()->json([
                 'error' => 'Reservación No Encontrado.',
             ], 404);
         }
-
+        $deleted = $this->reservaService->destroyById($id);
         return response()->json([
             'message' => 'Reserva eliminado exitosamente',
         ], 200);

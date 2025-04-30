@@ -171,14 +171,14 @@ class EnvironmentController extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->environmentService->destroyById($id);
+        $deleted = $this->environmentService->getEnvironmentById($id);
 
         if (!$deleted) {
             return response()->json([
                 'error' => 'Environment No Encontrado.',
             ], 404);
         }
-
+        $deleted = $this->environmentService->destroyById($id);
         return response()->json([
             'message' => 'Environment eliminado exitosamente',
         ], 200);

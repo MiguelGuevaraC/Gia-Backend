@@ -184,14 +184,14 @@ class EntryController extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->entryService->destroyById($id);
+        $deleted = $this->entryService->getEntryById($id);
 
         if (! $deleted) {
             return response()->json([
                 'error' => 'Entrada No Encontrado.',
             ], 404);
         }
-
+        $deleted = $this->entryService->destroyById($id);
         return response()->json([
             'message' => 'Entrada eliminado exitosamente',
         ], 200);

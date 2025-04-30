@@ -204,14 +204,14 @@ class PromotionController extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->promotionService->destroyById($id);
-
+       
+        $deleted = $this->promotionService->getPromotionById($id);
         if (! $deleted) {
             return response()->json([
                 'error' => 'Promocion No Encontrado.',
             ], 404);
         }
-
+        $deleted = $this->promotionService->destroyById($id);
         return response()->json([
             'message' => 'Promocion eliminado exitosamente',
         ], 200);

@@ -37,37 +37,78 @@ class StationController extends Controller
  * )
  */
 
- public function index(IndexStationRequest $request)
- {
-     $eventId = $request->get('event_id');
+    public function index(IndexStationRequest $request)
+    {
+        $eventId = $request->get('event_id');
 
- 
-     // Obtiene el query filtrado y ordenado (sin ejecutar aún)
-     $result = $this->getFilteredResults(
-         Station::class,
-         $request,
-         Station::filters,
-         Station::sorts,
-         StationResource::class
-     );
- 
-     // Obtener la colección
-     $stations = $result->getCollection();
- 
-     // Si se pasó el ID del evento, marcar disponibilidad
-     if ($eventId) {
- 
-         $stations->transform(function ($station)use ($eventId)  {
-           
-             $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado'
-             : 'Disponible';
-             return $station;
-         });
-     }
- 
-     return StationResource::collection($stations);
- }
- 
+        // Obtiene el query filtrado y paginado (ejecutado)
+        $result = $this->getFilteredResults(
+            Station::class,
+            $request,
+            Station::filters,
+            Station::sorts,
+            StationResource::class
+        );
+
+        // Recorre la colección si hay un ID de evento y modifica los datos
+        if ($eventId) {
+            $result->getCollection()->transform(function ($station) use ($eventId) {
+                $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado' : 'Disponible';
+                return $station;
+            });
+        }
+
+        // Devuelve la respuesta paginada completa
+        return StationResource::collection($result)
+            ->additional([
+                'links' => [
+                    'first' => $result->url(1),
+                    'last'  => $result->url($result->lastPage()),
+                    'prev'  => $result->previousPageUrl(),
+                    'next'  => $result->nextPageUrl(),
+                ],
+                'meta'  => [
+                    'current_page' => $result->currentPage(),
+                    'from'         => $result->firstItem(),
+                    'last_page'    => $result->lastPage(),
+                    'links'        => $this->formatPaginationLinks($result),
+                    'path'         => $request->url(),
+                    'per_page'     => $result->perPage(),
+                    'to'           => $result->lastItem(),
+                    'total'        => $result->total(),
+                ],
+            ]);
+    }
+
+    private function formatPaginationLinks($paginator)
+    {
+        $links = [];
+
+        // Link anterior
+        $links[] = [
+            'url'    => $paginator->previousPageUrl(),
+            'label'  => '&laquo; Previous',
+            'active' => false,
+        ];
+
+        // Links por página
+        foreach ($paginator->getUrlRange(1, $paginator->lastPage()) as $page => $url) {
+            $links[] = [
+                'url'    => $url,
+                'label'  => (string) $page,
+                'active' => $page === $paginator->currentPage(),
+            ];
+        }
+
+        // Link siguiente
+        $links[] = [
+            'url'    => $paginator->nextPageUrl(),
+            'label'  => 'Next &raquo;',
+            'active' => false,
+        ];
+
+        return $links;
+    }
 
     /**
      * @OA\Get(
@@ -81,27 +122,26 @@ class StationController extends Controller
      * )
      */
 
-     public function show(Request $request, $id)
-     {
-         $station = $this->stationService->getStationById($id);
-     
-         if (! $station) {
-             return response()->json([
-                 'error' => 'Estación no encontrada',
-             ], 404);
-         }
-     
-         $eventId = $request->get('event_id');
-     
-         if ($eventId) {
-            
+    public function show(Request $request, $id)
+    {
+        $station = $this->stationService->getStationById($id);
+
+        if (! $station) {
+            return response()->json([
+                'error' => 'Estación no encontrada',
+            ], 404);
+        }
+
+        $eventId = $request->get('event_id');
+
+        if ($eventId) {
+
             $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado'
             : 'Disponible';
-         }
-    
-         return new StationResource($station);
-     }
-     
+        }
+
+        return new StationResource($station);
+    }
 
     /**
      * @OA\Post(
@@ -216,8 +256,8 @@ class StationController extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->stationService->destroyById($id);
-
+        
+        $deleted = $this->stationService->getStationById($id);
         if (! $deleted) {
             return response()->json([
                 'error' => 'Station No Encontrado.',
@@ -228,7 +268,7 @@ class StationController extends Controller
                 'error' => 'Este elemento está vinculado a reservaciones.',
             ], 404);
         }
-
+        $deleted = $this->stationService->destroyById($id);
         return response()->json([
             'message' => 'Station eliminado exitosamente',
         ], 200);

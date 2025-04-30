@@ -135,14 +135,15 @@ class PersonaController extends Controller
  
      public function destroy($id)
      {
-         $deleted = $this->personService->destroyById($id);
- 
+         
+        $deleted = $this->personService->getPersonById($id);
          if (!$deleted) {
              return response()->json([
                  'error' => 'Persona no encontrada.',
              ], 404);
          }
  
+         $deleted = $this->personService->destroyById($id);
          return response()->json([
              'message' => 'Persona eliminada exitosamente',
          ], 200);

@@ -153,13 +153,14 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-        $deleted = $this->productService->destroyById($id);
+        $deleted = $this->productService->getProductById($id);
 
         if (! $deleted) {
             return response()->json([
                 'error' => 'Producto No Encontrado.',
             ], 404);
         }
+        $deleted = $this->productService->destroyById($id);
 
         return response()->json([
             'message' => 'Producto eliminado exitosamente',

@@ -187,14 +187,14 @@ class UserController extends Controller
                 'message' => 'Este Usuario No puede ser Eliminado',
             ], 422);
         }
-        $deleted = $this->userService->destroyById($id);
+        $deleted = $this->userService->getUserById($id);
 
         if (!$deleted) {
             return response()->json([
                 'error' => 'Usuario No Encontrado o .',
             ], 404);
         }
-
+        $deleted = $this->userService->destroyById($id);
         return response()->json([
             'message' => 'Persona eliminada exitosamente',
         ], 200);
