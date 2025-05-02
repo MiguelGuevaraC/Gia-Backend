@@ -341,7 +341,7 @@ class AuthenticationController extends Controller
             return response()->json(['message' => 'Su token ha vencido, Debe generar nuevo token'], 422);
         }
 
-        $data = array_merge($request->validated(), ['type_document' => "DNI", 'type_person' => "USUARIO", 'username' => $request->email, 'rol_id' => 2]);
+        $data = array_merge($request->validated(), ['type_document' => "DNI", 'type_person' => "NATURAL", 'username' => $request->email, 'rol_id' => 2]);
         $user = $this->userService->createUser($data);
 
         if ($user) {                                               // Verifica si la creación del usuario fue exitosa

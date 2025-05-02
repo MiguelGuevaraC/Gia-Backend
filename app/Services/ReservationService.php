@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\DetailReservation;
 use App\Models\Promotion;
 use App\Models\Reservation;
+use App\Models\Setting;
 
 class ReservationService
 {
@@ -17,7 +18,8 @@ class ReservationService
     {
         $data['user_id']    = auth()->id();
         $precioreservaton   = $data['precio_reservation']; // Eliminamos para evitar error en el fillable
-        $data['expires_at'] = now()->addMinutes(5);
+        $data['expires_at'] = now()->addMinutes(Setting::find(1)?->amount ?? 5);
+
         $data['status']     = 'Pendiente Pago';
       
                                                                      // Extraer los detalles antes de crear la reserva
