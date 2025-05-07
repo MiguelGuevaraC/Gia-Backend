@@ -25,7 +25,7 @@ class UpdatePermissionRequest extends UpdateRequest
     {
         return [
             'name'            => 'nullable|string|max:255',
-            'type'            => 'nullable|string|in:Usuarios,Roles', // Actualizado a obligatorio según el esquema
+            'type'            => 'nullable|string', // Actualizado a obligatorio según el esquema
             'status'          => 'nullable|string|in:Activo,Inactivo',            // Corregido a tipo numérico
             'link'            => 'nullable|string',                   // El campo link sigue siendo opcional
             'group_option_id' => 'nullable|exists:group_options,id',
