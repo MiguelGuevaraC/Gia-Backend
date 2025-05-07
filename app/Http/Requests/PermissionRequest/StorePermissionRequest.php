@@ -33,7 +33,7 @@ class StorePermissionRequest extends StoreRequest
         return [
             'name'            => 'required|string|max:255',
             'type'            => 'nullable|string|in:Usuarios,Roles', // Actualizado a obligatorio según el esquema
-            'status'          => 'nullable|string|activo,inactivo',            // Corregido a tipo numérico
+            'status'          => 'nullable|string|in:Activo,Inactivo',            // Corregido a tipo numérico
             'link'            => 'nullable|string',                   // El campo link sigue siendo opcional
             'group_option_id' => 'required|exists:group_options,id',
         ];
@@ -52,7 +52,7 @@ class StorePermissionRequest extends StoreRequest
 
             'status.numeric'           => 'El estado debe ser un número.',
             'status.min'               => 'El estado no puede ser negativo.',
-            'status.in'               => 'El estado solo puede ser activo, inactivo.',
+            'status.in'               => 'El estado solo puede ser Activo, Inactivo.',
 
             'link.string'              => 'El enlace debe ser una cadena de texto.',
 

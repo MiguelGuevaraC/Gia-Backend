@@ -26,7 +26,7 @@ class UpdatePermissionRequest extends UpdateRequest
         return [
             'name'            => 'nullable|string|max:255',
             'type'            => 'nullable|string|in:Usuarios,Roles', // Actualizado a obligatorio según el esquema
-            'status'          => 'nullable|string',            // Corregido a tipo numérico
+            'status'          => 'nullable|string|in:Activo,Inactivo',            // Corregido a tipo numérico
             'link'            => 'nullable|string',                   // El campo link sigue siendo opcional
             'group_option_id' => 'nullable|exists:group_options,id',
         ];
@@ -45,6 +45,7 @@ class UpdatePermissionRequest extends UpdateRequest
 
             'status.numeric'           => 'El estado debe ser un número.',
             'status.min'               => 'El estado no puede ser negativo.',
+            'status.in'               => 'El estado solo puede ser Activo, Inactivo.',
 
             'link.string'              => 'El enlace debe ser una cadena de texto.',
 
