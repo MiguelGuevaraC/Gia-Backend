@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('type')->nullable();
             $table->string('status')->default('Activo')->nullable();
+       
             
             $table->timestamps();
             $table->softDeletes();
