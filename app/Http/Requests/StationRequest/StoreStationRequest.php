@@ -27,36 +27,44 @@ class StoreStationRequest extends StoreRequest
             'status' => 'nullable|string', // Asegurar que sea true o false
 
             'price' => 'nullable|numeric|min:0',
-            'sort' => 'nullable|numeric',
+            'sort' => 'nullable|numeric|min:0',
 
             'environment_id' => 'required|integer|exists:environments,id,deleted_at,NULL', // Validar que exista en la tabla 'environments'
         ];
     }
 
     public function withValidator(Validator $validator)
-{
-    $validator->after(function ($validator) {
-        $type = $this->input('type');
-        $sort = $this->input('sort');
-        $id   = $this->route('id'); // Asume que la ruta tiene un {id}
+    {
+        $validator->after(function ($validator) {
+            $type          = $this->input('type');
+            $sort          = $this->input('sort');
+            $environmentId = $this->input('environment_id');
+            $id            = $this->route('id'); // para edición
 
-        if ($type && $sort !== null) {
-            $query = Station::where('type', $type)->where('sort', $sort);
-            if ($id) $query->where('id', '!=', $id);
+            if ($type && $sort !== null && $environmentId) {
+                $query = Station::where('type', $type)
+                    ->where('sort', $sort)
+                    ->where('environment_id', $environmentId);
 
-            if ($query->exists()) {
-                $validator->errors()->add('sort', "El orden {$sort} ya está registrado para el tipo {$type}.");
+                if ($id) {
+                    $query->where('id', '!=', $id);
+                }
+
+                if ($query->exists()) {
+                    $validator->errors()->add('sort', "El orden {$sort} ya está ocupado en el croquis para el tipo {$type} dentro de este ambiente. Por favor, elige otro número.");
+                }
+
+                $ultimo = Station::where('type', $type)
+                    ->where('environment_id', $environmentId)
+                    ->max('sort');
+
+                // if ($sort > 1 && $sort != ($ultimo + 1)) {
+                //     $validator->errors()->add('sort', "El orden ingresado no es válido. El siguiente número disponible en el croquis para el tipo {$type} dentro de este ambiente es " . ($ultimo + 1) . ".");
+                // }
+
             }
-
-            $ultimo = Station::where('type', $type)->max('sort');
-
-            if ($sort > 1 && $sort != ($ultimo + 1)) {
-                $validator->errors()->add('sort', "El siguiente orden disponible para el tipo {$type} es ".($ultimo + 1).".");
-            }
-        }
-    });
-}
-
+        });
+    }
     public function messages()
     {
         return [
@@ -81,6 +89,7 @@ class StoreStationRequest extends StoreRequest
             'price.numeric' => 'El campo precio debe ser un número.',
             'price.min' => 'El precio no puede ser menor que 0.',
             'sort.numeric' => 'El campo orden debe ser un número.',
+            'sort.min' => 'El campo orden no puede ser negativo.',
         ];
     }
 

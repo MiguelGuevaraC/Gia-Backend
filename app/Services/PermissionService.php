@@ -16,7 +16,7 @@ class PermissionService
 
     public function createPermission(array $data): Permission
     {
-        $data['status']='Activo';
+      
         $Permission = Permission::create($data);
 
         return $Permission;

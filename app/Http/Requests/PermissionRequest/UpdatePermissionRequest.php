@@ -24,10 +24,11 @@ class UpdatePermissionRequest extends UpdateRequest
     public function rules()
     {
         return [
-            'name'            => 'required|string|max:255',
-            'type'            => 'nullable|string',
-            'status'          => 'nullable|string',
-            'group_option_id' => 'required|exists:group_options,id',
+            'name'            => 'nullable|string|max:255',
+            'type'            => 'nullable|string|in:Usuarios,Roles', // Actualizado a obligatorio según el esquema
+            'status'          => 'nullable|string',            // Corregido a tipo numérico
+            'link'            => 'nullable|string',                   // El campo link sigue siendo opcional
+            'group_option_id' => 'nullable|exists:group_options,id',
         ];
     }
 
@@ -40,14 +41,16 @@ class UpdatePermissionRequest extends UpdateRequest
 
             'type.required'            => 'El tipo es obligatorio.',
             'type.string'              => 'El tipo debe ser una cadena de texto.',
+            'type.in'                  => 'El tipo debe ser Usuarios o Roles.',
 
             'status.numeric'           => 'El estado debe ser un número.',
             'status.min'               => 'El estado no puede ser negativo.',
+
+            'link.string'              => 'El enlace debe ser una cadena de texto.',
 
             'group_option_id.required' => 'El grupo de opción es obligatorio.',
             'group_option_id.exists'   => 'El grupo de opción seleccionado no es válido.',
         ];
     }
-
 
 }

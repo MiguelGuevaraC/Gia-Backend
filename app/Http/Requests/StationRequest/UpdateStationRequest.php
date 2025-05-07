@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\UpdateRequest;
 use App\Models\Station;
+use Illuminate\Contracts\Validation\Validator;
 
 class UpdateStationRequest extends UpdateRequest
 {
@@ -31,7 +32,7 @@ class UpdateStationRequest extends UpdateRequest
             'type' => 'sometimes|string|max:255', // Opcional y limitado a 50 caracteres
             'description' => 'sometimes|string|max:300', // Limitar la longitud del tipo
             'price' => 'nullable|numeric|min:0',
-            'sort' => 'nullable|numeric',
+            'sort' => 'nullable|numeric|min:0',
 
            'status' => [
             'sometimes',
@@ -49,7 +50,38 @@ class UpdateStationRequest extends UpdateRequest
             'environment_id' => 'sometimes|integer|exists:environments,id,deleted_at,NULL', // Opcional, pero debe existir en la tabla 'environments'
         ];
     }
-    
+    public function withValidator(Validator $validator)
+    {
+        $validator->after(function ($validator) {
+            $type          = $this->input('type');
+            $sort          = $this->input('sort');
+            $environmentId = $this->input('environment_id');
+            $id            = $this->route('id'); // para edición
+
+            if ($type && $sort !== null && $environmentId) {
+                $query = Station::where('type', $type)
+                    ->where('sort', $sort)
+                    ->where('environment_id', $environmentId);
+
+                if ($id) {
+                    $query->where('id', '!=', $id);
+                }
+
+                if ($query->exists()) {
+                    $validator->errors()->add('sort', "El orden {$sort} ya está ocupado en el croquis para el tipo {$type} dentro de este ambiente. Por favor, elige otro número.");
+                }
+
+                $ultimo = Station::where('type', $type)
+                    ->where('environment_id', $environmentId)
+                    ->max('sort');
+
+                // if ($sort > 1 && $sort != ($ultimo + 1)) {
+                //     $validator->errors()->add('sort', "El orden ingresado no es válido. El siguiente número disponible en el croquis para el tipo {$type} dentro de este ambiente es " . ($ultimo + 1) . ".");
+                // }
+
+            }
+        });
+    }
 
     public function messages()
     {
@@ -75,6 +107,8 @@ class UpdateStationRequest extends UpdateRequest
             'price.numeric' => 'El campo precio debe ser un número.',
             'price.min' => 'El precio no puede ser menor que 0.',
             'sort.numeric' => 'El campo orden debe ser un número.',
+
+            'sort.min' => 'El campo orden no puede ser negativo.',
         ];
     }
     
