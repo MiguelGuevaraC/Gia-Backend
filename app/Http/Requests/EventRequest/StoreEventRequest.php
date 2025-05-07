@@ -2,6 +2,7 @@
 namespace App\Http\Requests\EventRequest;
 
 use App\Http\Requests\StoreRequest;
+use Illuminate\Support\Facades\DB;
 
 class StoreEventRequest extends StoreRequest
 {
@@ -15,20 +16,37 @@ class StoreEventRequest extends StoreRequest
         return true; // Cambia esto si necesitas autorización específica
     }
 
+
+    
     public function rules()
     {
         return [
             'name'           => 'required|string|max:255',
-            'event_datetime' => 'required|date',            // Debe ser una fecha válida
-            'comment'        => 'nullable|string|max:1000', // Permitir comentarios opcionales
-            'status'         => 'nullable|string',          // Asegurar que sea true o false
+            'event_datetime' => [
+                'required',
+                'date',
+                function ($attribute, $value, $fail) {
+                    $eventDate = \Carbon\Carbon::parse($value)->format('Y-m-d');
+    
+                    $exists = DB::table('events')
+                        ->whereDate('event_datetime', $eventDate)
+                        ->whereNull('deleted_at')
+                        ->exists();
+    
+                    if ($exists) {
+                        $fail("Ya existe un evento programado para el día {$eventDate}.");
+                    }
+                },
+            ],
+            'comment'        => 'nullable|string|max:1000',
+            'status'         => 'nullable|string',
             'company_id'     => 'required|integer|exists:companies,id,deleted_at,NULL',
-            'route'          => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048', // Validar archivo de imagen
-
-            'pricebox' => 'required|numeric|min:0',
-            'pricetable' => 'required|numeric|min:0',
+            'route'          => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'pricebox'       => 'required|numeric|min:0',
+            'pricetable'     => 'required|numeric|min:0',
         ];
     }
+    
 
     public function messages()
     {

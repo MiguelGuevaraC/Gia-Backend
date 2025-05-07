@@ -7,6 +7,7 @@ use App\Http\Requests\PromotionRequest\UpdatePromotionRequest;
 use App\Http\Resources\PromotionResource;
 use App\Models\Promotion;
 use App\Services\PromotionService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PromotionController extends Controller
@@ -57,6 +58,30 @@ class PromotionController extends Controller
         return $promotions;
     }
 
+    public function index_resumen(IndexPromotionRequest $request)
+    {
+        // Obtener fecha actual
+        $today = Carbon::now();
+
+        // Calcular inicio (lunes) y fin (domingo) de la semana actual
+        $startOfWeek = $today->copy()->startOfWeek(Carbon::MONDAY);
+        $endOfWeek   = $today->copy()->endOfWeek(Carbon::SUNDAY);
+
+        // Aplicar filtro adicional a la consulta para que solo incluya promociones dentro de la semana
+        $promotions = $this->getFilteredResults(
+            Promotion::where(function ($query) use ($startOfWeek, $endOfWeek) {
+                $query->whereBetween('date_start', [$startOfWeek, $endOfWeek])
+                    ->orWhereBetween('date_end', [$startOfWeek, $endOfWeek]);
+            }),
+            $request,
+            Promotion::filters,
+            Promotion::sorts,
+            PromotionResource::class
+        );
+
+        return $promotions;
+    }
+
     /**
      * @OA\Get(
      *     path="/Gia-Backend/public/api/promotion-app",
@@ -82,7 +107,7 @@ class PromotionController extends Controller
         $promotions = $this->getFilteredResults(
             Promotion::whereDate('date_start', '<=', now())
                 ->whereDate('date_end', '>=', now()),
-                // ->where('stock_restante', '>', 0),
+            // ->where('stock_restante', '>', 0),
             $request,
             Promotion::filters,
             Promotion::sorts,
@@ -204,7 +229,7 @@ class PromotionController extends Controller
 
     public function destroy($id)
     {
-       
+
         $deleted = $this->promotionService->getPromotionById($id);
         if (! $deleted) {
             return response()->json([
