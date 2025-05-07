@@ -60,19 +60,13 @@ class PromotionController extends Controller
 
     public function index_resumen(IndexPromotionRequest $request)
     {
-        // Obtener fecha actual
-        $today = Carbon::now();
+        // Obtener fecha actual (sin hora)
+        $today = Carbon::today();
 
-        // Calcular inicio (lunes) y fin (domingo) de la semana actual
-        $startOfWeek = $today->copy()->startOfWeek(Carbon::MONDAY);
-        $endOfWeek   = $today->copy()->endOfWeek(Carbon::SUNDAY);
-
-        // Aplicar filtro adicional a la consulta para que solo incluya promociones dentro de la semana
+        // Aplicar filtro: promociones activas el día de hoy
         $promotions = $this->getFilteredResults(
-            Promotion::where(function ($query) use ($startOfWeek, $endOfWeek) {
-                $query->whereBetween('date_start', [$startOfWeek, $endOfWeek])
-                    ->orWhereBetween('date_end', [$startOfWeek, $endOfWeek]);
-            }),
+            Promotion::whereDate('date_start', '<=', $today)
+                ->whereDate('date_end', '>=', $today),
             $request,
             Promotion::filters,
             Promotion::sorts,

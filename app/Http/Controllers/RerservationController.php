@@ -66,8 +66,8 @@ class RerservationController extends Controller
         });
 
         // Contar reservas de tipo MESA y BOX
-        $reservasMesa = $reservations->where('station.type', 'MESA')->count();
-        $reservasBox  = $reservations->where('station.type', 'BOX')->count();
+        $reservasMesa = $reservations->where("status","!=","Caducado")->where('station.type', 'MESA')->count();
+        $reservasBox  = $reservations->where("status","!=","Caducado")->where('station.type', 'BOX')->count();
 
         // Contar mesas libres para hoy, filtrando por event_id si es necesario
         $event = Event::find($event_id); // Obtener el evento primero
