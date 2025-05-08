@@ -50,7 +50,7 @@ class StoreReservationRequest extends StoreRequest
 
                     // Ejecutar la actualización del stock antes de la validación
                     $promotion->recalculateStockPromotion();
-
+                    $promotion->find($promotion->id);
                     if ($promotion->stock_restante < $detail['cant']) {
                         $validator->errors()->add("details.$index.cant", "La promoción '{$promotion->name}' no tiene suficiente stock.");
                     }

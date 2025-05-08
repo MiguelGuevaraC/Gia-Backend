@@ -84,18 +84,20 @@ class Station extends Model
         return $reservation ? $reservation->reservation_datetime : 'No hay reserva existente para esta mesa.';
     }
 
-    public function getReservation()
+    public function getReservation($reservation)
     {
         $reservation = $this->hasMany(Reservation::class, 'station_id')
-            ->whereDate('reservation_datetime', '=', now()->toDateString())
-            ->latest('reservation_datetime') // Ordena por el campo de fecha de reserva
+            ->whereDate('reservation_datetime', now()->toDateString())
+            ->latest('reservation_datetime')
             ->first();
-        // Retornar el valor de 'reservation_datetime' o un mensaje predeterminado
+    
         return $reservation ? [
-            "person"     => $reservation->person,
-            "nro_people" => $reservation->nro_people,
+            "person"       => $reservation->person,
+            "nro_people"   => $reservation->nro_people,
+            "event_name"   => optional($reservation->event)->name,
         ] : null;
     }
+    
 
     public function getReservationStatus()
     {
@@ -121,5 +123,16 @@ class Station extends Model
             ->where('status', '!=', 'Caducado')
             ->exists();
     }
+
+    public function getReservaForEvent($eventId)
+    {
+        return $this->reservations()
+        ->where('event_id', $eventId)
+        ->where('status', '!=', 'Caducado')
+        ->latest() // ordena por timestamps (por defecto created_at)
+        ->first();
+        
+    }
+    
 
 }

@@ -29,6 +29,7 @@ class IndexStationRequest extends IndexRequest
             'type' => 'nullable|string',
             'descriptioni' => 'nullable|string',
             'status' => 'nullable|string',
+            'station_datetime' => 'nullable',
 
             'environment$name' => 'nullable|string',
             'environment_id' => 'nullable|string',

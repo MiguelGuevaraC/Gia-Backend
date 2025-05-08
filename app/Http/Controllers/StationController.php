@@ -6,8 +6,10 @@ use App\Http\Requests\StationRequest\IndexStationRequest;
 use App\Http\Requests\StationRequest\StoreStationRequest;
 use App\Http\Requests\StationRequest\UpdateStationRequest;
 use App\Http\Resources\StationResource;
+use App\Models\Event;
 use App\Models\Station;
 use App\Services\StationService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class StationController extends Controller
@@ -39,7 +41,8 @@ class StationController extends Controller
 
     public function index(IndexStationRequest $request)
     {
-        $eventId = $request->get('event_id');
+        $eventId              = $request->get('event_id');
+        $reservation_datetime = $request->get('station_datetime') ?? now()->toDateString();
 
         // Obtiene el query filtrado y paginado (ejecutado)
         $result = $this->getFilteredResults(
@@ -50,10 +53,34 @@ class StationController extends Controller
             StationResource::class
         );
 
-        // Recorre la colección si hay un ID de evento y modifica los datos
         if ($eventId) {
-            $result->getCollection()->transform(function ($station) use ($eventId) {
+            $event = Event::find($eventId);
+        } else {
+            $event = Event::whereDate('event_datetime', Carbon::parse($reservation_datetime)->toDateString())->first();
+
+        }
+
+        if ($event) {
+
+            $eventDate = Carbon::parse($event->event_datetime)->toDateString();
+            $eventId   = $event->id;
+            $result->getCollection()->transform(function ($station) use ($eventId, $eventDate) {
+
                 $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado' : 'Disponible';
+
+                $station->reservation = $reservation = ($station->getReservaForEvent($eventId));
+
+                $station->reservation = $reservation ? [
+                    "person"     => $reservation->person,
+                    "nro_people" => $reservation->nro_people,
+                    "event_name" => optional($reservation->event)->name,
+                    "event_datetime" => optional($reservation->event)->event_datetime,
+                ] : null;
+
+                $station->reservation_datetime = $reservation
+                ? Carbon::parse($reservation->reservation_datetime)->translatedFormat('d F \d\e\l Y')
+                : 'No hay reserva existente para esta mesa en la fecha del evento.';
+
                 return $station;
             });
         }
@@ -256,7 +283,7 @@ class StationController extends Controller
 
     public function destroy($id)
     {
-        
+
         $deleted = $this->stationService->getStationById($id);
         if (! $deleted) {
             return response()->json([

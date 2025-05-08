@@ -36,8 +36,8 @@ class StationResource extends JsonResource
             'status'           => $this->status ??  null,
             'route'            => $this->route ??  null,
             'server_id'        => $this->server_id,
-            'date_reservation' => $this->getReservationDatetime(),
-            'reservation' => $this->getReservation(),
+            'date_reservation' => $this->reservation_datetime,
+            'reservation' => $this->reservation,
             'environment_id'   => $this->environment_id,
             'environment'      => $this->environment ? new EnvironmentResource($this->environment) :  null,
         ];
