@@ -37,7 +37,7 @@ class StoreGalleryRequest extends FormRequest
             'images.*.file' => [
                 'required_without:images.*.name',
                 'file',
-                'mimes:jpeg,jpg,png,gif,pdf,doc,docx,xls,xlsx',
+                'mimes:jpeg,jpg,png,gif',
                 'max:4096',
             ],
             'images.*.name' => 'nullable|string|max:255',
@@ -56,7 +56,7 @@ class StoreGalleryRequest extends FormRequest
 
             'images.*.file.required_without' => 'Debe proporcionar un archivo si no se especifica un nombre.',
             'images.*.file'                  => 'El archivo subido no es válido.',
-            'images.*.file.mimes'            => 'El archivo debe ser de tipo: jpeg, jpg, png, gif, pdf, doc, docx, xls o xlsx.',
+            'images.*.file.mimes'            => 'El archivo debe ser de tipo: jpeg, jpg, png o gif',
             'images.*.file.max'              => 'El archivo no debe superar los 4MB.',
 
             'images.*.name.string'           => 'El nombre del archivo debe ser una cadena de texto.',
