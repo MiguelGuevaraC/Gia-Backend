@@ -34,6 +34,22 @@ class StoreReservationRequest extends StoreRequest
         ];
     }
 
+    public function prepareForValidation()
+    {
+        if ($this->filled('details')) {
+            foreach ($this->input('details') as $detail) {
+                $promotion = Promotion::where('id', $detail['id'] ?? null)
+                    ->whereNull('deleted_at')
+                    ->first();
+
+                if ($promotion) {
+                    // Actualizar el stock antes de validar
+                    $promotion->recalculateStockPromotion();
+                }
+            }
+        }
+    }
+
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
