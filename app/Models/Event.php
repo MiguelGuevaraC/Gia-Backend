@@ -51,6 +51,7 @@ class Event extends Model
     const sorts = [
         'id'   => 'desc',
         'name' => 'desc',
+        'event_datetime' => 'desc',
     ];
 
     public function user()

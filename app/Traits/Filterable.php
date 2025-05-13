@@ -10,11 +10,11 @@ trait Filterable
     {
         // Obtener el valor del campo 'search' de la solicitud
         $search = $request->query('search');
-    
+
         foreach ($filters as $filter => $operator) {
             $paramName = str_replace('.', '$', $filter);
             $value     = $request->query($paramName);
-    
+
             // Aplicar lógica especial para el campo 'search'
             if ($search !== null && $operator === 'like') {
                 // Aplicar un filtro LIKE con el valor de 'search'
@@ -28,18 +28,18 @@ trait Filterable
                 }
                 continue; // Saltamos al siguiente filtro ya que ya hemos aplicado el filtro para 'search'
             }
-    
+
             // Si el filtro usa 'between', verificamos la existencia de 'from' y 'to'
             if ($operator === 'between') {
                 $from = $request->query('from');
                 $to   = $request->query('to');
-    
+
                 if ($from || $to) {
                     $this->applyFilterCondition($query, $filter, $operator, compact('from', 'to'));
                     continue; // Saltamos al siguiente filtro ya que se ha aplicado el between
                 }
             }
-    
+
             if ($value !== null) {
                 if (strpos($filter, '.') !== false) {
                     [$relation, $relationFilter] = explode('.', $filter);
@@ -51,10 +51,9 @@ trait Filterable
                 }
             }
         }
-    
+
         return $query;
     }
-    
 
     protected function applyFilterCondition($query, $filter, $operator, $value)
     {
@@ -104,10 +103,10 @@ trait Filterable
         $sortField = $request->query('sort');
         $sortOrder = $request->query('direction', 'desc');
 
-        if ($sortField !== null && in_array($sortField, $sorts)) {
+        if ($sortField !== null && array_key_exists($sortField, $sorts)) {
             $query->orderBy($sortField, $sortOrder);
         } else {
-            $query->orderBy('id', $sortOrder);
+            $query->orderBy('id', $sortOrder); // Valor por defecto
         }
 
         return $query;
