@@ -25,7 +25,7 @@ class StoreReservationRequest extends StoreRequest
             'name'                 => 'nullable|string|max:255',
             'reservation_datetime' => 'required|date',
             'nro_people'           => 'nullable|string|max:255',
-            'precio_reservation'   => 'required|numeric|min:0',
+            //'precio_reservation'   => 'required|numeric|min:0',
 
             'event_id'             => 'required|string|max:255|exists:events,id,deleted_at,NULL',
             'station_id'           => 'required|string|max:255|exists:stations,id,deleted_at,NULL',

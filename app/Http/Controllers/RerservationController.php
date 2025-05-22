@@ -152,7 +152,27 @@ class RerservationController extends Controller
 
     public function store(StoreReservationRequest $request)
     {
-        $reserva = $this->reservaService->createReservation($request->validated());
+        $data = $request->validated();
+
+        $event   = Event::findOrFail($data['event_id']);
+        $station = Station::findOrFail($data['station_id']);
+
+        $precio = match ($station->type) {
+            'MESA' => $event->pricetable,
+            'BOX' => $event->pricebox,
+            default => null,
+        };
+
+        if (is_null($precio)) {
+            return response()->json([
+                'message' => "No se pudo determinar el precio de la reserva para el tipo de estación '{$station->type}'.",
+            ], 422);
+        }
+
+        $data['precio_reservation'] = $precio;
+
+        $reserva = $this->reservaService->createReservation($data);
+
         return new ReservationResource($reserva);
     }
 
