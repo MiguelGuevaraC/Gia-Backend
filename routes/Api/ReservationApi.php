@@ -8,6 +8,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::post('reservation', [RerservationController::class, 'store']);
     Route::get('reservation/{id}', [RerservationController::class, 'show']);
     Route::put('reservation/{id}', [RerservationController::class, 'update']);
+       Route::put('reservation/{id}/pay', [RerservationController::class, 'pay_reservation']);
     Route::delete('reservation/{id}', [RerservationController::class, 'destroy']);
 
 });

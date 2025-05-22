@@ -59,12 +59,12 @@ class ReservationService
         return $reservation;
     }
 
-    public function updateReservation(Reservation $environment, array $data): Reservation
+    public function updateReservation(Reservation $reservation, array $data): Reservation
     {
 
-        $environment->update($data);
+        $reservation->update($data);
 
-        return $environment;
+        return $reservation;
     }
 
     public function destroyById($id)

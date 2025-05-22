@@ -74,14 +74,15 @@ class User extends Authenticatable
 
     public function isFlagData()
     {
-        foreach (['phone', 'email', 'number_document', 'names', 'father_surname', 'mother_surname'] as $campo) {
+        foreach (['phone', 'email', 'number_document',
+            'names', 'father_surname', 'mother_surname'] as $campo) {
             if (empty($this->person->{$campo})) {
                 return 0;
             }
         }
         return 1;
     }
-    
+
     public function textFlagData()
     {
         $campos = [
@@ -92,19 +93,18 @@ class User extends Authenticatable
             'father_surname'  => 'apellido paterno',
             'mother_surname'  => 'apellido materno',
         ];
-    
+
         $faltantes = [];
-    
+
         foreach ($campos as $campo => $descripcion) {
             if (empty($this->person->{$campo})) {
                 $faltantes[] = $descripcion;
             }
         }
-    
+
         return empty($faltantes)
-            ? 'Datos Completos'
-            : 'Faltan los siguientes datos: ' . implode(', ', $faltantes);
+        ? 'Datos Completos'
+        : 'Faltan los siguientes datos: ' . implode(', ', $faltantes);
     }
-    
 
 }

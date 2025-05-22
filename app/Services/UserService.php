@@ -16,22 +16,21 @@ class UserService
     {
         // Verificar si la persona existe; si no, crearla
 
-        $identifier = isset($data['number_document']) ? ['number_document' => $data['number_document']] : ['email' => $data['email'] ?? null];
+        $attributes = [
+            'names'          => $data['names'] ?? null,
+            'father_surname' => $data['father_surname'] ?? null,
+            'mother_surname' => $data['mother_surname'] ?? null,
+            'type_document'  => $data['type_document'] ?? null,
+            'type_person'    => $data['type_person'] ?? null,
+            'business_name'  => $data['business_name'] ?? null,
+            'address'        => $data['address'] ?? null,
+            'phone'          => $data['phone'] ?? null,
+            'email'          => $data['email'] ?? null,
+        ];
 
-        $person = Person::firstOrCreate(
-            $identifier, // Condición para encontrar una persona existente
-            [            // Solo los campos que no se repiten en el 'firstOrCreate'
-                'names'          => $data['names'] ?? null,
-                'father_surname' => $data['father_surname'] ?? null,
-                'mother_surname' => $data['mother_surname'] ?? null,
-                'type_document'  => $data['type_document'] ?? null,
-                'type_person'    => $data['type_person'] ?? null,
-                'business_name'  => $data['business_name'] ?? null,
-                'address'        => $data['address'] ?? null,
-                'phone'          => $data['phone'] ?? null,
-                'email'          => $data['email'] ?? null,
-            ]
-        );
+        $person = ! empty($data['number_document'])
+        ? Person::firstOrCreate(['number_document' => $data['number_document']], $attributes)
+        : Person::create($attributes);
 
         $name = isset($data['type_document']) && $data['type_document'] === 'DNI'
         ? (isset($data['names']) ? $data['names'] : '') . ' ' .
@@ -61,7 +60,7 @@ class UserService
             $filteredData = array_intersect_key($data, $person->getAttributes());
             $person->update($filteredData);
 
-            $User->name= $person->names;
+            $User->name = $person->names;
         } else {
             // Si no se encuentra la persona asociada al usuario, lanzar un error o manejarlo
             throw new \Exception('Persona no encontrada para el usuario con ID: ' . $User->id);

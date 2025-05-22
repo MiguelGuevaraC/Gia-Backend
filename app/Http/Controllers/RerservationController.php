@@ -2,12 +2,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReservationRequest\IndexReservationRequest;
+use App\Http\Requests\ReservationRequest\PayReservationRequest;
 use App\Http\Requests\ReservationRequest\StoreReservationRequest;
 use App\Http\Requests\ReservationRequest\UpdateReservationRequest;
 use App\Http\Resources\ReservationResource;
 use App\Models\Event;
 use App\Models\Reservation;
 use App\Models\Station;
+use App\Services\AuditLogService;
+use App\Services\CulquiService;
 use App\Services\ReservationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,10 +18,12 @@ use Illuminate\Http\Request;
 class RerservationController extends Controller
 {
     protected $reservaService;
+    protected $culquiService;
 
-    public function __construct(ReservationService $reservaService)
+    public function __construct(ReservationService $reservaService, CulquiService $culquiService)
     {
         $this->reservaService = $reservaService;
+        $this->culquiService  = $culquiService;
     }
 /**
  * @OA\Get(
@@ -62,14 +67,14 @@ class RerservationController extends Controller
             $isToday      = Carbon::parse($reservation->reservation_datetime)->isSameDay(Carbon::parse($reservationDatetime));
             $matchesEvent = $event_id ? $reservation->event->id == $event_id : true;
             // return $isToday && $matchesEvent;
-            return $matchesEvent ;
+            return $matchesEvent;
         });
 
         // Contar reservas de tipo MESA y BOX
-        $reservasMesa = $reservations->where("status","!=","Caducado")->where('station.type', 'MESA')->count();
-        $reservasBox  = $reservations->where("status","!=","Caducado")->where('station.type', 'BOX')->count();
+        $reservasMesa = $reservations->where("status", "!=", "Caducado")->where('station.type', 'MESA')->count();
+        $reservasBox  = $reservations->where("status", "!=", "Caducado")->where('station.type', 'BOX')->count();
 
-        // Contar mesas libres para hoy, filtrando por event_id si es necesario
+                                         // Contar mesas libres para hoy, filtrando por event_id si es necesario
         $event = Event::find($event_id); // Obtener el evento primero
 
         $mesasLibres = Station::whereHas('environment', function ($query) use ($event) {
@@ -81,7 +86,6 @@ class RerservationController extends Controller
         })->whereDoesntHave('reservations', function ($query) use ($reservationDatetime) {
             $query->whereDate('reservation_datetime', '=', $reservationDatetime);
         })->count();
-        
 
         return response()->json([
             'data'          => $reservations,
@@ -150,6 +154,59 @@ class RerservationController extends Controller
     {
         $reserva = $this->reservaService->createReservation($request->validated());
         return new ReservationResource($reserva);
+    }
+
+    public function pay_reservation($id_reservation, PayReservationRequest $request)
+    {
+        try {
+
+            $reservation = Reservation::find($id_reservation);
+            if (! $reservation) {
+                return response()->json([
+                    'error' => 'Reservación No encontrada',
+                ], 422);
+            }
+            if ($reservation->status != 'Pendiente Pago') {
+
+                if ($reservation->status == 'Pagado') {
+                    return response()->json([
+                        'error' => 'La reserva ya fué Pagada.',
+                    ], 422);
+                }
+
+                return response()->json([
+                    'error' => 'La reserva ya finalizó su tiempo para realizar el pago.',
+                ], 422);
+            }
+
+            // 1. Procesar el pago con Culqi
+            $result = $this->culquiService->createCharge($request);
+            AuditLogService::log('culqi_create_charge', $request->all(), $result);
+
+            if (! $result['success']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El pago falló.',
+                    'error'   => $result['message'] ?? 'Error desconocido en el pago.',
+                ], 400);
+            }
+
+            $this->reservaService->updateReservation($reservation, ["status" => "Pagado"]);
+
+            return response()->json([
+                'success'      => true,
+                'message'      => 'Pago registrado correctamente.',
+                'payment_data' => $result['object'],
+                'data'         => $reservation,
+            ]);
+
+        } catch (\Exception $e) {
+            AuditLogService::log('exception_caught', request()->all(), ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error inesperado: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
 /**

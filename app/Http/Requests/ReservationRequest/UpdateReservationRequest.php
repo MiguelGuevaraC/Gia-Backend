@@ -25,7 +25,7 @@ class UpdateReservationRequest extends UpdateRequest
     public function rules()
     {
         return [
-            'name'                 => 'required|string|max:255',
+            'name'                 => 'nullable|string|max:255',
             'reservation_datetime' => 'required|date',
             'nro_people'           => 'nullable|string|max:255',
             'event_id'             => 'nullable|string|max:255|exists:events,id,deleted_at,NULL',   // Verifica si el event_id existe en la tabla events

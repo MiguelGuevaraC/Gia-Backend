@@ -4,10 +4,9 @@ namespace App\Http\Requests\ReservationRequest;
 use App\Http\Requests\StoreRequest;
 use App\Models\Event;
 use App\Models\Promotion;
-use App\Models\Reservation;
 use App\Models\Station;
 
-class StoreReservationRequest extends StoreRequest
+class PayReservationRequest extends StoreRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,18 +21,21 @@ class StoreReservationRequest extends StoreRequest
     public function rules()
     {
         return [
-            'name'                 => 'nullable|string|max:255',
-            'reservation_datetime' => 'required|date',
-            'nro_people'           => 'nullable|string|max:255',
-            'precio_reservation'   => 'required|numeric|min:0',
 
-            'event_id'             => 'required|string|max:255|exists:events,id,deleted_at,NULL',
-            'station_id'           => 'required|string|max:255|exists:stations,id,deleted_at,NULL',
-            'person_id'            => 'required|string|max:255|exists:people,id,deleted_at,NULL',
+                                                                        // Validaciones para el cargo con Culqi
+            'amount'             => ['required', 'numeric', 'min:600'], // Monto debe ser numérico y mayor que 0
+            'description'        => ['required', 'string', 'max:255'],  // Descripción es obligatoria y con un límite de caracteres
+            'email'              => ['required', 'email'],              // Email debe ser válido
+            'token'              => ['required', 'string'],             // Token no debe estar vacío
 
-            'details'              => 'nullable|array',
-            'details.*.id'         => 'required_with:details.*.cant|integer|exists:promotions,id,deleted_at,NULL',
-            'details.*.cant'       => 'required_with:details.*.id|integer|min:1',
+            'precio_reservation' => 'required|numeric|min:0',
+
+            'event_id'           => 'required|exists:events,id,deleted_at,NULL',
+            'station_id'         => 'required|exists:stations,id,deleted_at,NULL',
+
+            'details'            => 'nullable|array',
+            'details.*.id'       => 'required_with:details.*.cant|integer|exists:promotions,id,deleted_at,NULL',
+            'details.*.cant'     => 'required_with:details.*.id|integer|min:1',
         ];
     }
 
@@ -56,6 +58,17 @@ class StoreReservationRequest extends StoreRequest
     public function messages()
     {
         return [
+            // Culqi
+            'amount.required'               => 'El monto es obligatorio.',
+            'amount.numeric'                => 'El monto debe ser un valor numérico.',
+            'amount.min'                    => 'El monto debe ser como mínimo de S/. 600.',
+            'description.required'          => 'La descripción es obligatoria.',
+            'description.max'               => 'La descripción no debe superar los 255 caracteres.',
+            'email.required'                => 'El correo electrónico es obligatorio.',
+            'email.email'                   => 'El correo electrónico no tiene un formato válido.',
+            'token.required'                => 'El token de pago es obligatorio.',
+
+            //formulario validaciones
             'name.required'                 => 'El nombre es obligatorio.',
             'name.string'                   => 'El nombre debe ser un texto válido.',
             'name.max'                      => 'El nombre no puede superar los 255 caracteres.',
@@ -87,54 +100,11 @@ class StoreReservationRequest extends StoreRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $this->validateStock($validator);
-            $this->validateMesaOcupada($validator);
             $this->validatePrecioReserva($validator);
             $this->validateFechaNoMayorEvento($validator);
             $this->validateFechaNoMenorHoy($validator);
+            $this->validateAmountTotal($validator); // 👈 NUEVO
         });
-    }
-
-    private function validateStock($validator)
-    {
-        if ($this->filled('details')) {
-            foreach ($this->input('details') as $index => $detail) {
-                $promotion = Promotion::where('id', $detail['id'])
-                    ->whereNull('deleted_at')
-                    ->first();
-
-                if (! $promotion) {
-                    continue; // Ya validado por 'exists'
-                }
-
-                $promotion->recalculateStockPromotion();
-
-                if ($promotion->stock_restante < $detail['cant']) {
-                    $validator->errors()->add("details.$index.cant", "La promoción '{$promotion->name}' no tiene suficiente stock.");
-                }
-            }
-        }
-    }
-
-    private function validateMesaOcupada($validator)
-    {
-        if ($this->filled(['event_id', 'station_id'])) {
-            $mesaOcupada = Reservation::where('event_id', $this->input('event_id'))
-                ->where('station_id', $this->input('station_id'))
-                ->where('status', '!=', 'Caducado')
-                ->with(['station', 'event'])
-                ->first();
-
-            if ($mesaOcupada) {
-                $nombreMesa   = optional($mesaOcupada->station)->name ?? 'Mesa desconocida';
-                $nombreEvento = optional($mesaOcupada->event)->name ?? 'Evento desconocido';
-
-                $validator->errors()->add(
-                    "station_id",
-                    "La mesa '{$nombreMesa}' ya está ocupada en el evento '{$nombreEvento}'."
-                );
-            }
-        }
     }
 
     private function validatePrecioReserva($validator)
@@ -190,6 +160,35 @@ class StoreReservationRequest extends StoreRequest
                 );
             }
         }
+    }
+
+    private function validateAmountTotal($validator)
+    {
+        $precioReservation = floatval($this->precio_reservation);
+        $totalPromotions   = 0;
+
+        if ($this->filled('details')) {
+            foreach ($this->details as $detail) {
+                $promotion = Promotion::where('id', $detail['id'] ?? null)
+                    ->whereNull('deleted_at')
+                    ->first();
+
+                if ($promotion && isset($detail['cant'])) {
+                    $totalPromotions += floatval($promotion->precio) * intval($detail['cant']);
+                }
+            }
+        }
+
+        $expectedAmount = $precioReservation + $totalPromotions;
+        $providedAmount = floatval($this->amount) / 100;
+
+        if (round($expectedAmount, 2) !== round($providedAmount, 2)) {
+            $validator->errors()->add(
+                'amount',
+                "El monto total ingresado S/. {$providedAmount} no es correcto. Debe ser igual a la suma del precio de la reserva S/. {$precioReservation} más el precio de las promociones seleccionadas S/. {$totalPromotions}, dando un total de S/. {$expectedAmount}."
+            );
+        }
+
     }
 
 }
