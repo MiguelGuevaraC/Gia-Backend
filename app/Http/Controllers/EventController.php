@@ -21,46 +21,46 @@ class EventController extends Controller
 /**
  * @OA\Get(
  *     path="/Gia-Backend/public/api/event",
- *     summary="Obtener eventos con filtros",
+ *     summary="Listar eventos con filtros",
  *     tags={"Event"},
  *     security={{"bearerAuth": {}}},
- *     @OA\Parameter(name="name", in="query", description="Filtrar por nombre", required=false, @OA\Schema(type="string", maxLength=255)),
- *     @OA\Parameter(name="event_datetime", in="query", description="Fecha y hora del evento (YYYY-MM-DD)", required=false, @OA\Schema(type="string", format="date")),
- *     @OA\Parameter(name="comment", in="query", description="Filtrar por comentarios", required=false, @OA\Schema(type="string", maxLength=1000)),
-
- *     @OA\Parameter(name="user_id", in="query", description="ID del usuario", required=false, @OA\Schema(type="string")),
- *     @OA\Parameter(name="from", in="query", description="Fecha de inicio", required=false, @OA\Schema(type="string", format="date")),
- *     @OA\Parameter(name="to", in="query", description="Fecha de fin", required=false, @OA\Schema(type="string", format="date")),
- *     @OA\Parameter(name="search", in="query", description="Busqueda", required=false, @OA\Schema(type="string")),
-
- *     @OA\Response(response=200, description="Eventos obtenidos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Event"))),
+ *     @OA\Parameter(name="name", in="query", description="Filtrar por nombre", required=false, @OA\Schema(type="string")),
+ *     @OA\Parameter(name="event_datetime", in="query", description="Filtrar por fecha (YYYY-MM-DD)", required=false, @OA\Schema(type="string", format="date")),
+ *     @OA\Response(response=200, description="Lista de eventos", @OA\JsonContent(type="array", @OA\Items(ref="#/components/schemas/Event"))),
  *     @OA\Response(response=422, description="Error de validación", @OA\JsonContent(@OA\Property(property="error", type="string")))
  * )
  */
-
     public function index(IndexEventRequest $request)
     {
+        $now = now()->toDateTimeString();
+
+        $query = Event::query()
+            ->orderByRaw("
+            CASE WHEN event_datetime >= ? THEN 0 ELSE 1 END ASC,
+            CASE WHEN event_datetime >= ? THEN event_datetime ELSE NULL END ASC,
+            CASE WHEN event_datetime < ? THEN event_datetime ELSE NULL END DESC",
+                [$now, $now, $now]);
 
         return $this->getFilteredResults(
-            Event::class,
+            $query,
             $request,
             Event::filters,
-            Event::sorts,
+            [], // usamos orderByRaw directamente
             EventResource::class
         );
     }
 
-    /**
-     * @OA\Get(
-     *     path="/Gia-Backend/public/api/event/{id}",
-     *     summary="Obtener detalles de un event por ID",
-     *     tags={"Event"},
-     *     security={{"bearerAuth": {}}},
-     *     @OA\Parameter(name="id", in="path", description="ID del evento", required=true, @OA\Schema(type="integer", example=1)),
-     *     @OA\Response(response=200, description="persona encontrada", @OA\JsonContent(ref="#/components/schemas/Event")),
-     *     @OA\Response(response=404, description="Evento No Encontrado", @OA\JsonContent(type="object", @OA\Property(property="error", type="string", example="Evento No Encontrado")))
-     * )
-     */
+/**
+ * @OA\Get(
+ *     path="/Gia-Backend/public/api/event/{id}",
+ *     summary="Obtener evento por ID",
+ *     tags={"Event"},
+ *     security={{"bearerAuth": {}}},
+ *     @OA\Parameter(name="id", in="path", description="ID del evento", required=true, @OA\Schema(type="integer")),
+ *     @OA\Response(response=200, description="Evento encontrado", @OA\JsonContent(ref="#/components/schemas/Event")),
+ *     @OA\Response(response=404, description="No encontrado", @OA\JsonContent(@OA\Property(property="error", type="string")))
+ * )
+ */
 
     public function show($id)
     {
@@ -170,17 +170,17 @@ class EventController extends Controller
      * )
      **/
 
-     public function destroy($id)
-     {
-         $event = $this->eventService->getEventById($id);
-         if (!$event) {
-             return response()->json(['error' => 'Evento no encontrado.'], 404);
-         }
-         if ($event->reservations()->exists()) {
-             return response()->json(['error' => 'El evento tiene reservas asociadas y no se puede eliminar.'], 400);
-         }
-         $this->eventService->destroyById($id);
-         return response()->json(['message' => 'Evento eliminado exitosamente.'], 200);
-     }
-     
+    public function destroy($id)
+    {
+        $event = $this->eventService->getEventById($id);
+        if (! $event) {
+            return response()->json(['error' => 'Evento no encontrado.'], 404);
+        }
+        if ($event->reservations()->exists()) {
+            return response()->json(['error' => 'El evento tiene reservas asociadas y no se puede eliminar.'], 400);
+        }
+        $this->eventService->destroyById($id);
+        return response()->json(['message' => 'Evento eliminado exitosamente.'], 200);
+    }
+
 }
