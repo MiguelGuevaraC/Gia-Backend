@@ -89,7 +89,7 @@ class StoreReservationRequest extends StoreRequest
         $validator->after(function ($validator) {
             $this->validateStock($validator);
             $this->validateMesaOcupada($validator);
-            $this->validatePrecioReserva($validator);
+         
             $this->validateFechaNoMayorEvento($validator);
             $this->validateFechaNoMenorHoy($validator);
         });
@@ -137,25 +137,7 @@ class StoreReservationRequest extends StoreRequest
         }
     }
 
-    private function validatePrecioReserva($validator)
-    {
-        if ($this->filled(['event_id', 'station_id', 'precio_reservation'])) {
-            $event   = Event::find($this->event_id);
-            $station = Station::find($this->station_id);
-
-            if ($event && $station) {
-                $expectedPrice = $station->type === 'MESA' ? $event->pricetable
-                : ($station->type === 'BOX' ? $event->pricebox : null);
-
-                if ($expectedPrice !== null && floatval($this->precio_reservation) != floatval($expectedPrice)) {
-                    $validator->errors()->add(
-                        'precio_reservation',
-                        "El precio ingresado no coincide con el valor de la estación tipo '{$station->type}' en el evento '{$event->name}'. Debe ser: $expectedPrice."
-                    );
-                }
-            }
-        }
-    }
+  
 
     private function validateFechaNoMayorEvento($validator)
     {

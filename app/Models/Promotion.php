@@ -60,16 +60,24 @@ class Promotion extends Model
             ->whereNotIn('r.status', ['Caducado'])
             ->whereNull('dr.deleted_at')
             ->sum('dr.cant');
-            
-    
+
         $stockInicial = $this->stock;
-    
+
         $nuevoStock = max($stockInicial - $stockUsado, 0); // evita negativos
 
-        $promotion= Promotion::find( $this->id);
+        $promotion = Promotion::find($this->id);
         // $this->update(['stock_restante' => $nuevoStock]);
-        $promotion->stock_restante=$nuevoStock;
+        $promotion->stock_restante = $nuevoStock;
         $promotion->save();
+
+        $this->stock_restante = $nuevoStock;
+
+        // Verificar fechas y stock para actualizar status
+        $now         = now();
+        $inDateRange = $now->between($this->date_start, $this->date_end);
+        $hasStock    = $nuevoStock > 0;
+        $this->status = ($inDateRange && $hasStock) ? 'Activo' : 'Inactivo';
+        $this->save();
     }
-    
+
 }

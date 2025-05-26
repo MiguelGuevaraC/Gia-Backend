@@ -38,7 +38,7 @@ class Station extends Model
         'environment_id'         => '=',
         'environment.company_id' => '=',
         'price'                  => '=',
-        'sort'                   => '=',
+        //'sort'                   => '=',
     ];
 
     /**
@@ -48,7 +48,7 @@ class Station extends Model
         'id'          => 'desc',
         'name'        => 'desc',
         'description' => 'desc',
-
+        'sort'        => 'desc',
     ];
 
     public function environment()
@@ -90,14 +90,13 @@ class Station extends Model
             ->whereDate('reservation_datetime', now()->toDateString())
             ->latest('reservation_datetime')
             ->first();
-    
+
         return $reservation ? [
-            "person"       => $reservation->person,
-            "nro_people"   => $reservation->nro_people,
-            "event_name"   => optional($reservation->event)->name,
+            "person"     => $reservation->person,
+            "nro_people" => $reservation->nro_people,
+            "event_name" => optional($reservation->event)->name,
         ] : null;
     }
-    
 
     public function getReservationStatus()
     {
@@ -127,12 +126,11 @@ class Station extends Model
     public function getReservaForEvent($eventId)
     {
         return $this->reservations()
-        ->where('event_id', $eventId)
-        ->where('status', '!=', 'Caducado')
-        ->latest() // ordena por timestamps (por defecto created_at)
-        ->first();
-        
+            ->where('event_id', $eventId)
+            ->where('status', '!=', 'Caducado')
+            ->latest() // ordena por timestamps (por defecto created_at)
+            ->first();
+
     }
-    
 
 }

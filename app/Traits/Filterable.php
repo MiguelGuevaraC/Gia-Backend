@@ -104,7 +104,12 @@ trait Filterable
         $sortOrder = $request->query('direction', 'desc');
 
         if ($sortField !== null && array_key_exists($sortField, $sorts)) {
-            $query->orderBy($sortField, $sortOrder);
+            if ($sortField === 'sort') {
+                // Ordena numéricamente si el campo es "sort"
+                $query->orderByRaw("CAST(sort AS UNSIGNED) $sortOrder");
+            } else {
+                $query->orderBy($sortField, $sortOrder);
+            }
         } else {
             $query->orderBy('id', $sortOrder); // Valor por defecto
         }

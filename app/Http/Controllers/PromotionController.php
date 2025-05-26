@@ -40,7 +40,6 @@ class PromotionController extends Controller
      */
     public function index(IndexPromotionRequest $request)
     {
-
         $promotions = $this->getFilteredResults(
             Promotion::class,
             $request,
@@ -52,9 +51,24 @@ class PromotionController extends Controller
         if ($promotions instanceof \Illuminate\Pagination\LengthAwarePaginator) {
             $promotions = $promotions->getCollection();
         }
-        $promotions->each(function ($promotion) {
+
+        $now = now();
+
+        $promotions->each(function ($promotion) use ($now) {
             $promotion->recalculateStockPromotion();
+
+            $inDateRange = $now->between($promotion->date_start, $promotion->date_end);
+            $hasStock    = $promotion->stock_restante > 0;
+
+            if ($inDateRange && $hasStock) {
+                $promotion->status = 'Activo';
+            } else {
+                $promotion->status = 'Inactivo';
+            }
         });
+
+   
+
         return $promotions;
     }
 

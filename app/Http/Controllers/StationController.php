@@ -44,6 +44,11 @@ class StationController extends Controller
         $eventId              = $request->get('event_id');
         $reservation_datetime = $request->get('station_datetime') ?? now()->toDateString();
 
+        if (! $request->query('sort')) {
+            $request->query->set('sort', 'sort');
+            $request->query->set('direction', 'desc');
+        }
+
         // Obtiene el query filtrado y paginado (ejecutado)
         $result = $this->getFilteredResults(
             Station::class,
@@ -71,9 +76,9 @@ class StationController extends Controller
                 $station->reservation = $reservation = ($station->getReservaForEvent($eventId));
 
                 $station->reservation = $reservation ? [
-                    "person"     => $reservation->person,
-                    "nro_people" => $reservation->nro_people,
-                    "event_name" => optional($reservation->event)->name,
+                    "person"         => $reservation->person,
+                    "nro_people"     => $reservation->nro_people,
+                    "event_name"     => optional($reservation->event)->name,
                     "event_datetime" => optional($reservation->event)->event_datetime,
                 ] : null;
 
