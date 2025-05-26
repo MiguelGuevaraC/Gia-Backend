@@ -6,10 +6,12 @@ use App\Http\Requests\StationRequest\IndexStationRequest;
 use App\Http\Requests\StationRequest\StoreStationRequest;
 use App\Http\Requests\StationRequest\UpdateStationRequest;
 use App\Http\Resources\StationResource;
+use App\Models\Environment;
 use App\Models\Event;
 use App\Models\Station;
 use App\Services\StationService;
 use Carbon\Carbon;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 
 class StationController extends Controller
@@ -42,7 +44,7 @@ class StationController extends Controller
     public function index(IndexStationRequest $request)
     {
         $eventId              = $request->get('event_id');
-        $reservation_datetime = $request->get('station_datetime') ?? now()->toDateString();
+        $reservation_datetime = $request->get('date_reservation') ?? now()->toDateString();
 
         if (! $request->query('sort')) {
             $request->query->set('sort', 'sort');
@@ -57,18 +59,40 @@ class StationController extends Controller
             Station::sorts,
             StationResource::class
         );
-
+        $environmentId = $request->get('environment_id');
+        $environment   = Environment::find($environmentId);
+        $companyId     = $environment->company_id;
         if ($eventId) {
             $event = Event::find($eventId);
         } else {
-            $event = Event::whereDate('event_datetime', Carbon::parse($reservation_datetime)->toDateString())->first();
+            // Buscar todos los eventos que coincidan con la fecha sin considerar hora
+            $eventDate = Carbon::parse($reservation_datetime)->toDateString();
 
+            $events = Event::whereDate('event_datetime', $eventDate)
+                ->where('company_id', $companyId)
+                ->get();
+
+            // Si hay más de un evento ese día, se devuelve error 422
+            if ($events->count() > 1) {
+                throw new HttpResponseException(response()->json([
+                    'message' => 'Se encontraron múltiples eventos en esta fecha. Por favor, filtre por evento específico.',
+                    'events'  => $events->map(function ($e) {
+                        return [
+                            'id'             => $e->id,
+                            'name'           => $e->name,
+                            'event_datetime' => $e->event_datetime,
+                        ];
+                    }),
+                ], 422));
+            }
+
+            $event = $events->first();
         }
 
         if ($event) {
-
             $eventDate = Carbon::parse($event->event_datetime)->toDateString();
             $eventId   = $event->id;
+
             $result->getCollection()->transform(function ($station) use ($eventId, $eventDate) {
 
                 $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado' : 'Disponible';
