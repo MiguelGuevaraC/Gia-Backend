@@ -40,8 +40,16 @@ class PromotionController extends Controller
      */
     public function index(IndexPromotionRequest $request)
     {
+        $query = Promotion::query();
+
+        if ($request->filled('date_start')) {
+            $filterDate = $request->date_start;
+            $query->whereDate('date_start', '<=', $filterDate)
+                ->whereDate('date_end', '>=', $filterDate);
+        }
+
         $promotions = $this->getFilteredResults(
-            Promotion::class,
+            $query,
             $request,
             Promotion::filters,
             Promotion::sorts,
@@ -66,8 +74,6 @@ class PromotionController extends Controller
                 $promotion->status = 'Inactivo';
             }
         });
-
-   
 
         return $promotions;
     }

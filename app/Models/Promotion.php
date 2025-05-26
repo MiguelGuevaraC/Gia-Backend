@@ -35,7 +35,7 @@ class Promotion extends Model
         'description' => 'like',
 
         'precio'      => '=',
-        'date_start'  => 'date',
+        //'date_start'  => 'date',
         'date_end'    => 'date',
         'stock'       => '=',
         'status'      => '=',
