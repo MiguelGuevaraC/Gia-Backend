@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->text('description')->nullable();
             $table->decimal('precio')->nullable();
-            $table->date('date_start')->nullable();
-            $table->date('date_end')->nullable();
+            $table->dateTime('date_start')->nullable();
+            $table->dateTime('date_end')->nullable();
             $table->integer('stock')->nullable();
             $table->string('status')->nullable();
             $table->string('status')->default('Activo')->nullable();
