@@ -20,12 +20,12 @@ class EntryService
         return $event;
     }
 
-    public function updateEntry(Entry $environment, array $data): Entry
+    public function updateEntry(Entry $entry, array $data): Entry
     {
+        $data = array_intersect_key($data, $entry->getAttributes());
+        $entry->update($data);
 
-        $environment->update($data);
-
-        return $environment;
+        return $entry;
     }
 
     public function destroyById($id)
