@@ -25,10 +25,10 @@ class StoreUserAppRequest extends StoreRequest
     public function rules()
     {
         return [
-            'email'      => 'required|email|unique:users,username,NULL,id,deleted_at,NULL',
-            'phone'      => 'required|string',
-            'token_form' => 'required|string',
-            'password'   => [
+            'email'          => 'required|email|unique:users,username,NULL,id,deleted_at,NULL',
+            'phone'          => 'required|string',
+            'token_form'     => 'required|string',
+            'password'       => [
                 'required',
                 'string',
                 'min:8',         // Mínimo 8 caracteres
@@ -37,7 +37,9 @@ class StoreUserAppRequest extends StoreRequest
                 'regex:/[0-9]/', // Al menos un número
                 'regex:/[\W]/',  // Al menos un carácter especial
             ],
-            'names'      => 'required|string',
+            'names'          => 'required|string',
+            'father_surname' => 'nullable|string|max:255',
+            'mother_surname' => 'nullable|string|max:255',
         ];
     }
 
@@ -57,6 +59,10 @@ class StoreUserAppRequest extends StoreRequest
             'password.regex'      => 'La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un número y un carácter especial.',
             'names.required'      => 'El nombre es obligatorio.',
             'names.string'        => 'El nombre debe ser un texto válido.',
+            'father_surname.string' => 'El apellido paterno debe ser un texto válido.',
+            'father_surname.max'  => 'El apellido paterno no debe exceder los 255 caracteres.',
+            'mother_surname.string' => 'El apellido materno debe ser un texto válido.',
+            'mother_surname.max'  => 'El apellido materno no debe exceder los 255 caracteres.',
         ];
     }
 

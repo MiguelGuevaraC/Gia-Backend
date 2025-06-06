@@ -44,7 +44,7 @@ class UpdateUserRequest extends UpdateRequest
             'rol_id'          => 'nullable|integer|exists:rols,id,deleted_at,NULL',
             'date_birth'      => 'nullable|date',
             'number_document' => [
-                'required',
+                'nullable',
                 function ($attribute, $value, $fail) use ($id) {
                     // Verificar si el número de documento ya está asociado a una persona existente
                     $person = Person::where('number_document', $value)

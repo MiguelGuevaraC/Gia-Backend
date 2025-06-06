@@ -31,8 +31,9 @@ class StorePromotionRequest extends StoreRequest
             'name'        => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'precio'      => 'required|numeric|min:0',
-            'date_start'  => 'required|date',
-            'date_end'    => 'required|date|after_or_equal:date_start',
+            'date_start'  => 'required|date_format:Y-m-d H:i:s',
+            'date_end'    => 'required|date_format:Y-m-d H:i:s|after_or_equal:date_start',
+
             'stock'       => 'required|integer|min:0',
             'status'      => 'nullable|string|in:Activo,Inactivo',
             'product_id'  => 'required|exists:products,id', // Validación del ID del producto
@@ -55,11 +56,11 @@ class StorePromotionRequest extends StoreRequest
             'precio.min'              => 'El precio debe ser mayor o igual a 0.',
 
             'date_start.required'     => 'La fecha de inicio es obligatoria.',
-            'date_start.date'         => 'La fecha de inicio debe tener un formato válido.',
-
+            'date_start.date_format'  => 'La fecha de inicio debe tener el formato Y-m-d H:i:s.',
             'date_end.required'       => 'La fecha de fin es obligatoria.',
-            'date_end.date'           => 'La fecha de fin debe tener un formato válido.',
-            'date_end.after_or_equal' => 'La fecha de fin debe ser posterior o igual a la fecha de inicio.',
+            'date_end.date_format'    => 'La fecha de fin debe tener el formato Y-m-d H:i:s.',
+            'date_end.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
+            
 
             'stock.required'          => 'El stock es obligatorio.',
             'stock.integer'           => 'El stock debe ser un número entero.',

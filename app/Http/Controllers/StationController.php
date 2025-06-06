@@ -41,100 +41,90 @@ class StationController extends Controller
  * )
  */
 
-    public function index(IndexStationRequest $request)
-    {
-        $eventId              = $request->get('event_id');
-        $reservation_datetime = $request->get('date_reservation') ?? now()->toDateString();
+  public function index(IndexStationRequest $request)
+{
+    $eventId              = $request->get('event_id');
+    $reservation_datetime = $request->get('date_reservation') ?? now()->toDateString();
 
-        if (! $request->query('sort')) {
-            $request->query->set('sort', 'sort');
-            $request->query->set('direction', 'desc');
-        }
+    if (! $request->query('sort')) {
+        $request->query->set('sort', 'sort');
+        $request->query->set('direction', 'desc');
+    }
 
-        // Obtiene el query filtrado y paginado (ejecutado)
-        $result = $this->getFilteredResults(
-            Station::class,
-            $request,
-            Station::filters,
-            Station::sorts,
-            StationResource::class
-        );
-        $environmentId = $request->get('environment_id');
-        $environment   = Environment::find($environmentId);
-        $companyId     = $environment->company_id;
-        if ($eventId) {
-            $event = Event::find($eventId);
-        } else {
-            // Buscar todos los eventos que coincidan con la fecha sin considerar hora
-            $eventDate = Carbon::parse($reservation_datetime)->toDateString();
+    $result = $this->getFilteredResults(
+        Station::class,
+        $request,
+        Station::filters,
+        Station::sorts,
+        StationResource::class
+    );
 
-            $events = Event::whereDate('event_datetime', $eventDate)
-                ->where('company_id', $companyId)
-                ->get();
+    $companyId = null;
 
-            // Si hay más de un evento ese día, se devuelve error 422
-            if ($events->count() > 1) {
-                throw new HttpResponseException(response()->json([
-                    'message' => 'Se encontraron múltiples eventos en esta fecha. Por favor, filtre por evento específico.',
-                    'events'  => $events->map(function ($e) {
-                        return [
-                            'id'             => $e->id,
-                            'name'           => $e->name,
-                            'event_datetime' => $e->event_datetime,
-                        ];
-                    }),
-                ], 422));
-            }
+    if ($environmentId = $request->get('environment_id')) {
+        $companyId = optional(Environment::find($environmentId))->company_id;
+    } elseif ($request->has('company_id')) {
+        $companyId = $request->get('company_id');
+    }
 
+    if (!$eventId && $companyId) {
+        $eventDate = Carbon::parse($reservation_datetime)->toDateString();
+
+        $events = Event::whereDate('event_datetime', $eventDate)
+            ->where('company_id', $companyId)
+            ->get();
+
+        if ($events->count() === 1) {
             $event = $events->first();
+            $eventId = $event->id;
         }
+    } elseif ($eventId) {
+        $event = Event::find($eventId);
+    }
 
-        if ($event) {
-            $eventDate = Carbon::parse($event->event_datetime)->toDateString();
-            $eventId   = $event->id;
+    if (!empty($event)) {
+        $eventDate = Carbon::parse($event->event_datetime)->toDateString();
 
-            $result->getCollection()->transform(function ($station) use ($eventId, $eventDate) {
+        $result->getCollection()->transform(function ($station) use ($eventId, $eventDate) {
+            $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado' : 'Disponible';
 
-                $station->status = $station->isAvailableForEvent($eventId) ? 'Reservado' : 'Disponible';
+            $reservation = $station->getReservaForEvent($eventId);
 
-                $station->reservation = $reservation = ($station->getReservaForEvent($eventId));
+            $station->reservation = $reservation ? [
+                "person"         => $reservation->person,
+                "nro_people"     => $reservation->nro_people,
+                "event_name"     => optional($reservation->event)->name,
+                "event_datetime" => optional($reservation->event)->event_datetime,
+            ] : null;
 
-                $station->reservation = $reservation ? [
-                    "person"         => $reservation->person,
-                    "nro_people"     => $reservation->nro_people,
-                    "event_name"     => optional($reservation->event)->name,
-                    "event_datetime" => optional($reservation->event)->event_datetime,
-                ] : null;
-
-                $station->reservation_datetime = $reservation
+            $station->reservation_datetime = $reservation
                 ? Carbon::parse($reservation->reservation_datetime)->translatedFormat('d F \d\e\l Y')
                 : 'No hay reserva existente para esta mesa en la fecha del evento.';
 
-                return $station;
-            });
-        }
-
-        // Devuelve la respuesta paginada completa
-        return StationResource::collection($result)
-            ->additional([
-                'links' => [
-                    'first' => $result->url(1),
-                    'last'  => $result->url($result->lastPage()),
-                    'prev'  => $result->previousPageUrl(),
-                    'next'  => $result->nextPageUrl(),
-                ],
-                'meta'  => [
-                    'current_page' => $result->currentPage(),
-                    'from'         => $result->firstItem(),
-                    'last_page'    => $result->lastPage(),
-                    'links'        => $this->formatPaginationLinks($result),
-                    'path'         => $request->url(),
-                    'per_page'     => $result->perPage(),
-                    'to'           => $result->lastItem(),
-                    'total'        => $result->total(),
-                ],
-            ]);
+            return $station;
+        });
     }
+
+    return StationResource::collection($result)
+        ->additional([
+            'links' => [
+                'first' => $result->url(1),
+                'last'  => $result->url($result->lastPage()),
+                'prev'  => $result->previousPageUrl(),
+                'next'  => $result->nextPageUrl(),
+            ],
+            'meta'  => [
+                'current_page' => $result->currentPage(),
+                'from'         => $result->firstItem(),
+                'last_page'    => $result->lastPage(),
+                'links'        => $this->formatPaginationLinks($result),
+                'path'         => $request->url(),
+                'per_page'     => $result->perPage(),
+                'to'           => $result->lastItem(),
+                'total'        => $result->total(),
+            ],
+        ]);
+}
 
     private function formatPaginationLinks($paginator)
     {
