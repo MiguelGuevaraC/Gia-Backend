@@ -33,23 +33,23 @@ class Event extends Model
     ];
     const filters = [
 
-        'name'           => 'like',
+        'name' => 'like',
         'event_datetime' => 'date',
-        'comment'        => 'like',
-        'nro_reservas'   => '=',
-        'nro_boxes'      => '=',
-        'status'         => 'like',
-        'user_id'        => '=',
-        'company_id'     => '=',
-        'pricetable'     => '=',
-        'pricebox'       => '=',
+        'comment' => 'like',
+        'nro_reservas' => '=',
+        'nro_boxes' => '=',
+        'status' => 'like',
+        'user_id' => '=',
+        'company_id' => '=',
+        'pricetable' => '=',
+        'pricebox' => '=',
     ];
 
     /**
      * Campos de ordenación disponibles.
      */
     const sorts = [
-        'id'   => 'desc',
+        'id' => 'desc',
         'name' => 'desc',
         'event_datetime' => 'desc',
     ];
@@ -83,11 +83,18 @@ class Event extends Model
             ->map(function ($reservation) {
                 return [
                     'nro_recepcion' => $reservation->id,
-                    'status_recepcion'        => $reservation->status,
-                    'station'       => $reservation->station,
+                    'status_recepcion' => $reservation->status,
+                    'station' => $reservation->station,
                 ];
             })
             ->values();
+    }
+
+    public function lotteries()
+    {
+        return $this->belongsToMany(Lottery::class, 'lottery_by_events')
+            ->withPivot('price_factor_consumo')
+            ->withTimestamps();
     }
 
 }

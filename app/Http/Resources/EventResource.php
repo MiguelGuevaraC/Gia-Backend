@@ -31,21 +31,23 @@ class EventResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'             => $this->id,
-            'name'           => $this->name ?? null,
+            'id' => $this->id,
+            'name' => $this->name ?? null,
             'event_datetime' => $this->event_datetime ?? null,
-            'comment'        => $this->comment ?? null,
-            'status'         => $this->event_datetime ? (Carbon::parse($this->event_datetime)->isFuture() ? 'Próximo' : 'Finalizó') : null,
-            'route'          => $this->route ?? null,
-            'pricebox'       => $this->pricebox ?? null,
-            'pricetable'     => $this->pricetable ?? null,
-            'activeStations'     => $this->activeStations() ?? null,
+            'comment' => $this->comment ?? null,
+            'status' => $this->event_datetime ? (Carbon::parse($this->event_datetime)->isFuture() ? 'Próximo' : 'Finalizó') : null,
+            'route' => $this->route ?? null,
+            'pricebox' => $this->pricebox ?? null,
+            'pricetable' => $this->pricetable ?? null,
+      
 
-            'user_id'        => $this->user_id ?? null,
-            'user'           => $this->user ? new UserOnlyResource($this->user) : null,
+            'activeStations' => $this->activeStations() ?? null,
 
-            'company_id'     => $this->company_id ?? null,
-            'company'        => $this->company ? new CompanyResource($this->company) : null,
+            'user_id' => $this->user_id ?? null,
+            'user' => $this->user ? new UserOnlyResource($this->user) : null,
+
+            'company_id' => $this->company_id ?? null,
+            'company' => $this->company ? new CompanyResource($this->company) : null,
         ];
     }
 

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('cant')->nullable();
             $table->string('type')->nullable();
             $table->decimal('precio')->nullable();
-            $table->decimal('precio_total')->nullable();
+            //$table->decimal('precio_total')->nullable();
 
             $table->string('status')->default('Pendiente')->nullable();
 

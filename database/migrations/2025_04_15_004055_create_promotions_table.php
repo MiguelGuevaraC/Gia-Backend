@@ -21,7 +21,6 @@ return new class extends Migration
             $table->dateTime('date_start')->nullable();
             $table->dateTime('date_end')->nullable();
             $table->integer('stock')->nullable();
-            $table->string('status')->nullable();
             $table->string('status')->default('Activo')->nullable();
             $table->foreignId('product_id')->nullable()->unsigned()
             ->constrained('products');

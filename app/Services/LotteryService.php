@@ -12,13 +12,26 @@ class LotteryService
     }
 
     public function createLottery(array $data): Lottery
-    {
-        $data['user_created_id'] = auth()->id(); // Obtiene el ID del usuario logueado
-        $data['code_serie']      = str_pad((int) Lottery::max('code_serie') + 1, 4, '0', STR_PAD_LEFT);
-        $data['status'] = 'Pendiente';
-        $lottery = Lottery::create($data);
-        return $lottery;
+{
+    $data['user_created_id'] = auth()->id(); // ID del usuario autenticado
+    $data['code_serie'] = str_pad((int) Lottery::max('code_serie') + 1, 4, '0', STR_PAD_LEFT);
+    $data['status'] = 'Pendiente';
+
+    // Crear sorteo
+    $lottery = Lottery::create($data);
+
+    // Si viene event_id, guardar/actualizar la relación en lottery_by_event
+    if (!empty($data['event_id'])) {
+        $lottery->events()->syncWithoutDetaching([
+            $data['event_id'] => [
+                'price_factor_consumo' => $data['price_factor_consumo'] ?? null,
+            ]
+        ]);
     }
+
+    return $lottery;
+}
+
 
     public function updateLottery(Lottery $Lottery, array $data): Lottery
     {

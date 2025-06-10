@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,7 @@ class Lottery extends Model
         'lottery_name',
         'lottery_description',
         'lottery_date',
+        'lottery_price',
         'status',
         'winner_id',
         'user_created_id',
@@ -31,15 +33,16 @@ class Lottery extends Model
      */
     const filters = [
 
-        'code_serie'          => 'like',
-        'event_id'            => '=',
-        'lottery_name'        => 'like',
+        'code_serie' => 'like',
+        'event_id' => '=',
+        'lottery_name' => 'like',
         'lottery_description' => 'like',
-        'lottery_date'        => 'date',
-        'winner_id'           => '=',
-        'user_created_id'     => '=',
-        'created_at'          => 'between',
-        'status'              => 'like',
+        'lottery_date' => 'date',
+        'lottery_price' => '=',
+        'winner_id' => '=',
+        'user_created_id' => '=',
+        'created_at' => 'between',
+        'status' => 'like',
     ];
 
     /**
@@ -61,4 +64,17 @@ class Lottery extends Model
     {
         return $this->belongsTo(Event::class, 'event_id');
     }
+   public function events()
+{
+    return $this->belongsToMany(Event::class, 'lottery_by_events')
+                ->withPivot('price_factor_consumo')
+                ->withTimestamps();
+}
+public function lotteryByEvent()
+{
+    return $this->hasOne(LotteryByEvent::class);
+}
+
+
+
 }
