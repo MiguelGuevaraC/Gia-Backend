@@ -64,17 +64,20 @@ class Lottery extends Model
     {
         return $this->belongsTo(Event::class, 'event_id');
     }
-   public function events()
-{
-    return $this->belongsToMany(Event::class, 'lottery_by_events')
-                ->withPivot('price_factor_consumo')
-                ->withTimestamps();
-}
-public function lotteryByEvent()
-{
-    return $this->hasOne(LotteryByEvent::class);
-}
+    public function events()
+    {
+        return $this->belongsToMany(Event::class, 'lottery_by_events')
+            ->withPivot('price_factor_consumo')
+            ->withTimestamps();
+    }
+    public function lotteryByEvent()
+    {
+        return $this->hasOne(LotteryByEvent::class);
+    }
 
-
+    public function tickets()
+    {
+        return $this->hasMany(LotteryTicket::class);
+    }
 
 }

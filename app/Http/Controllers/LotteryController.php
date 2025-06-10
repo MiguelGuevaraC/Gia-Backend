@@ -71,7 +71,7 @@ class LotteryController extends Controller
 
         $lottery = $this->lotteryService->getLotteryById($id);
 
-        if (! $lottery) {
+        if (!$lottery) {
             return response()->json([
                 'error' => 'Sorteo No Encontrado',
             ], 404);
@@ -100,7 +100,7 @@ class LotteryController extends Controller
     public function store(StoreLotteryRequest $request)
     {
         $lotery = $this->lotteryService->createLottery($request->validated());
-        return new LotteryResource ($lotery);
+        return new LotteryResource($lotery);
     }
 
     /**
@@ -134,7 +134,7 @@ class LotteryController extends Controller
         $validatedData = $request->validated();
 
         $lottery = $this->lotteryService->getLotteryById($id);
-        if (! $lottery) {
+        if (!$lottery) {
             return response()->json([
                 'error' => 'Sorteo No Encontrado',
             ], 404);
@@ -160,16 +160,27 @@ class LotteryController extends Controller
 
     public function destroy($id)
     {
+        $lottery = $this->lotteryService->getLotteryById($id);
 
-        $deleted = $this->lotteryService->getLotteryById($id);
-        if (! $deleted) {
+        if (!$lottery) {
             return response()->json([
-                'error' => 'Sorteo No Encontrado.',
+                'error' => 'Sorteo no encontrado.',
             ], 404);
         }
-        $deleted = $this->lotteryService->destroyById($id);
+
+        // Verificar si tiene tickets relacionados
+        if ($lottery->tickets()->exists()) {
+            return response()->json([
+                'error' => 'No se puede eliminar el sorteo porque tiene tickets registrados.',
+            ], 400);
+        }
+
+        // Proceder con la eliminación
+        $this->lotteryService->destroyById($id);
+
         return response()->json([
-            'message' => 'Sorteo eliminado exitosamente',
+            'message' => 'Sorteo eliminado exitosamente.',
         ], 200);
     }
+
 }

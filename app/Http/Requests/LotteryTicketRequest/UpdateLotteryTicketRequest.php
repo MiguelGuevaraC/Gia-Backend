@@ -3,6 +3,9 @@
 namespace App\Http\Requests\LotteryTicketRequest;
 
 use App\Http\Requests\UpdateRequest;
+use App\Models\Lottery;
+use App\Models\LotteryTicket;
+use Illuminate\Validation\Validator;
 
 class UpdateLotteryTicketRequest extends UpdateRequest
 {
@@ -20,10 +23,7 @@ class UpdateLotteryTicketRequest extends UpdateRequest
     public function rules(): array
     {
         return [
-            'reason' => 'nullable|in:compra,regalo_por_consumo',
             'status' => 'nullable|in:Pendiente,Finalizado,Anulado',
-            'lottery_id' => 'nullable|integer|exists:lotteries,id',
-            'user_owner_id' => 'nullable|integer|exists:users,id',
         ];
     }
 
@@ -33,12 +33,27 @@ class UpdateLotteryTicketRequest extends UpdateRequest
     public function messages(): array
     {
         return [
-            'reason.in' => 'La razón debe ser "compra" o "regalo_por_consumo".',
             'status.in' => 'El estado debe ser "Pendiente", "Finalizado" o "Anulado".',
-            'lottery_id.integer' => 'El ID del sorteo debe ser un número entero.',
-            'lottery_id.exists' => 'El sorteo seleccionado no existe.',
-            'user_owner_id.integer' => 'El ID del usuario debe ser un número entero.',
-            'user_owner_id.exists' => 'El usuario seleccionado no existe.',
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function ($validator) {
+            $ticketId = $this->route('id'); // O usa 'ticket' según cómo esté definido tu route model binding
+
+            $lotteryTicket = LotteryTicket::find( $ticketId);
+            $lottery=Lottery::find($lotteryTicket->lottery_id);
+
+            if (!$lottery) {
+                $validator->errors()->add('ticket', 'El sorteo no existe no puede actualizar el ticket.');
+                return;
+            }
+            
+
+            if ($lottery && $lottery->status !== 'Pendiente') {
+                $validator->errors()->add('status', 'No se puede actualizar el ticket porque el sorteo ya no está en estado "Pendiente".');
+            }
+        });
     }
 }

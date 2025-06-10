@@ -10,8 +10,7 @@ use App\Models\Lottery;
  * @OA\Schema(
  *     schema="StoreLotteryTicketRequest",
  *     type="object",
- *     required={"reason", "lottery_id", "amount", "description", "email", "token"},
- *     @OA\Property(property="reason", type="string", enum={"compra", "regalo_por_consumo"}, description="Razón del ticket"),
+ *     required={"lottery_id", "amount", "description", "email", "token"},
  *     @OA\Property(property="lottery_id", type="integer", description="ID del sorteo"),
  *     @OA\Property(property="amount", type="number", format="float", description="Monto pagado por el ticket"),
  *     @OA\Property(property="description", type="string", maxLength=255, description="Descripción de la compra"),
@@ -63,22 +62,23 @@ class StoreLotteryTicketRequest extends StoreRequest
     }
 
     private function validateAmountTotal(Validator $validator): void
-{
-    $lottery = Lottery::find($this->lottery_id);
+    {
+        $lottery = Lottery::find($this->lottery_id);
 
-    if (!$lottery) {
-        return; // Ya validado en "exists"
+        if (!$lottery) {
+            return; // Ya validado en "exists"
+        }
+
+        $submittedAmount = $this->amount / 100;
+        $expectedAmount = $lottery->lottery_price;
+
+        if (abs($submittedAmount - $expectedAmount) > 0.001) {
+            $validator->errors()->add(
+                'amount',
+                'El monto enviado (' . number_format($submittedAmount, 2) . ') no coincide con el precio del sorteo (' . number_format($expectedAmount, 2) . '). ' .
+                'Diferencia: ' . number_format(abs($submittedAmount - $expectedAmount), 2)
+            );
+        }
     }
-
-    $submittedAmount = $this->amount / 100;
-    $expectedAmount = $lottery->lottery_price;
-
-    if (abs($submittedAmount - $expectedAmount) > 0.001) {
-        $validator->errors()->add('amount', 
-            'El monto enviado (' . number_format($submittedAmount, 2) . ') no coincide con el precio del sorteo (' . number_format($expectedAmount, 2) . '). ' .
-            'Diferencia: ' . number_format(abs($submittedAmount - $expectedAmount), 2)
-        );
-    }
-}
 
 }

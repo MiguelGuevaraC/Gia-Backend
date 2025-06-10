@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\IndexLotteryRequest;
 use App\Http\Requests\LotteryRequest\IndexLotteryRequest as LotteryRequestIndexLotteryRequest;
 use App\Http\Requests\LotteryTicketRequest\IndexLotteryTicketRequest;
+use App\Http\Requests\LotteryTicketRequest\StoreAdminLotteryTicketRequest;
 use App\Http\Requests\LotteryTicketRequest\StoreLotteryTicketRequest;
 use App\Http\Requests\LotteryTicketRequest\UpdateLotteryTicketRequest;
 use App\Http\Requests\StoreLotteryRequest;
@@ -107,6 +108,17 @@ class LotteryTicketController extends Controller
 
     }
 
+    public function store_admin(StoreAdminLotteryTicketRequest $request)
+    {
+        return new LotteryTicketResource(
+            $this->lotteryTicketService->create([
+                ...$request->validated(),
+                'reason' => 'admin'
+            ])
+        );
+    }
+
+
     /**
      * @OA\Post(
      *     path="/Gia-Backend/public/api/lottery_ticket/{id}",
@@ -121,8 +133,26 @@ class LotteryTicketController extends Controller
      */
     public function update(UpdateLotteryTicketRequest $request, $id)
     {
-        return response()->json(['message' => 'Edición No Permitida'], 404);
+        try {
+            $validatedData = $request->validated();
+            $lotteryticket = $this->lotteryTicketService->getById($id);
+            if (!$lotteryticket) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Ticket de sorteo no encontrado.',
+                ], 404);
+            }
+            $updatedLottery = $this->lotteryTicketService->update($lotteryticket, $validatedData);
+            return new LotteryTicketResource(LotteryTicket::find($updatedLottery->id));
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error al actualizar el ticket.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
+
 
     /**
      * @OA\Delete(

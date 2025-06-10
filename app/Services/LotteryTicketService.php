@@ -28,29 +28,29 @@ class LotteryTicketService
     }
 
     public function create(array $data): LotteryTicket
-{
-    try {
-        $lottery = Lottery::findOrFail($data['lottery_id']);
-        $lastNumber = (int) preg_replace(
-            '/.*-(\d{8})$/',
-            '$1',
-            LotteryTicket::where('lottery_id', $lottery->id)
-                ->orderByDesc('code_correlative')
-                ->value('code_correlative') ?? '00000000'
-        );
+    {
+        try {
+            $lottery = Lottery::findOrFail($data['lottery_id']);
+            $lastNumber = (int) preg_replace(
+                '/.*-(\d{8})$/',
+                '$1',
+                LotteryTicket::where('lottery_id', $lottery->id)
+                    ->orderByDesc('code_correlative')
+                    ->value('code_correlative') ?? '00000000'
+            );
 
-        $codeCorrelative = $lottery->code_serie . '-' . str_pad($lastNumber + 1, 8, '0', STR_PAD_LEFT);
+            $codeCorrelative = $lottery->code_serie . '-' . str_pad($lastNumber + 1, 8, '0', STR_PAD_LEFT);
 
-        return LotteryTicket::create([
-            ...$data,
-            'code_correlative' => $codeCorrelative,
-            'user_owner_id' => auth()->id(),
-            'status' => 'Pendiente',
-        ]);
-    } catch (\Throwable $e) {
-        $this->handleException('Error al crear el ticket', $e);
+            return LotteryTicket::create([
+                ...$data,
+                'code_correlative' => $codeCorrelative,
+                'user_owner_id' => auth()->id(),
+                'status' => 'Pendiente',
+            ]);
+        } catch (\Throwable $e) {
+            $this->handleException('Error al crear el ticket', $e);
+        }
     }
-}
 
 
 
