@@ -36,6 +36,13 @@ class UpdateLotteryRequest extends UpdateRequest
                     return !is_null($this->input('event_id'));
                 }),
             ],
+            'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+
+            'prizes' => 'required|array|min:1',
+            'prizes.*.name' => 'required|string|max:255',
+            'prizes.*.route' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+
+            'prizes.*.id' => 'nullable|integer|exists:prizes,id',
         ];
 
     }
@@ -61,10 +68,31 @@ class UpdateLotteryRequest extends UpdateRequest
 
             'event_id.integer' => 'El ID del evento debe ser un número entero.',
             'event_id.exists' => 'El evento seleccionado no existe.',
+
+            'route.image' => 'El archivo debe ser una imagen.',
+            'route.mimes' => 'El archivo debe ser de tipo: jpg, jpeg, png, gif.',
+            'route.max' => 'El archivo no puede ser mayor a 2 MB.',
+
+            'prizes.required' => 'Debe ingresar al menos un premio.',
+            'prizes.array' => 'Los premios deben enviarse como un arreglo.',
+            'prizes.min' => 'Debe registrar al menos un premio.',
+
+            'prizes.*.name.required' => 'El nombre del premio es obligatorio.',
+            'prizes.*.name.string' => 'El nombre del premio debe ser una cadena de texto.',
+            'prizes.*.name.max' => 'El nombre del premio no puede exceder los 255 caracteres.',
+
+            'prizes.*.route.required' => 'La imagen del premio es obligatoria.',
+            'prizes.*.route.image' => 'Cada imagen del premio debe ser un archivo de imagen.',
+            'prizes.*.route.mimes' => 'Cada imagen del premio debe ser de tipo: jpg, jpeg, png, gif.',
+            'prizes.*.route.max' => 'Cada imagen del premio no puede superar los 2 MB.',
+
+            'prizes.*.id.exists' => 'El premio seleccionado no existe.',
+            'prizes.*.id.integer' => 'El ID del premio debe ser un número entero.',
+
         ];
     }
 
-       public function withValidator($validator): void
+    public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             // Verificamos si se está intentando cambiar el estado a 'Anulado'

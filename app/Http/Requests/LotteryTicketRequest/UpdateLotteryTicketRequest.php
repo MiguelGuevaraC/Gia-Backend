@@ -42,14 +42,20 @@ class UpdateLotteryTicketRequest extends UpdateRequest
         $validator->after(function ($validator) {
             $ticketId = $this->route('id'); // O usa 'ticket' según cómo esté definido tu route model binding
 
-            $lotteryTicket = LotteryTicket::find( $ticketId);
-            $lottery=Lottery::find($lotteryTicket->lottery_id);
+            $lotteryTicket = LotteryTicket::find($ticketId);
+
+            if ($this->input('status') === 'Anulado' && $lotteryTicket->reason !== 'admin') {
+                $validator->errors()->add('reason', 'No se puede actualizar el ticket porque su concepto no es admin.');
+                return;
+            }
+
+            $lottery = Lottery::find($lotteryTicket->lottery_id);
 
             if (!$lottery) {
                 $validator->errors()->add('ticket', 'El sorteo no existe no puede actualizar el ticket.');
                 return;
             }
-            
+
 
             if ($lottery && $lottery->status !== 'Pendiente') {
                 $validator->errors()->add('status', 'No se puede actualizar el ticket porque el sorteo ya no está en estado "Pendiente".');

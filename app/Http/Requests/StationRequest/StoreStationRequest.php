@@ -8,39 +8,35 @@ use Illuminate\Validation\Validator;
 
 class StoreStationRequest extends StoreRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
-        return true; // Cambia esto si necesitas autorización específica
+        return true;
     }
 
     public function rules()
     {
         return [
             'name' => 'required|string|max:255',
-            'type' => 'required|string|max:50', // Limitar la longitud del tipo
-            'description' => 'nullable|string|max:50', // Limitar la longitud del tipo
-            'status' => 'nullable|string', // Asegurar que sea true o false
-
+            'description' => 'nullable|string|max:50',
+            'status' => 'nullable|string',
+            'type' => 'required|string|max:50',
             'price' => 'nullable|numeric|min:0',
+            'price_unitario' => 'nullable|numeric|min:0',
+            'quantity_people' => 'nullable|numeric|min:0',
             'sort' => 'nullable|numeric|min:0',
-
-            'environment_id' => 'required|integer|exists:environments,id,deleted_at,NULL', // Validar que exista en la tabla 'environments'
+            'environment_id' => 'required|integer|exists:environments,id,deleted_at,NULL',
         ];
     }
 
     public function withValidator(Validator $validator)
     {
         $validator->after(function ($validator) {
-            $type          = $this->input('type');
-            $sort          = $this->input('sort');
+            $type = $this->input('type');
+            $sort = $this->input('sort');
             $environmentId = $this->input('environment_id');
-            $id            = $this->route('id'); // para edición
+            $id = $this->route('id');
 
+            // Validación para evitar duplicados en sort + type + environment_id
             if ($type && $sort !== null && $environmentId) {
                 $query = Station::where('type', $type)
                     ->where('sort', $sort)
@@ -53,18 +49,32 @@ class StoreStationRequest extends StoreRequest
                 if ($query->exists()) {
                     $validator->errors()->add('sort', "El orden {$sort} ya está ocupado en el croquis para el tipo {$type} dentro de este ambiente. Por favor, elige otro número.");
                 }
+            }
 
-                $ultimo = Station::where('type', $type)
-                    ->where('environment_id', $environmentId)
-                    ->max('sort');
+            // Validaciones específicas para BOX
+            if (strtoupper($type) === 'BOX') {
+                $price = $this->input('price');
+                $unit = $this->input('price_unitario');
+                $qty = $this->input('quantity_people');
 
-                // if ($sort > 1 && $sort != ($ultimo + 1)) {
-                //     $validator->errors()->add('sort', "El orden ingresado no es válido. El siguiente número disponible en el croquis para el tipo {$type} dentro de este ambiente es " . ($ultimo + 1) . ".");
-                // }
+                if (is_null($unit)) {
+                    $validator->errors()->add('price_unitario', 'El precio unitario es obligatorio para estaciones tipo BOX.');
+                }
 
+                if (is_null($qty)) {
+                    $validator->errors()->add('quantity_people', 'La cantidad de personas es obligatoria para estaciones tipo BOX.');
+                }
+
+                if (!is_null($unit) && !is_null($qty)) {
+                    $expectedPrice = $unit * $qty;
+                    if ((float)$price !== (float)$expectedPrice) {
+                        $validator->errors()->add('price', "El precio debe ser igual a precio_unitario × cantidad de personas ({$unit} × {$qty} = {$expectedPrice}).");
+                    }
+                }
             }
         });
     }
+
     public function messages()
     {
         return [
@@ -79,7 +89,6 @@ class StoreStationRequest extends StoreRequest
             'type.string' => 'El tipo debe ser una cadena de texto.',
             'type.max' => 'El tipo no puede tener más de 50 caracteres.',
 
-            'status.required' => 'El estado es obligatorio.',
             'status.string' => 'El estado debe ser una cadena.',
 
             'environment_id.required' => 'El ambiente es obligatorio.',
@@ -92,5 +101,4 @@ class StoreStationRequest extends StoreRequest
             'sort.min' => 'El campo orden no puede ser negativo.',
         ];
     }
-
 }

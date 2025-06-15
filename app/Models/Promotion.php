@@ -31,14 +31,14 @@ class Promotion extends Model
         'deleted_at',
     ];
     const filters = [
-        'name'        => 'like',
+        'name' => 'like',
         'description' => 'like',
 
-        'precio'      => '=',
+        'precio' => '=',
         //'date_start'  => 'date',
-        'date_end'    => 'date',
-        'stock'       => '=',
-        'status'      => '=',
+        'date_end' => 'date',
+        'stock' => '=',
+        'status' => '=',
     ];
 
     /**
@@ -73,9 +73,9 @@ class Promotion extends Model
         $this->stock_restante = $nuevoStock;
 
         // Verificar fechas y stock para actualizar status
-        $now         = now();
+        $now = now();
         $inDateRange = $now->between($this->date_start, $this->date_end);
-        $hasStock    = $nuevoStock > 0;
+        $hasStock = $nuevoStock > 0;
         $this->status = ($inDateRange && $hasStock) ? 'Activo' : 'Inactivo';
         $this->save();
     }

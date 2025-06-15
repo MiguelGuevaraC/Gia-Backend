@@ -44,7 +44,6 @@ class LotteryTicketService
             return LotteryTicket::create([
                 ...$data,
                 'code_correlative' => $codeCorrelative,
-                'user_owner_id' => auth()->id(),
                 'status' => 'Pendiente',
             ]);
         } catch (\Throwable $e) {

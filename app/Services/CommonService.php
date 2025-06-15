@@ -10,6 +10,7 @@ class CommonService
 
     public function store_photo(array $data, Object $object, String $name_folder)
     {
+        
         $ruta = "https://develop.garzasoft.com/Gia-Backend/public";
         if (isset($data['route']) && $data['route'] instanceof \Illuminate\Http\UploadedFile) {
             $timestamp = now()->format('Ymd_His');
@@ -18,7 +19,6 @@ class CommonService
             $filePath  = $data['route']->storeAs($name_folder, $fileName, 'public');
             $object->update(['route' => $ruta . Storage::url($filePath)]);
         }
-
     }
 
     public function update_photo(array $data, Object $object, String $name_folder): string

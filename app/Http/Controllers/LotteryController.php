@@ -6,6 +6,7 @@ use App\Http\Requests\LotteryRequest\StoreLotteryRequest;
 use App\Http\Requests\LotteryRequest\UpdateLotteryRequest;
 use App\Http\Resources\LotteryResource;
 use App\Models\Lottery;
+use App\Models\LotteryTicket;
 use App\Services\LotteryService;
 use Illuminate\Http\Request;
 
@@ -182,5 +183,39 @@ class LotteryController extends Controller
             'message' => 'Sorteo eliminado exitosamente.',
         ], 200);
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/lottery/{id}/participants",
+     *     summary="Listar participantes únicos",
+     *     tags={"Lottery"},
+     *     security={{"bearerAuth": {}}},
+     *     @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer", example=1)),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="lottery_id", type="integer", example=1),
+     *             @OA\Property(property="participants", type="array", @OA\Items(ref="#/components/schemas/User1"))
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="No encontrado", @OA\JsonContent(@OA\Property(property="error", type="string", example="Lottery no encontrada"))),
+     *     @OA\Response(response=401, description="No autorizado", @OA\JsonContent(@OA\Property(property="error", type="string", example="No autorizado")))
+     * )
+     */
+
+    public function participants($id)
+    {
+        $lottery = $this->lotteryService->getLotteryById($id);
+
+        if (!$lottery) {
+            return response()->json([
+                'error' => 'Sorteo no encontrado.',
+            ], 404);
+        }
+        return $this->lotteryService->uniqueParticipants($id);
+    }
+
+
 
 }

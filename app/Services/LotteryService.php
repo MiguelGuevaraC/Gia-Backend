@@ -1,10 +1,21 @@
 <?php
 namespace App\Services;
 
+use App\Http\Resources\UserOnlyResource;
 use App\Models\Lottery;
+use App\Models\LotteryTicket;
+use App\Models\Prize;
+use Illuminate\Support\Facades\DB;
 
 class LotteryService
 {
+
+    protected $commonService;
+
+    public function __construct(CommonService $commonService)
+    {
+        $this->commonService = $commonService;
+    }
 
     public function getLotteryById(int $id): ?Lottery
     {
@@ -13,41 +24,139 @@ class LotteryService
 
     public function createLottery(array $data): Lottery
     {
-        $data['user_created_id'] = auth()->id(); // ID del usuario autenticado
-        $data['code_serie'] = str_pad((int) Lottery::max('code_serie') + 1, 4, '0', STR_PAD_LEFT);
-        $data['status'] = 'Pendiente';
 
-        // Crear sorteo
-        $lottery = Lottery::create($data);
 
-        // Si viene event_id, guardar/actualizar la relación en lottery_by_event
-        if (!empty($data['event_id'])) {
-            $lottery->events()->syncWithoutDetaching([
-                $data['event_id'] => [
-                    'price_factor_consumo' => $data['price_factor_consumo'] ?? null,
-                ]
-            ]);
+        try {
+
+            $data['user_created_id'] = auth()->id();
+            $data['code_serie'] = str_pad((int) Lottery::max('code_serie') + 1, 4, '0', STR_PAD_LEFT);
+            $data['status'] = 'Pendiente';
+
+            $lottery = Lottery::create($data);
+
+            // Asociar evento (si lo hay)
+            if (!empty($data['event_id'])) {
+                $lottery->events()->syncWithoutDetaching([
+                    $data['event_id'] => ['price_factor_consumo' => $data['price_factor_consumo'] ?? null]
+                ]);
+            }
+
+            // Guardar portada del sorteo
+            if (!empty($data['route'])) {
+                $this->commonService->store_photo($data, $lottery, 'lotteries');
+            }
+
+            // Crear premios (si existen)
+            if (!empty($data['prizes']) && is_array($data['prizes'])) {
+                foreach ($data['prizes'] as $prizeData) {
+                    $prize = Prize::create([
+                        'lottery_id' => $lottery->id,
+                        'name' => $prizeData['name'] ?? 'Premio sin nombre',
+                    ]);
+
+                    if (!empty($prizeData['route'])) {
+                        $this->commonService->store_photo($prizeData, $prize, 'prizes');
+                    }
+                }
+            }
+
+            return $lottery;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al crear el sorteo: " . $e->getMessage(), 0, $e);
         }
+    }
 
-        return $lottery;
+    public function uniqueParticipants($lotteryId)
+    {
+        $users = LotteryTicket::with('userOwner')
+            ->where('lottery_id', $lotteryId)
+            ->whereNotNull('user_owner_id')
+            ->get()
+            ->pluck('userOwner')
+            ->unique('id')
+            ->values();
+
+        return $users->isEmpty()
+            ? []
+            : UserOnlyResource::collection($users);
     }
 
 
     public function updateLottery(Lottery $lottery, array $data): Lottery
     {
-        // Solo actualizar atributos del modelo Lottery
-        $lotteryData = array_intersect_key($data, $lottery->getAttributes());
-        $lottery->update($lotteryData);
+        try {
+            // 1. Actualizar campos del sorteo
+            $lotteryData = array_intersect_key($data, $lottery->getAttributes());
+            $lottery->update($lotteryData);
 
-        // Actualizar el factor de consumo si se proporciona
-        if (isset($data['price_factor_consumo'])) {
-            $lottery->events()->updateExistingPivot($lottery->event_id, [
-                'price_factor_consumo' => $data['price_factor_consumo']
-            ]);
+            // 2. Actualizar imagen del sorteo si hay una nueva imagen
+            if (isset($data['route'])) {
+                $data['route'] = $this->commonService->update_photo($data, $lottery, 'lotteries');
+                $lottery->update(['route' => $data['route']]);
+            }
+
+            // 3. Actualizar factor de consumo en evento relacionado
+            if (!empty($data['event_id']) && isset($data['price_factor_consumo'])) {
+                $lottery->events()->syncWithoutDetaching([
+                    $data['event_id'] => ['price_factor_consumo' => $data['price_factor_consumo']]
+                ]);
+            }
+
+            // 4. Actualizar premios
+            if (!empty($data['prizes']) && is_array($data['prizes'])) {
+                $incomingIds = collect($data['prizes'])->pluck('id')->filter()->toArray();
+
+                // Eliminar premios que ya no están en el request
+                $lottery->prizes()
+                    ->whereNotIn('id', $incomingIds)
+                    ->delete();
+
+                // Recorrer premios recibidos
+                foreach ($data['prizes'] as $prizeData) {
+                    if (!empty($prizeData['id'])) {
+                        // Buscar premio existente
+                        $prize = Prize::where('id', $prizeData['id'])
+                            ->where('lottery_id', $lottery->id)
+                            ->first();
+
+                        if ($prize) {
+                            // Actualizar nombre
+                            if (isset($prizeData['name'])) {
+                                $prize->name = $prizeData['name'];
+                            }
+
+                            // Actualizar imagen si hay
+                            if (isset($prizeData['route'])) {
+                                $prizeData['route'] = $this->commonService->update_photo($prizeData, $prize, 'prizes');
+                                $prize->route = $prizeData['route'];
+                            }
+
+                            $prize->save();
+                            continue;
+                        }
+                    }
+
+                    // Si no hay ID o no coincide con sorteo, se crea uno nuevo
+                    $newPrize = new Prize();
+                    $newPrize->lottery_id = $lottery->id;
+                    $newPrize->name = $prizeData['name'] ?? 'Sin nombre';
+
+                    if (isset($prizeData['route'])) {
+                        $prizeData['route'] = $this->commonService->update_photo($prizeData, $newPrize, 'prizes');
+                        $newPrize->route = $prizeData['route'];
+                    }
+
+                    $newPrize->save();
+                }
+            }
+
+            return $lottery;
+        } catch (\Exception $e) {
+            throw new \RuntimeException("Error al actualizar el sorteo: " . $e->getMessage(), 0, $e);
         }
-
-        return $lottery;
     }
+
+
 
     public function destroyById($id)
     {

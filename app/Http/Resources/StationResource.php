@@ -15,7 +15,7 @@ class StationResource extends JsonResource
      *     @OA\Property(property="description", type="string", example="Description"),
      *     @OA\Property(property="type", type="string", example="Monitoring"),
      *     @OA\Property(property="price", type="string", example="20.00"),
-         *     @OA\Property(property="sort", type="integer", example="1"),
+     *     @OA\Property(property="sort", type="integer", example="1"),
      *     @OA\Property(property="status", type="boolean", example=true),
      *     @OA\Property(property="route", type="string", example="/environment/production"),
      *     @OA\Property(property="server_id", type="integer", example=15),
@@ -27,19 +27,22 @@ class StationResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'               => $this->id,
-            'name'             => $this->name ??   null,
-            'description'      => $this->description ??  null,
-            'type'             => $this->type ??  null,
-            'price'           => $this->price ??  null,
-            'sort'           => $this->sort ??  null,
-            'status'           => $this->status ??  null,
-            'route'            => $this->route ??  null,
-            'server_id'        => $this->server_id,
+            'id' => $this->id,
+            'name' => $this->name ?? null,
+            'description' => $this->description ?? null,
+            'type' => $this->type ?? null,
+            'price' => $this->price ?? null,
+            'price_unitario' => $this->price_unitario ?? null,
+            'quantity_people' => $this->quantity_people ?? null,
+
+            'sort' => $this->sort ?? null,
+            'status' => $this->status ?? null,
+            'route' => $this->route ?? null,
+            'server_id' => $this->server_id,
             'date_reservation' => $this->reservation_datetime,
             'reservation' => $this->reservation,
-            'environment_id'   => $this->environment_id,
-            'environment'      => $this->environment ? new EnvironmentResource($this->environment) :  null,
+            'environment_id' => $this->environment_id,
+            'environment' => $this->environment ? new EnvironmentResource($this->environment) : null,
         ];
     }
 

@@ -15,6 +15,8 @@ class LotteryResource extends JsonResource
      *     @OA\Property(property="lottery_name", type="string", example="Sorteo Navideño"),
      *     @OA\Property(property="lottery_description", type="string", example="Premio por compras en diciembre"),
      *     @OA\Property(property="lottery_date", type="string", format="date-time", example="2025-12-24T20:00:00Z"),
+     *     @OA\Property(property="lottery_price", type="number", format="float", example=50.00),
+     *     @OA\Property(property="lottery_by_event", type="boolean", example=true),
      *     @OA\Property(property="status", type="string", example="Pendiente"),
      *     @OA\Property(property="winner_id", type="integer", nullable=true, example=15),
      *     @OA\Property(property="winner_name", type="string", nullable=true, example="Juan Pérez"),
@@ -22,7 +24,13 @@ class LotteryResource extends JsonResource
      *     @OA\Property(property="user_created_name", type="string", example="Admin User"),
      *     @OA\Property(property="event_id", type="integer", nullable=true, example=2),
      *     @OA\Property(property="event_name", type="string", nullable=true, example="Campaña Navidad"),
-     *     @OA\Property(property="created_at", type="string", format="date-time", example="2025-06-05T10:00:00Z")
+     *     @OA\Property(property="created_at", type="string", format="date-time", example="2025-06-05T10:00:00Z"),
+     *     @OA\Property(property="updated_at", type="string", format="date-time", example="2025-06-10T12:00:00Z"),
+     *     @OA\Property(
+     *         property="prizes",
+     *         type="array",
+     *         @OA\Items(ref="#/components/schemas/Prize")
+     *     )
      * )
      */
     public function toArray($request)
@@ -36,6 +44,7 @@ class LotteryResource extends JsonResource
             'lottery_price' => $this->lottery_price,
             'lottery_by_event' => $this->lotteryByEvent,
             'status' => $this->status,
+            'route' => $this->route,
             'winner_id' => $this->winner_id,
             'winner_name' => $this->winner?->name,
             'user_created_id' => $this->user_created_id,
@@ -44,6 +53,9 @@ class LotteryResource extends JsonResource
             'event_name' => $this?->event?->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'prizes' => $this->prizes
+                ? PrizeResource::collection($this->prizes)->values()
+                : null,
         ];
     }
 }

@@ -34,6 +34,9 @@ class UpdateStationRequest extends UpdateRequest
             'price' => 'nullable|numeric|min:0',
             'sort' => 'nullable|numeric|min:0',
 
+               'price_unitario' => 'nullable|numeric|min:0',
+            'quantity_people' => 'nullable|numeric|min:0',
+
            'status' => [
             'sometimes',
             'string',
@@ -50,38 +53,53 @@ class UpdateStationRequest extends UpdateRequest
             'environment_id' => 'sometimes|integer|exists:environments,id,deleted_at,NULL', // Opcional, pero debe existir en la tabla 'environments'
         ];
     }
-    public function withValidator(Validator $validator)
-    {
-        $validator->after(function ($validator) {
-            $type          = $this->input('type');
-            $sort          = $this->input('sort');
-            $environmentId = $this->input('environment_id');
-            $id            = $this->route('id'); // para edición
+   public function withValidator(Validator $validator)
+{
+    $validator->after(function ($validator) {
+        $type = $this->input('type');
+        $sort = $this->input('sort');
+        $environmentId = $this->input('environment_id');
+        $id = $this->route('id');
 
-            if ($type && $sort !== null && $environmentId) {
-                $query = Station::where('type', $type)
-                    ->where('sort', $sort)
-                    ->where('environment_id', $environmentId);
+        // Validar combinación de sort + type + environment
+        if ($type && $sort !== null && $environmentId) {
+            $query = Station::where('type', $type)
+                ->where('sort', $sort)
+                ->where('environment_id', $environmentId);
 
-                if ($id) {
-                    $query->where('id', '!=', $id);
-                }
-
-                if ($query->exists()) {
-                    $validator->errors()->add('sort', "El orden {$sort} ya está ocupado en el croquis para el tipo {$type} dentro de este ambiente. Por favor, elige otro número.");
-                }
-
-                $ultimo = Station::where('type', $type)
-                    ->where('environment_id', $environmentId)
-                    ->max('sort');
-
-                // if ($sort > 1 && $sort != ($ultimo + 1)) {
-                //     $validator->errors()->add('sort', "El orden ingresado no es válido. El siguiente número disponible en el croquis para el tipo {$type} dentro de este ambiente es " . ($ultimo + 1) . ".");
-                // }
-
+            if ($id) {
+                $query->where('id', '!=', $id);
             }
-        });
-    }
+
+            if ($query->exists()) {
+                $validator->errors()->add('sort', "El orden {$sort} ya está ocupado en el croquis para el tipo {$type} dentro de este ambiente. Por favor, elige otro número.");
+            }
+        }
+
+        // Validación especial para tipo BOX
+        if ($type === 'BOX') {
+            $price = $this->input('price');
+            $unitPrice = $this->input('price_unitario');
+            $people = $this->input('quantity_people');
+
+            if (is_null($unitPrice)) {
+                $validator->errors()->add('price_unitario', 'El campo precio unitario es obligatorio para el tipo BOX.');
+            }
+
+            if (is_null($people)) {
+                $validator->errors()->add('quantity_people', 'El campo cantidad de personas es obligatorio para el tipo BOX.');
+            }
+
+            if (!is_null($unitPrice) && !is_null($people)) {
+                $expectedPrice = $unitPrice * $people;
+                if ((float) $price !== (float) $expectedPrice) {
+                    $validator->errors()->add('price', "El precio total debe ser igual al producto de precio unitario por cantidad de personas ({$unitPrice} × {$people} = {$expectedPrice}).");
+                }
+            }
+        }
+    });
+}
+
 
     public function messages()
     {

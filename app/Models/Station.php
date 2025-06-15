@@ -19,6 +19,8 @@ class Station extends Model
         'route',
         'environment_id',
         'price',
+        'price_unitario',
+        'quantity_people',
         'sort',
         'created_at',
         'updated_at',

@@ -15,6 +15,7 @@ class Lottery extends Model
         'lottery_description',
         'lottery_date',
         'lottery_price',
+        'route',
         'status',
         'winner_id',
         'user_created_id',
@@ -33,6 +34,7 @@ class Lottery extends Model
      */
     const filters = [
 
+        'route',
         'code_serie' => 'like',
         'event_id' => '=',
         'lottery_name' => 'like',
@@ -75,9 +77,15 @@ class Lottery extends Model
         return $this->hasOne(LotteryByEvent::class);
     }
 
+    
+
     public function tickets()
     {
         return $this->hasMany(LotteryTicket::class);
     }
 
+    public function prizes()
+    {
+        return $this->hasMany(Prize::class);
+    }
 }
