@@ -77,4 +77,8 @@ class Reservation extends Model
     {
         return $this->hasMany(DetailReservation::class);
     }
+     public function codes()
+    {
+        return $this->hasOne(CodeAsset::class);
+    }
 }

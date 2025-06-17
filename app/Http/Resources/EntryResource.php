@@ -41,6 +41,7 @@ class EntryResource extends JsonResource
             'person'         => $this->person ? new PersonResource($this->person) :  null,
             'event_id'      => $this->event_id ??  null,
             'event'         => $this->event ? new EventResource($this->event) :  null,
+            'code'      => $this->codes ??  null,
         ];
     }
 

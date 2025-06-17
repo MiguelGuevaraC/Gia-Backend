@@ -61,4 +61,8 @@ class Entry extends Model
     {
         return $this->belongsTo(Person::class, 'person_id');
     }
+     public function codes()
+    {
+        return $this->hasOne(CodeAsset::class);
+    }
 }

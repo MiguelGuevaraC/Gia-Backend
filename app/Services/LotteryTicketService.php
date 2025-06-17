@@ -9,6 +9,13 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class LotteryTicketService
 {
+    protected $codeGeneratorService;
+
+    public function __construct(CodeGeneratorService $codeGeneratorService)
+    {
+        $this->codeGeneratorService = $codeGeneratorService;
+    }
+
     protected function handleException(string $message, \Throwable $e = null, int $code = 400): never
     {
         Log::error($message, ['exception' => $e]);
@@ -41,11 +48,21 @@ class LotteryTicketService
 
             $codeCorrelative = $lottery->code_serie . '-' . str_pad($lastNumber + 1, 8, '0', STR_PAD_LEFT);
 
-            return LotteryTicket::create([
+            $ticket = LotteryTicket::create([
                 ...$data,
                 'code_correlative' => $codeCorrelative,
                 'status' => 'Pendiente',
             ]);
+
+            $resultado = $this->codeGeneratorService->generar('barcode', [
+                'description'=>'Ticket Sorteo',
+                'reservation_id' => null,
+                'lottery_ticket_id' => $ticket->id,
+                'entry_id' => null,
+            ]);
+
+
+            return $ticket;
         } catch (\Throwable $e) {
             $this->handleException('Error al crear el ticket', $e);
         }

@@ -51,4 +51,8 @@ class LotteryTicket extends Model
     {
         return $this->belongsTo(Lottery::class, 'lottery_id');
     }
+     public function codes()
+    {
+        return $this->hasOne(CodeAsset::class,'lottery_ticket_id');
+    }
 }

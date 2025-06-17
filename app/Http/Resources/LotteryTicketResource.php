@@ -34,6 +34,7 @@ class LotteryTicketResource extends JsonResource
             'user_owner_name' => optional($this->userOwner)->name,
             'lottery_id' => $this->lottery_id,
             'lottery_name' => optional($this->lottery)->lottery_name,
+            'code' => new CodeResource($this->codes) ?? null,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

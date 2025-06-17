@@ -5,7 +5,12 @@ use App\Models\Entry;
 
 class EntryService
 {
+    protected $codeGeneratorService;
 
+    public function __construct(CodeGeneratorService $codeGeneratorService)
+    {
+        $this->codeGeneratorService = $codeGeneratorService;
+    }
     public function getEntryById(int $id): ?Entry
     {
         return Entry::find($id);
@@ -15,9 +20,16 @@ class EntryService
     {
         $data['user_id'] = auth()->id(); // Obtiene el ID del usuario logueado
 
-        $event = Entry::create($data);
+        $entry = Entry::create($data);
 
-        return $event;
+        $resultado = $this->codeGeneratorService->generar('barcode', [
+            'description'=>'Entrada',
+            'reservation_id' => null,
+            'lottery_ticket_id' => null,
+            'entry_id' => $entry->id,
+        ]);
+
+        return $entry;
     }
 
     public function updateEntry(Entry $entry, array $data): Entry
@@ -32,7 +44,7 @@ class EntryService
     {
         $Entry = Entry::find($id);
 
-        if (! $Entry) {
+        if (!$Entry) {
             return false;
         }
         return $Entry->delete(); // Devuelve true si la eliminación fue exitosa
