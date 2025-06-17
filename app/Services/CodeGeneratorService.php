@@ -7,34 +7,37 @@ use Illuminate\Support\Facades\Crypt;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\CodeAsset;
+use App\Models\Entry;
+use App\Models\LotteryTicket;
+use App\Models\Reservation;
 use App\Models\ScanLog;
 use Illuminate\Support\Facades\Log; // Asegúrate de importar Log
 use Vinkla\Hashids\Facades\Hashids;
 class CodeGeneratorService
 {
 
-private function encryptShort(string $code): string
-{
-    // Hashear el code original como string → Hashids trabaja con enteros, así que transformamos el code a un número único y corto
-    $numeric = crc32($code); // Más corto que hexdec(md5())
-    return Hashids::encode($numeric); // Hash único pero corto
-}
-
-public static function decryptShort(string $hash): ?string
-{
-    $decoded = Hashids::decode($hash);
-
-    if (empty($decoded)) {
-        return null;
+    private function encryptShort(string $code): string
+    {
+        // Hashear el code original como string → Hashids trabaja con enteros, así que transformamos el code a un número único y corto
+        $numeric = crc32($code); // Más corto que hexdec(md5())
+        return Hashids::encode($numeric); // Hash único pero corto
     }
 
-    $numeric = $decoded[0];
+    public static function decryptShort(string $hash): ?string
+    {
+        $decoded = Hashids::decode($hash);
 
-    // Buscar en la base de datos el `code` que tenga ese hash generado
-    $codeAsset = CodeAsset::whereRaw('CRC32(code) = ?', [$numeric])->first();
+        if (empty($decoded)) {
+            return null;
+        }
 
-    return $codeAsset?->code;
-}
+        $numeric = $decoded[0];
+
+        // Buscar en la base de datos el `code` que tenga ese hash generado
+        $codeAsset = CodeAsset::whereRaw('CRC32(code) = ?', [$numeric])->first();
+
+        return $codeAsset?->code;
+    }
 
 
 
@@ -51,7 +54,7 @@ public static function decryptShort(string $hash): ?string
             } while (CodeAsset::where('code', $code)->exists());
 
             $encrypted = $this->encryptShort($code); // más corto
-     
+
 
             $barcodePath = null;
             $qrcodePath = null;
@@ -101,8 +104,6 @@ public static function decryptShort(string $hash): ?string
         try {
             $code = $this->decryptShort($encrypted);
 
-    
-
             $codeAsset = CodeAsset::where('code', $code)->first();
 
             if (!$codeAsset) {
@@ -119,6 +120,28 @@ public static function decryptShort(string $hash): ?string
                 ];
             }
 
+            // ✅ Verificar a qué modelo está relacionado y actualizar el estado
+            if ($codeAsset->entry_id) {
+                $entry = Entry::find($codeAsset->entry_id);
+                if ($entry) {
+                    $entry->status_entry = 'Código Escaneado';
+                    $entry->save();
+                }
+            } elseif ($codeAsset->reservation_id) {
+                $reservation = Reservation::find($codeAsset->reservation_id);
+                if ($reservation) {
+                    $reservation->status_scan = 'Código Escaneado';
+                    $reservation->save();
+                }
+            } elseif ($codeAsset->lottery_ticket_id) {
+                $ticket = LotteryTicket::find($codeAsset->lottery_ticket_id);
+                if ($ticket) {
+                    $ticket->status_scan = 'Código Escaneado';
+                    $ticket->save();
+                }
+            }
+
+            // Registrar escaneo exitoso
             ScanLog::create([
                 'code_asset_id' => $codeAsset->id,
                 'ip' => $ip,

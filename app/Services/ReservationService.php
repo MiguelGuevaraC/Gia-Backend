@@ -61,12 +61,7 @@ class ReservationService
 
         }
 
-        $resultado = $this->codeGeneratorService->generar('barcode', [
-            'description'=>'Reserva',
-            'reservation_id' => $reservation->id,
-            'lottery_ticket_id' => null,
-            'entry_id' => null,
-        ]);
+     
         return $reservation;
     }
 

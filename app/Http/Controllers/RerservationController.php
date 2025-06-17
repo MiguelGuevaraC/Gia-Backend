@@ -10,6 +10,7 @@ use App\Models\Event;
 use App\Models\Reservation;
 use App\Models\Station;
 use App\Services\AuditLogService;
+use App\Services\CodeGeneratorService;
 use App\Services\CulquiService;
 use App\Services\LotteryService;
 use App\Services\LotteryTicketService;
@@ -23,14 +24,18 @@ class RerservationController extends Controller
     protected $culquiService;
     protected $lotteryTicketService;
 
+    protected $codeGeneratorService;
+
     public function __construct(
         ReservationService $reservaService,
         CulquiService $culquiService,
-        LotteryTicketService $lotteryTicketService
+        LotteryTicketService $lotteryTicketService,
+        CodeGeneratorService $codeGeneratorService
     ) {
         $this->reservaService = $reservaService;
         $this->culquiService = $culquiService;
         $this->lotteryTicketService = $lotteryTicketService;
+        $this->codeGeneratorService = $codeGeneratorService;
     }
     /**
      * @OA\Get(
@@ -222,6 +227,13 @@ class RerservationController extends Controller
 
             $this->afterUpdateReservation($reservation, floatval($request->amount) / 100);
 
+
+            $resultado = $this->codeGeneratorService->generar('barcode', [
+                'description' => 'Reserva',
+                'reservation_id' => $reservation->id,
+                'lottery_ticket_id' => null,
+                'entry_id' => null,
+            ]);
 
             return response()->json([
                 'success' => true,
