@@ -20,7 +20,8 @@ class PrizeResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'event_name' => $this?->name,
+            'name' => $this?->name,
+            'description' => $this?->description,
             'route' => $this->route,
             'created_at' => $this->created_at,
         ];

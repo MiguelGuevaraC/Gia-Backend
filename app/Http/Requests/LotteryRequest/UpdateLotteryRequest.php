@@ -41,7 +41,7 @@ class UpdateLotteryRequest extends UpdateRequest
             'prizes' => 'required|array|min:1',
             'prizes.*.name' => 'required|string|max:255',
             'prizes.*.route' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
-
+            'prizes.*.description' => 'required|string',
             'prizes.*.id' => 'nullable|integer|exists:prizes,id',
         ];
 
@@ -88,6 +88,10 @@ class UpdateLotteryRequest extends UpdateRequest
 
             'prizes.*.id.exists' => 'El premio seleccionado no existe.',
             'prizes.*.id.integer' => 'El ID del premio debe ser un número entero.',
+
+
+            'prizes.*.description.required' => 'La descripción del premio es obligatorio.',
+            'prizes.*.description.string' => 'La descripción del premio debe ser una cadena de texto.',
 
         ];
     }

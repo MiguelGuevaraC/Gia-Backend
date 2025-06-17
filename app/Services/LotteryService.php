@@ -51,7 +51,8 @@ class LotteryService
                 foreach ($data['prizes'] as $prizeData) {
                     $prize = Prize::create([
                         'lottery_id' => $lottery->id,
-                        'name' => $prizeData['name'] ?? 'Premio sin nombre',
+                        'name' => $prizeData['name'] ?? '-',
+                        'description' => $prizeData['description'] ?? '-',
                     ]);
 
                     if (!empty($prizeData['route'])) {
@@ -124,6 +125,10 @@ class LotteryService
                             if (isset($prizeData['name'])) {
                                 $prize->name = $prizeData['name'];
                             }
+                            if (isset($prizeData['description'])) {
+                                $prize->description = $prizeData['description'];
+                            }
+
 
                             // Actualizar imagen si hay
                             if (isset($prizeData['route'])) {
@@ -139,7 +144,8 @@ class LotteryService
                     // Si no hay ID o no coincide con sorteo, se crea uno nuevo
                     $newPrize = new Prize();
                     $newPrize->lottery_id = $lottery->id;
-                    $newPrize->name = $prizeData['name'] ?? 'Sin nombre';
+                    $newPrize->name = $prizeData['name'] ?? '-';
+                    $newPrize->description = $prizeData['description'] ?? '-';
 
                     if (isset($prizeData['route'])) {
                         $prizeData['route'] = $this->commonService->update_photo($prizeData, $newPrize, 'prizes');

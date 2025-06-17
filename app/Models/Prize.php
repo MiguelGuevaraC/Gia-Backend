@@ -14,6 +14,7 @@ class Prize extends Model
     protected $fillable = [
         'id',
         'name',
+        'description',
         'name_image',
         'route',
         'lottery_id',

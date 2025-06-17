@@ -80,6 +80,7 @@ class StoreLotteryRequest extends StoreRequest
 
             'prizes' => 'required|array|min:1',
             'prizes.*.name' => 'required|string|max:255',
+            'prizes.*.description' => 'required|string',
             'prizes.*.route' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
         ];
     }
@@ -120,6 +121,9 @@ class StoreLotteryRequest extends StoreRequest
             'prizes.*.name.required' => 'El nombre del premio es obligatorio.',
             'prizes.*.name.string' => 'El nombre del premio debe ser una cadena de texto.',
             'prizes.*.name.max' => 'El nombre del premio no puede exceder los 255 caracteres.',
+
+            'prizes.*.description.required' => 'La descripción del premio es obligatorio.',
+            'prizes.*.description.string' => 'La descripción del premio debe ser una cadena de texto.',
 
             'prizes.*.route.required' => 'La imagen del premio es obligatoria.',
             'prizes.*.route.image' => 'Cada imagen del premio debe ser un archivo de imagen.',

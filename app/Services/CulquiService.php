@@ -33,20 +33,20 @@ class CulquiService
             "source_id" => $request->token,
         ]);
 
-        if (! isset($charge->id)) {
+        if (!isset($charge->id)) {
             return [
                 'success' => false,
                 'message' => $charge->user_message ?? $charge->merchant_message ?? 'Error al procesar el pago',
-                'object'  => $charge,
-                'status'  => 400,
+                'object' => $charge,
+                'status' => 400,
             ];
         }
 
         return [
             'success' => true,
             'message' => 'Pago procesado correctamente',
-            'object'  => $charge,
-            'status'  => 200,
+            'object' => $charge,
+            'status' => 200,
         ];
     }
 

@@ -14,6 +14,7 @@ return new class extends Migration {
         Schema::create('prizes', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
+             $table->text('description')->nullable();
             $table->text('route')->nullable();
             $table->foreignId('lottery_id')->nullable()->constrained('lotteries')->onDelete('cascade');
             $table->timestamps();
