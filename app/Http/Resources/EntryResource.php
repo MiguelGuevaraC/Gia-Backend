@@ -22,26 +22,26 @@ class EntryResource extends JsonResource
      *     @OA\Property(property="person", type="object", ref="#/components/schemas/Person", description="Detalles de la persona asociada"),
      *     @OA\Property(property="event_id", type="integer", example=15, description="ID del evento relacionado"),
      *     @OA\Property(property="event", ref="#/components/schemas/Event")
-     
+
      * )
      */
 
     public function toArray($request)
     {
         return [
-            'id'             => $this->id,
-            'entry_datetime' => $this->entry_datetime ??  null,
-            'code_pay'       => $this->code_pay ??  null,
-            'quantity'       => $this->quantity ??  null,
-            'status_pay'     => $this->status_pay ??  null,
-            'status_entry'   => $this->status_entry ??  null,
-            'user_id'        => $this->user_id ??  null,
-            'user'           => $this->user ? $this->user :  null,
-            'person_id'      => $this->person_id ??  null,
-            'person'         => $this->person ? new PersonResource($this->person) :  null,
-            'event_id'      => $this->event_id ??  null,
-            'event'         => $this->event ? new EventResource($this->event) :  null,
-            'code'      => $this->codes ??  null,
+            'id' => $this->id,
+            'entry_datetime' => $this->entry_datetime ?? null,
+            'code_pay' => $this->code_pay ?? null,
+            'quantity' => $this->quantity ?? null,
+            'status_pay' => $this->status_pay ?? null,
+            'status_entry' => $this->status_entry ?? null,
+            'user_id' => $this->user_id ?? null,
+            'user' => $this->user ? $this->user : null,
+            'person_id' => $this->person_id ?? null,
+            'person' => $this->person ? new PersonResource($this->person) : null,
+            'event_id' => $this->event_id ?? null,
+            'event' => $this->event ? new EventResource($this->event) : null,
+            'code' => new CodeResource($this->codes) ?? null,
         ];
     }
 

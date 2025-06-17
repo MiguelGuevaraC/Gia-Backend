@@ -7,10 +7,36 @@ use Illuminate\Support\Facades\Crypt;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use App\Models\CodeAsset;
+use App\Models\ScanLog;
 use Illuminate\Support\Facades\Log; // Asegúrate de importar Log
-
+use Vinkla\Hashids\Facades\Hashids;
 class CodeGeneratorService
 {
+
+private function encryptShort(string $code): string
+{
+    // Hashear el code original como string → Hashids trabaja con enteros, así que transformamos el code a un número único y corto
+    $numeric = crc32($code); // Más corto que hexdec(md5())
+    return Hashids::encode($numeric); // Hash único pero corto
+}
+
+public static function decryptShort(string $hash): ?string
+{
+    $decoded = Hashids::decode($hash);
+
+    if (empty($decoded)) {
+        return null;
+    }
+
+    $numeric = $decoded[0];
+
+    // Buscar en la base de datos el `code` que tenga ese hash generado
+    $codeAsset = CodeAsset::whereRaw('CRC32(code) = ?', [$numeric])->first();
+
+    return $codeAsset?->code;
+}
+
+
 
     public function generar(string $type = 'barcode', array $data = []): array
     {
@@ -24,21 +50,22 @@ class CodeGeneratorService
                 $code = Str::upper(Str::random(8));
             } while (CodeAsset::where('code', $code)->exists());
 
-            $encrypted = Crypt::encryptString($code);
+            $encrypted = $this->encryptShort($code); // más corto
+     
 
             $barcodePath = null;
             $qrcodePath = null;
 
             if ($type === 'barcode' || $type === 'both') {
                 $barcodeGen = new BarcodeGeneratorPNG();
-                $barcodeImg = $barcodeGen->getBarcode($code, $barcodeGen::TYPE_CODE_128);
-                $barcodePath = "barcodes/{$code}.png";
+                $barcodeImg = $barcodeGen->getBarcode($encrypted, $barcodeGen::TYPE_CODE_128);
+                $barcodePath = "barcodes/{$encrypted}.png";
                 Storage::disk('public')->put($barcodePath, $barcodeImg);
             }
 
             if ($type === 'qrcode' || $type === 'both') {
                 $qrImg = QrCode::format('png')->generate($encrypted);
-                $qrcodePath = "qrcodes/{$code}.png";
+                $qrcodePath = "qrcodes/{$encrypted}.png";
                 Storage::disk('public')->put($qrcodePath, $qrImg);
             }
 
@@ -53,7 +80,6 @@ class CodeGeneratorService
             CodeAsset::create($assetData);
 
             return [
-                'code' => $code,
                 'encrypted' => $encrypted,
                 'barcode_url' => $barcodePath ? Storage::url($barcodePath) : null,
                 'qrcode_url' => $qrcodePath ? Storage::url($qrcodePath) : null,
@@ -69,5 +95,55 @@ class CodeGeneratorService
         }
     }
 
+
+    public function registrarEscaneo(string $encrypted, string $ip): array
+    {
+        try {
+            $code = $this->decryptShort($encrypted);
+
+    
+
+            $codeAsset = CodeAsset::where('code', $code)->first();
+
+            if (!$codeAsset) {
+                ScanLog::create([
+                    'code_asset_id' => null,
+                    'ip' => $ip,
+                    'status' => 'denied',
+                    'description' => 'Código no registrado.',
+                ]);
+
+                return [
+                    'status' => 'denied',
+                    'message' => 'Código no válido',
+                ];
+            }
+
+            ScanLog::create([
+                'code_asset_id' => $codeAsset->id,
+                'ip' => $ip,
+                'status' => 'ok',
+                'description' => 'Escaneo permitido.',
+                "code" => $code,
+            ]);
+
+            return [
+                'status' => 'ok',
+                'message' => 'Escaneo registrado correctamente',
+            ];
+        } catch (\Throwable $e) {
+            ScanLog::create([
+                'code_asset_id' => null,
+                'ip' => $ip,
+                'status' => 'denied',
+                'description' => 'Error al desencriptar el código: ' . $e->getMessage(),
+            ]);
+
+            return [
+                'status' => 'denied',
+                'message' => 'Error en el escaneo',
+            ];
+        }
+    }
 
 }
