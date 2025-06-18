@@ -228,7 +228,7 @@ class RerservationController extends Controller
             $this->afterUpdateReservation($reservation, floatval($request->amount) / 100);
 
 
-            $resultado = $this->codeGeneratorService->generar('barcode', [
+            $resultado = $this->codeGeneratorService->generar('qrcode', [
                 'description' => 'Reserva',
                 'reservation_id' => $reservation->id,
                 'lottery_ticket_id' => null,
@@ -239,7 +239,7 @@ class RerservationController extends Controller
                 'success' => true,
                 'message' => 'Pago registrado correctamente.',
                 // 'payment_data' => $result['object'],
-                'data' => $reservation,
+                'data' => new ReservationResource($reservation),
             ]);
 
         } catch (\Exception $e) {

@@ -24,11 +24,17 @@ class UserOnlyResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name ??   null,
             'username' => $this->username ??  null,
-            'person_id' => $this->person_id ?? null,
-            'isFlagData'      => $this->isFlagData() ?? null,
-            'textFlagData'      => $this->textFlagData() ?? null,
-            'rol_id' => $this->rol_id ??  null,
+            'person_id' => $this->person_id ??  null,
             'person' => $this->person ? new PersonResource($this->person) :  null,
+            'tickets' => $this->whenLoaded('tickets', function () {
+                return $this->tickets->map(function ($ticket) {
+                    return [
+                        'id' => $ticket->id,
+                        'code' => $ticket->code,
+                        'status' => $ticket->status,
+                    ];
+                });
+            }),
         ];
 
     }

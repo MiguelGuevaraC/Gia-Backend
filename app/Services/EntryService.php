@@ -19,11 +19,17 @@ class EntryService
     public function createEntry(array $data): Entry
     {
         $data['user_id'] = auth()->id(); // Obtiene el ID del usuario logueado
+        $data['correlative'] = str_pad((int) Entry::where('event_id', $data['event_id'])->max('correlative') + 1, 8, '0', STR_PAD_LEFT);
 
-        $entry = Entry::create($data);
+        $entry = Entry::create([
+            ...$data,
+            'status' => 'Pendiente',
+            'quantity' => '1',
+            'entry_datetime' => now()
+        ]);
 
-        $resultado = $this->codeGeneratorService->generar('barcode', [
-            'description'=>'Entrada',
+        $resultado = $this->codeGeneratorService->generar('qrcode', [
+            'description' => 'Entrada',
             'reservation_id' => null,
             'lottery_ticket_id' => null,
             'entry_id' => $entry->id,

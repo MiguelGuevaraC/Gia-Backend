@@ -55,4 +55,8 @@ class CodeAsset extends Model
     {
         return $this->hasMany(Environment::class);
     }
+      public function scan_logs()
+    {
+        return $this->hasMany(ScanLog::class,'code_asset_id');
+    }
 }

@@ -30,6 +30,7 @@ class EntryResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            "correlative"=> $this->correlative ?? null,
             'entry_datetime' => $this->entry_datetime ?? null,
             'code_pay' => $this->code_pay ?? null,
             'quantity' => $this->quantity ?? null,

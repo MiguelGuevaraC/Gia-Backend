@@ -102,7 +102,7 @@ class LotteryTicketController extends Controller
         return new LotteryTicketResource(
             $this->lotteryTicketService->create([
                 ...$request->validated(),
-                'reason' => 'compra',
+                'reason' => 'compra ticket',
                 'user_owner_id' => auth()->id(),
             ])
         );

@@ -31,6 +31,7 @@ class EventAppResource extends JsonResource
         return [
             'id'             => $this->id,
             'name'           => $this->name ?? null,
+                "correlative"=> $this->correlative ?? null,
             'event_datetime' => $this->event_datetime ?? null,
             'comment'        => $this->comment ?? null,
             'pricebox'       => $this->pricebox ?? null,

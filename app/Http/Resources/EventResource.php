@@ -32,6 +32,7 @@ class EventResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            "correlative" => $this->correlative ?? null,
             'name' => $this->name ?? null,
             'event_datetime' => $this->event_datetime ?? null,
             'comment' => $this->comment ?? null,
@@ -39,7 +40,7 @@ class EventResource extends JsonResource
             'route' => $this->route ?? null,
             'pricebox' => $this->pricebox ?? null,
             'pricetable' => $this->pricetable ?? null,
-      
+
 
             'activeStations' => $this->activeStations() ?? null,
 

@@ -5,10 +5,13 @@ use App\Http\Requests\LotteryRequest\IndexLotteryRequest;
 use App\Http\Requests\LotteryRequest\StoreLotteryRequest;
 use App\Http\Requests\LotteryRequest\UpdateLotteryRequest;
 use App\Http\Resources\LotteryResource;
+use App\Http\Resources\ParticipantResource;
 use App\Models\Lottery;
 use App\Models\LotteryTicket;
+use App\Models\User;
 use App\Services\LotteryService;
 use Illuminate\Http\Request;
+
 
 class LotteryController extends Controller
 {
@@ -204,17 +207,23 @@ class LotteryController extends Controller
      * )
      */
 
-    public function participants($id)
-    {
-        $lottery = $this->lotteryService->getLotteryById($id);
+  public function participants($lotteryId)
+{
+    $participants = User::whereHas('tickets', function ($query) use ($lotteryId) {
+        $query->where('lottery_id', $lotteryId);
+    })
+    ->with([
+        'tickets' => function ($query) use ($lotteryId) {
+            $query->where('lottery_id', $lotteryId);
+        },
+        'person'
+    ])
+    ->get();
 
-        if (!$lottery) {
-            return response()->json([
-                'error' => 'Sorteo no encontrado.',
-            ], 404);
-        }
-        return $this->lotteryService->uniqueParticipants($id);
-    }
+    return ParticipantResource::collection($participants);
+}
+
+
 
 
 

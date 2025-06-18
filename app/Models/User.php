@@ -47,9 +47,9 @@ class User extends Authenticatable
     ];
 
     const filters = [
-        'username'             => 'like',
-        'name'                 => 'like',
-        'person.name'          => 'like',
+        'username' => 'like',
+        'name' => 'like',
+        'person.name' => 'like',
         'person.business_name' => 'like',
     ];
 
@@ -59,7 +59,7 @@ class User extends Authenticatable
     const sorts = [
 
         'username' => 'desc',
-        'id'       => 'desc',
+        'id' => 'desc',
     ];
 
     public function person()
@@ -74,8 +74,14 @@ class User extends Authenticatable
 
     public function isFlagData()
     {
-        foreach (['phone', 'email', 'number_document',
-            'names', 'father_surname', 'mother_surname'] as $campo) {
+        foreach ([
+            'phone',
+            'email',
+            'number_document',
+            'names',
+            'father_surname',
+            'mother_surname'
+        ] as $campo) {
             if (empty($this->person->{$campo})) {
                 return 0;
             }
@@ -86,12 +92,12 @@ class User extends Authenticatable
     public function textFlagData()
     {
         $campos = [
-            'phone'           => 'teléfono',
-            'email'           => 'correo electrónico',
+            'phone' => 'teléfono',
+            'email' => 'correo electrónico',
             'number_document' => 'documento',
-            'names'           => 'nombres',
-            'father_surname'  => 'apellido paterno',
-            'mother_surname'  => 'apellido materno',
+            'names' => 'nombres',
+            'father_surname' => 'apellido paterno',
+            'mother_surname' => 'apellido materno',
         ];
 
         $faltantes = [];
@@ -103,8 +109,13 @@ class User extends Authenticatable
         }
 
         return empty($faltantes)
-        ? 'Datos Completos'
-        : 'Faltan los siguientes datos: ' . implode(', ', $faltantes);
+            ? 'Datos Completos'
+            : 'Faltan los siguientes datos: ' . implode(', ', $faltantes);
+    }
+
+    public function tickets()
+    {
+        return $this->hasMany(LotteryTicket::class, 'user_owner_id');
     }
 
 }

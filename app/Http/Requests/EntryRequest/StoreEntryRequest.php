@@ -2,6 +2,7 @@
 namespace App\Http\Requests\EntryRequest;
 
 use App\Http\Requests\StoreRequest;
+use Illuminate\Validation\Validator;
 
 class StoreEntryRequest extends StoreRequest
 {
@@ -18,42 +19,46 @@ class StoreEntryRequest extends StoreRequest
     public function rules()
     {
         return [
-            'name'           => 'required|string|max:255',
-            'entry_datetime' => 'nullable|date', // Debe ser una fecha válida
-            'code_pay'       => 'nullable|string|max:255',
-            'quantity'       => 'nullable|string|max:255',
-            'status_pay'     => 'nullable|string|max:255',
-            'status_entry'   => 'nullable|string|max:255',
-            'event_id'       => 'nullable|string|max:255|exists:events,id,deleted_at,NULL', // Asegura que el evento existe
-            'person_id'      => 'nullable|string|max:255|exists:persons,id,deleted_at,NULL',   // Asegura que la persona existe
+            'event_id' => 'required|integer|exists:events,id',
+            'amount' => ['required', 'numeric', 'min:600'],
+            'description' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email'],
+            'token' => ['required', 'string'],
         ];
     }
-    
-    public function messages()
+
+    public function messages(): array
     {
         return [
-            'name.required'         => 'El nombre es obligatorio.',
-            'name.string'           => 'El nombre debe ser una cadena de texto.',
-            'name.max'              => 'El nombre no puede tener más de 255 caracteres.',
-            'entry_datetime.date'   => 'La fecha de entrada debe ser una fecha válida.',
-            'code_pay.string'       => 'El código de pago debe ser una cadena de texto.',
-            'code_pay.max'          => 'El código de pago no puede tener más de 255 caracteres.',
-            'quantity.string'       => 'La cantidad debe ser una cadena de texto.',
-            'quantity.max'          => 'La cantidad no puede tener más de 255 caracteres.',
-       
-            'status_pay.string'     => 'El estado del pago debe ser una cadena de texto.',
-            'status_pay.max'        => 'El estado del pago no puede tener más de 255 caracteres.',
-          
-            'status_entry.string'   => 'El estado de la entrada debe ser una cadena de texto.',
-            'status_entry.max'      => 'El estado de la entrada no puede tener más de 255 caracteres.',
-            'event_id.string'       => 'El identificador del evento debe ser una cadena de texto.',
-            'event_id.max'          => 'El identificador del evento no puede tener más de 255 caracteres.',
-            'event_id.exists'       => 'El identificador del evento no existe.',
-            'person_id.string'      => 'El identificador de la persona debe ser una cadena de texto.',
-            'person_id.max'         => 'El identificador de la persona no puede tener más de 255 caracteres.',
-            'person_id.exists'      => 'El identificador de la persona no existe.',
+            'event_id.required' => 'El ID del evento es obligatorio.',
+            'event_id.integer' => 'El ID del evento debe ser un número entero.',
+            'event_id.exists' => 'El evento seleccionado no existe.',
+            'amount.required' => 'El monto es obligatorio.',
+            'amount.numeric' => 'El monto debe ser un número.',
+            'amount.min' => 'El monto mínimo permitido es de 600.',
+            'description.required' => 'La descripción es obligatoria.',
+            'description.string' => 'La descripción debe ser un texto.',
+            'description.max' => 'La descripción no puede tener más de 255 caracteres.',
+            'email.required' => 'El correo electrónico es obligatorio.',
+            'email.email' => 'El correo electrónico no es válido.',
+            'token.required' => 'El token de pago es obligatorio.',
         ];
     }
-    
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $this->validateAmountTotal($validator);
+        });
+    }
+
+    private function validateAmountTotal(Validator $validator): void
+    {
+        // $validator->errors()->add(
+        //     'amount',
+        //     'VALIDAR ANTES DE COMPRAR UNA ENTRADA, PREGUNTAR AL ADMINISTRADOR'
+        // );
+    }
+
 
 }
