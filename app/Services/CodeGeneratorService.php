@@ -59,16 +59,25 @@ class CodeGeneratorService
             $barcodePath = null;
             $qrcodePath = null;
 
+            $folder = 'otros';
+            if (!empty($data['entry_id'])) {
+                $folder = 'entradas';
+            } elseif (!empty($data['reservation_id'])) {
+                $folder = 'reservas';
+            } elseif (!empty($data['lottery_ticket_id'])) {
+                $folder = 'tickets';
+            }
+
             if ($type === 'barcode' || $type === 'both') {
                 $barcodeGen = new BarcodeGeneratorPNG();
                 $barcodeImg = $barcodeGen->getBarcode($encrypted, $barcodeGen::TYPE_CODE_128);
-                $barcodePath = "barcodes/{$encrypted}.png";
+                $barcodePath = "{$folder}/barcodes/{$encrypted}.png";
                 Storage::disk('public')->put($barcodePath, $barcodeImg);
             }
 
             if ($type === 'qrcode' || $type === 'both') {
                 $qrImg = QrCode::format('png')->generate($encrypted);
-                $qrcodePath = "qrcodes/{$encrypted}.png";
+                $qrcodePath = "{$folder}/qrcodes/{$encrypted}.png";
                 Storage::disk('public')->put($qrcodePath, $qrImg);
             }
 

@@ -20,6 +20,7 @@ class Lottery extends Model
         'winner_id',
         'user_created_id',
         'event_id',
+        'company_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -65,6 +66,10 @@ class Lottery extends Model
     public function event()
     {
         return $this->belongsTo(Event::class, 'event_id');
+    }
+     public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
     }
     public function events()
     {

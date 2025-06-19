@@ -2,6 +2,7 @@
 namespace App\Http\Requests\EntryRequest;
 
 use App\Http\Requests\StoreRequest;
+use App\Models\Event;
 use Illuminate\Validation\Validator;
 
 class StoreEntryRequest extends StoreRequest
@@ -24,6 +25,7 @@ class StoreEntryRequest extends StoreRequest
             'description' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email'],
             'token' => ['required', 'string'],
+            'quantity' => ['required', 'integer', 'min:1'],
         ];
     }
 
@@ -42,6 +44,9 @@ class StoreEntryRequest extends StoreRequest
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo electrónico no es válido.',
             'token.required' => 'El token de pago es obligatorio.',
+            'quantity.required' => 'La cantidad de tickets es obligatoria.',
+            'quantity.integer' => 'La cantidad de tickets debe ser un número entero.',
+            'quantity.min' => 'Debes comprar al menos un ticket.',
         ];
     }
 
@@ -54,10 +59,21 @@ class StoreEntryRequest extends StoreRequest
 
     private function validateAmountTotal(Validator $validator): void
     {
-        // $validator->errors()->add(
-        //     'amount',
-        //     'VALIDAR ANTES DE COMPRAR UNA ENTRADA, PREGUNTAR AL ADMINISTRADOR'
-        // );
+        $event = Event::find($this->event_id);
+
+        if (!$event) {
+            return;
+        }
+
+        $submittedAmount = $this->amount / 100;
+        $expectedAmount = $event->price_entry * $this->quantity;
+
+        if (abs($submittedAmount - $expectedAmount) > 0.001) {
+            $validator->errors()->add(
+                'amount',
+                'El monto enviado (' . number_format($submittedAmount, 2) . ') no coincide con el precio esperado (' . number_format($expectedAmount, 2) . ') para ' . $this->quantity . ' entrada(s).'
+            );
+        }
     }
 
 

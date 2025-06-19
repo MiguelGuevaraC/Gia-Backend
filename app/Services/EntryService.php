@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Entry;
+use Illuminate\Support\Collection;
 
 class EntryService
 {
@@ -16,27 +17,35 @@ class EntryService
         return Entry::find($id);
     }
 
-    public function createEntry(array $data): Entry
+
+
+    public function createEntry(array $data): Collection
     {
-        $data['user_id'] = auth()->id(); // Obtiene el ID del usuario logueado
-        $data['correlative'] = str_pad((int) Entry::where('event_id', $data['event_id'])->max('correlative') + 1, 8, '0', STR_PAD_LEFT);
+        $data['user_id'] = auth()->id();
 
-        $entry = Entry::create([
-            ...$data,
-            'status' => 'Pendiente',
-            'quantity' => '1',
-            'entry_datetime' => now()
-        ]);
+        $lastCorrelative = (int) Entry::where('event_id', $data['event_id'])->max('correlative') ?? 0;
 
-        $resultado = $this->codeGeneratorService->generar('qrcode', [
-            'description' => 'Entrada',
-            'reservation_id' => null,
-            'lottery_ticket_id' => null,
-            'entry_id' => $entry->id,
-        ]);
+        return collect(range(1, $data['quantity']))->map(function ($i) use ($data, $lastCorrelative) {
+            $correlative = str_pad($lastCorrelative + $i, 8, '0', STR_PAD_LEFT);
 
-        return $entry;
+            $entry = Entry::create([
+                ...$data,
+                'correlative' => $correlative,
+                'status' => 'Pendiente',
+                'entry_datetime' => now(),
+            ]);
+
+            $this->codeGeneratorService->generar('qrcode', [
+                'description' => 'Entrada',
+                'reservation_id' => null,
+                'lottery_ticket_id' => null,
+                'entry_id' => $entry->id,
+            ]);
+
+            return $entry;
+        });
     }
+
 
     public function updateEntry(Entry $entry, array $data): Entry
     {

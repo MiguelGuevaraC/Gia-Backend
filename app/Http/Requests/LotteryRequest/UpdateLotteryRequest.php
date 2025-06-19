@@ -24,7 +24,8 @@ class UpdateLotteryRequest extends UpdateRequest
             'lottery_name' => 'nullable|string|max:255',
             'lottery_description' => 'nullable|string',
             'lottery_date' => 'nullable|date',
-            'lottery_price' => 'required|min:1|numeric',
+            'lottery_price' => 'nullable|min:1|numeric',
+            'company_id' => 'nullable|integer|exists:companies,id,deleted_at,NULL',
             'status' => 'nullable|string|in:Pendiente,Anulado,Finalizado',
             'winner_id' => 'nullable|integer|exists:users,id',
             'event_id' => 'nullable|integer|exists:events,id',
@@ -61,6 +62,12 @@ class UpdateLotteryRequest extends UpdateRequest
             'lottery_price.required' => 'El precio del sorteo es obligatorio.',
             'lottery_description.string' => 'La descripción del sorteo debe ser una cadena de texto.',
             'lottery_date.date' => 'La fecha del sorteo debe ser una fecha válida.',
+            
+            'company_id.required' => 'La compañía es obligatoria.',
+            'company_id.integer' => 'El identificador de la compañía debe ser un número entero.',
+            'company_id.exists' => 'La compañía seleccionada no existe.',
+
+            
             'status.string' => 'El estado debe ser una cadena de texto.',
             'status.in' => 'El estado debe ser uno de los siguientes: Pendiente, Anulado, Finalizado.',
             'winner_id.integer' => 'El ID del ganador debe ser un número entero.',

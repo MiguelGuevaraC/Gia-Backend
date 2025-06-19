@@ -35,7 +35,9 @@ class LotteryTicketResource extends JsonResource
             'lottery_id' => $this->lottery_id,
             'lottery_name' => ($this?->lottery)?->lottery_name,
             'lottery_date' => ($this?->lottery)?->lottery_date,
-             'prizes' => ($this?->lottery)?->prizes
+            'lottery_company_id' => ($this?->lottery)?->company_id,
+            'lottery_company_business_name' => ($this?->lottery)?->company?->business_name,
+            'prizes' => ($this?->lottery)?->prizes
                 ? PrizeResource::collection(($this?->lottery)?->prizes)->values()
                 : null,
             'code' => new CodeResource($this->codes) ?? null,

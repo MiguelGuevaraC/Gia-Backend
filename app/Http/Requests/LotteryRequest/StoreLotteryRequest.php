@@ -46,6 +46,7 @@ class StoreLotteryRequest extends StoreRequest
             'lottery_description' => 'required|string|max:255',
             'lottery_date' => 'required|date',
             'lottery_price' => 'required|min:1|numeric',
+            'company_id' => 'required|integer|exists:companies,id,deleted_at,NULL',
 
 
             'event_id' => [
@@ -102,6 +103,11 @@ class StoreLotteryRequest extends StoreRequest
             'lottery_price.required' => 'El precio del sorteo es obligatorio.',
             'lottery_price.numeric' => 'El precio del sorteo debe ser un número.',
             'lottery_price.min' => 'El precio del sorteo no puede ser negativo ni con valor 0.',
+
+            'company_id.required' => 'La compañía es obligatoria.',
+            'company_id.integer' => 'El identificador de la compañía debe ser un número entero.',
+            'company_id.exists' => 'La compañía seleccionada no existe.',
+
 
             'event_id.integer' => 'El ID del evento debe ser un número entero.',
             'event_id.exists' => 'El evento seleccionado no existe.',

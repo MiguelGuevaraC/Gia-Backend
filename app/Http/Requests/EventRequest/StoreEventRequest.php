@@ -46,6 +46,7 @@ class StoreEventRequest extends StoreRequest
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'pricebox' => 'required|numeric|min:0',
             'pricetable' => 'required|numeric|min:0',
+            'price_entry' => 'required|numeric|min:0',
         ];
     }
 
@@ -78,6 +79,10 @@ class StoreEventRequest extends StoreRequest
             'pricetable.required' => 'El campo precio de mesa es obligatorio.',
             'pricetable.numeric' => 'El campo precio de mesa debe ser un número.',
             'pricetable.min' => 'El precio de mesa no puede ser menor que 0.',
+
+            'price_entry.required' => 'El campo precio de entrada es obligatorio.',
+            'price_entry.numeric' => 'El campo precio de entrada debe ser un número.',
+            'price_entry.min' => 'El precio de entrada no puede ser menor que 0.',
         ];
     }
 

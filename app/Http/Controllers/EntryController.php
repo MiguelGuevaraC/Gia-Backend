@@ -128,7 +128,7 @@ class EntryController extends Controller
             ], 400);
         }
 
-        return new EntryResource(
+        return EntryResource::collection(
             $this->entryService->createEntry([
                 ...$request->validated(),
                 'reason' => 'compra entrada',

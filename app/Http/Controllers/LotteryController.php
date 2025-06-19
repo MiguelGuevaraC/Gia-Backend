@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LotteryRequest\AssignWinnersRequest;
 use App\Http\Requests\LotteryRequest\IndexLotteryRequest;
 use App\Http\Requests\LotteryRequest\StoreLotteryRequest;
 use App\Http\Requests\LotteryRequest\UpdateLotteryRequest;
 use App\Http\Resources\LotteryResource;
 use App\Http\Resources\ParticipantResource;
+use App\Http\Resources\PrizeResource;
 use App\Models\Lottery;
 use App\Models\LotteryTicket;
 use App\Models\User;
@@ -207,24 +209,40 @@ class LotteryController extends Controller
      * )
      */
 
-  public function participants($lotteryId)
-{
-    $participants = User::whereHas('tickets', function ($query) use ($lotteryId) {
-        $query->where('lottery_id', $lotteryId);
-    })
-    ->with([
-        'tickets' => function ($query) use ($lotteryId) {
+    public function participants($lotteryId)
+    {
+        $participants = User::whereHas('tickets', function ($query) use ($lotteryId) {
             $query->where('lottery_id', $lotteryId);
-        },
-        'person'
-    ])
-    ->get();
+        })
+            ->with([
+                'tickets' => function ($query) use ($lotteryId) {
+                    $query->where('lottery_id', $lotteryId);
+                },
+                'person'
+            ])
+            ->get();
 
-    return ParticipantResource::collection($participants);
-}
+        return ParticipantResource::collection($participants);
+    }
 
 
+    public function lotteryHistory()
+    {
+        $lotteries = $this->lotteryService->getLotteryHistoryForUser(auth()->id());
 
+        return LotteryResource::collection($lotteries);
+    }
+
+
+    public function assignWinners(AssignWinnersRequest $request, $lottery_id)
+    {
+        $updatedPrizes = $this->lotteryService->assignWinnersToPrizes(
+            $lottery_id,
+            $request->assignments
+        );
+
+        return PrizeResource::collection($updatedPrizes);
+    }
 
 
 }

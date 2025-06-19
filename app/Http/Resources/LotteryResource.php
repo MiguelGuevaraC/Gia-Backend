@@ -45,8 +45,9 @@ class LotteryResource extends JsonResource
             'lottery_by_event' => $this->lotteryByEvent,
             'status' => $this->status,
             'route' => $this->route,
-            'winner_id' => $this->winner_id,
-            'winner_name' => $this->winner?->name,
+            'company_id' => $this->company_id,
+            'company_business_name' => $this->company?->business_name,
+
             'user_created_id' => $this->user_created_id,
             'user_created_name' => $this->user_created?->name,
             'event_id' => $this->event_id,

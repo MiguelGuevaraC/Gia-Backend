@@ -17,6 +17,7 @@ class Event extends Model
         'comment',
         'pricetable',
         'pricebox',
+        'price_entry',
         'company_id',
         'status',
         'user_id',

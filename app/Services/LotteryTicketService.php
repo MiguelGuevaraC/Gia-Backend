@@ -6,6 +6,7 @@ use App\Models\Lottery;
 use App\Models\LotteryTicket;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Support\Collection;
 
 class LotteryTicketService
 {
@@ -34,10 +35,13 @@ class LotteryTicketService
         }
     }
 
-    public function create(array $data): LotteryTicket
+
+    public function create(array $data): Collection
     {
         try {
             $lottery = Lottery::findOrFail($data['lottery_id']);
+
+            // Obtener último número correlativo
             $lastNumber = (int) preg_replace(
                 '/.*-(\d{8})$/',
                 '$1',
@@ -46,27 +50,30 @@ class LotteryTicketService
                     ->value('code_correlative') ?? '00000000'
             );
 
-            $codeCorrelative = $lottery->code_serie . '-' . str_pad($lastNumber + 1, 8, '0', STR_PAD_LEFT);
+            return collect(range(1, $data['quantity']))->map(function ($i) use ($data, $lottery, $lastNumber) {
+                $codeCorrelative = $lottery->code_serie . '-' . str_pad($lastNumber + $i, 8, '0', STR_PAD_LEFT);
 
-            $ticket = LotteryTicket::create([
-                ...$data,
-                'code_correlative' => $codeCorrelative,
-                'status' => 'Pendiente',
-            ]);
+                $ticket = LotteryTicket::create([
+                    ...$data,
+                    'code_correlative' => $codeCorrelative,
+                    'status' => 'Pendiente',
+                ]);
 
-            $resultado = $this->codeGeneratorService->generar('barcode', [
-                'description'=>'Ticket Sorteo',
-                'reservation_id' => null,
-                'lottery_ticket_id' => $ticket->id,
-                'entry_id' => null,
-            ]);
+                $this->codeGeneratorService->generar('barcode', [
+                    'description' => 'Ticket Sorteo',
+                    'reservation_id' => null,
+                    'lottery_ticket_id' => $ticket->id,
+                    'entry_id' => null,
+                ]);
 
+                return $ticket;
+            });
 
-            return $ticket;
         } catch (\Throwable $e) {
-            $this->handleException('Error al crear el ticket', $e);
+            $this->handleException('Error al crear el/los ticket(s)', $e);
         }
     }
+
 
 
 

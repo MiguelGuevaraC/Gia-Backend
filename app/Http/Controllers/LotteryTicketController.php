@@ -99,7 +99,7 @@ class LotteryTicketController extends Controller
             ], 400);
         }
 
-        return new LotteryTicketResource(
+        return LotteryTicketResource::collection(
             $this->lotteryTicketService->create([
                 ...$request->validated(),
                 'reason' => 'compra ticket',

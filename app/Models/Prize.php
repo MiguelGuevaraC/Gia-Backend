@@ -18,6 +18,7 @@ class Prize extends Model
         'name_image',
         'route',
         'lottery_id',
+        'lottery_ticket_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -44,4 +45,8 @@ class Prize extends Model
         'id' => 'desc',
     ];
 
+     public function lottery_ticket()
+    {
+        return $this->belongsTo(LotteryTicket::class, 'lottery_ticket_id');
+    }
 }

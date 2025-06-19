@@ -28,11 +28,14 @@ class StoreLotteryTicketRequest extends StoreRequest
     public function rules(): array
     {
         return [
+
             'lottery_id' => 'required|integer|exists:lotteries,id',
             'amount' => ['required', 'numeric', 'min:600'],
             'description' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email'],
             'token' => ['required', 'string'],
+            'quantity' => ['required', 'integer', 'min:1'],
+
         ];
     }
 
@@ -51,6 +54,10 @@ class StoreLotteryTicketRequest extends StoreRequest
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo electrónico no es válido.',
             'token.required' => 'El token de pago es obligatorio.',
+            'quantity.required' => 'La cantidad de tickets es obligatoria.',
+            'quantity.integer' => 'La cantidad de tickets debe ser un número entero.',
+            'quantity.min' => 'Debes comprar al menos un ticket.',
+
         ];
     }
 
@@ -66,19 +73,19 @@ class StoreLotteryTicketRequest extends StoreRequest
         $lottery = Lottery::find($this->lottery_id);
 
         if (!$lottery) {
-            return; // Ya validado en "exists"
+            return;
         }
 
         $submittedAmount = $this->amount / 100;
-        $expectedAmount = $lottery->lottery_price;
+        $expectedAmount = $lottery->lottery_price * $this->quantity;
 
         if (abs($submittedAmount - $expectedAmount) > 0.001) {
             $validator->errors()->add(
                 'amount',
-                'El monto enviado (' . number_format($submittedAmount, 2) . ') no coincide con el precio del sorteo (' . number_format($expectedAmount, 2) . '). ' .
-                'Diferencia: ' . number_format(abs($submittedAmount - $expectedAmount), 2)
+                'El monto enviado (' . number_format($submittedAmount, 2) . ') no coincide con el precio esperado (' . number_format($expectedAmount, 2) . ') para ' . $this->quantity . ' ticket(s).'
             );
         }
     }
+
 
 }

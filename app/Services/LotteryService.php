@@ -6,6 +6,8 @@ use App\Models\Lottery;
 use App\Models\LotteryTicket;
 use App\Models\Prize;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Collection;
 
 class LotteryService
 {
@@ -80,6 +82,55 @@ class LotteryService
         return $users->isEmpty()
             ? []
             : UserOnlyResource::collection($users);
+    }
+
+    public function getLotteryHistoryForUser(int $userId)
+    {
+        return Lottery::whereHas('tickets', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+            ->with([
+                'tickets' => function ($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                }
+            ])
+            ->orderByDesc('lottery_date')
+            ->limit(50)
+            ->get();
+    }
+
+
+    public function assignWinnersToPrizes(int $lotteryId, array $assignments): Collection
+    {
+        $updatedPrizes = collect();
+
+        try {
+            collect($assignments)->each(function ($assignment) use ($lotteryId, $updatedPrizes) {
+                $prize = Prize::where('id', $assignment['prize_id'])
+                    ->where('lottery_id', $lotteryId)
+                    ->first();
+
+
+                $prize->update([
+                    'lottery_ticket_id' => $assignment['lottery_ticket_id'],
+                ]);
+
+                $prize->refresh();
+              
+                $updatedPrizes->push($prize);
+            });
+
+            return $updatedPrizes;
+
+        } catch (\Throwable $e) {
+            Log::error('Error al asignar ganadores a los premios', [
+                'lottery_id' => $lotteryId,
+                'assignments' => $assignments,
+                'exception' => $e->getMessage(),
+            ]);
+
+            throw new \Exception('Ocurrió un error al asignar los ganadores. Por favor, verifica los datos enviados.');
+        }
     }
 
 
