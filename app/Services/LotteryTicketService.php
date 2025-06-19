@@ -95,4 +95,13 @@ class LotteryTicketService
             $this->handleException('Error al eliminar el ticket', $e);
         }
     }
+    
+    public function getLotteryHistoryForUser(int $userId)
+    {
+        return LotteryTicket::
+            where('user_owner_id', $userId)
+            ->orderByDesc('id')
+            ->limit(50)
+            ->get();
+    }
 }

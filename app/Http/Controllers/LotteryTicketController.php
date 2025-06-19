@@ -175,4 +175,12 @@ class LotteryTicketController extends Controller
             return response()->json(['message' => $e->getMessage()], 404);
         }
     }
+
+    
+    public function lotteryHistory()
+    {
+        $lotteries = $this->lotteryTicketService->getLotteryHistoryForUser(auth()->id());
+
+        return LotteryTicketResource::collection($lotteries);
+    }
 }

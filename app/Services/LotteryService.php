@@ -84,20 +84,6 @@ class LotteryService
             : UserOnlyResource::collection($users);
     }
 
-    public function getLotteryHistoryForUser(int $userId)
-    {
-        return Lottery::whereHas('tickets', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })
-            ->with([
-                'tickets' => function ($query) use ($userId) {
-                    $query->where('user_id', $userId);
-                }
-            ])
-            ->orderByDesc('lottery_date')
-            ->limit(50)
-            ->get();
-    }
 
 
     public function assignWinnersToPrizes(int $lotteryId, array $assignments): Collection

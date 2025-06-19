@@ -6,6 +6,7 @@ use App\Http\Requests\LotteryRequest\IndexLotteryRequest;
 use App\Http\Requests\LotteryRequest\StoreLotteryRequest;
 use App\Http\Requests\LotteryRequest\UpdateLotteryRequest;
 use App\Http\Resources\LotteryResource;
+use App\Http\Resources\LotteryTicketResource;
 use App\Http\Resources\ParticipantResource;
 use App\Http\Resources\PrizeResource;
 use App\Models\Lottery;
@@ -225,13 +226,6 @@ class LotteryController extends Controller
         return ParticipantResource::collection($participants);
     }
 
-
-    public function lotteryHistory()
-    {
-        $lotteries = $this->lotteryService->getLotteryHistoryForUser(auth()->id());
-
-        return LotteryResource::collection($lotteries);
-    }
 
 
     public function assignWinners(AssignWinnersRequest $request, $lottery_id)

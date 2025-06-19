@@ -12,4 +12,5 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::get('lottery/{id}/participants', [LotteryController::class, 'participants']);
     Route::post('lottery/{lottery_id}/assignWinners', [LotteryController::class, 'assignWinners']);
 
+    
 });
