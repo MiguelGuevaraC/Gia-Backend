@@ -57,6 +57,9 @@ class LotteryResource extends JsonResource
             'prizes' => $this->prizes
                 ? PrizeResource::collection($this->prizes)->values()
                 : null,
+            'prizes_winners' => $this->prizes
+                ? WinningPrizeResource::collection($this->prizes)->values()
+                : null,
         ];
     }
 }

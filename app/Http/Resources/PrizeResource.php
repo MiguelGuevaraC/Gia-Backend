@@ -29,7 +29,8 @@ class PrizeResource extends JsonResource
     public function toArray($request)
     {
         $ticket = $this->lottery_ticket;
-
+        $user = $ticket?->userOwner;
+        $person = $user?->person;
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -40,6 +41,15 @@ class PrizeResource extends JsonResource
                 'code_correlative' => $ticket->code_correlative,
                 'reason' => $ticket->reason,
                 'code' => $ticket->codes ? new CodeResource($ticket->codes) : null,
+                'winner_id' => $user?->id,
+                'winner_name' => $person
+                    ? trim(implode(' ', array_filter([
+                        $person?->names,
+                        $person?->father_surname,
+                        $person?->mother_surname,
+                        $person?->business_name,
+                    ])))
+                    : null,
             ] : null,
             'created_at' => $this->created_at,
         ];
