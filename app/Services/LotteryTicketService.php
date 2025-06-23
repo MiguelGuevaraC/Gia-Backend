@@ -67,7 +67,6 @@ class LotteryTicketService
                     'lottery_ticket_id' => $ticket->id,
                     'entry_id' => null,
                 ]);
-
                 return $ticket;
             });
 

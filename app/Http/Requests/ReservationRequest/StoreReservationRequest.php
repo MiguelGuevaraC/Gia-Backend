@@ -90,7 +90,7 @@ class StoreReservationRequest extends StoreRequest
             $this->validateStock($validator);
             $this->validateMesaOcupada($validator);
          
-            $this->validateFechaNoMayorEvento($validator);
+            //$this->validateFechaNoMayorEvento($validator);
             $this->validateFechaNoMenorHoy($validator);
         });
     }

@@ -27,7 +27,7 @@ class CulquiService
             "amount" => $request->amount,
             "capture" => true,
             "currency_code" => "PEN",
-            "description" => $request->description !== '-' ? $request->description : 'Pago de pedido',
+            "description" => $request->description != '' ? $request->description : 'Pago de culqui',
             "email" => $request->email,
             "installments" => 0,
             "source_id" => $request->token,

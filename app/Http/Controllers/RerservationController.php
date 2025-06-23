@@ -212,6 +212,9 @@ class RerservationController extends Controller
             }
 
             // 1. Procesar el pago con Culqi
+            $request->merge([
+                'description' => $request->filled('description') ? $request->description : 'Pago de Reserva',
+            ]);
             $result = $this->culquiService->createCharge($request);
             AuditLogService::log('culqi_create_charge', $request->all(), $result);
 

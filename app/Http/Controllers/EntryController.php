@@ -115,7 +115,9 @@ class EntryController extends Controller
 
     public function store(StoreEntryRequest $request)
     {
-
+        $request->merge([
+            'description' => $request->filled('description') ? $request->description : 'Pago de Entrada',
+        ]);
         // 1. Procesar el pago con Culqi
         $result = $this->culquiService->createCharge($request);
         AuditLogService::log('culqi_create_charge', $request->all(), $result);

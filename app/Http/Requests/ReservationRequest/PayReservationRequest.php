@@ -22,7 +22,7 @@ class PayReservationRequest extends StoreRequest
     {
         return [
             'amount'      => ['required', 'numeric', 'min:600'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'min:5','max:80'],
             'email'       => ['required', 'email'],
             'token'       => ['required', 'string'],
 

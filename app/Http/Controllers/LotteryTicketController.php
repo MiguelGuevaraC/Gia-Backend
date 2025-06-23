@@ -87,6 +87,9 @@ class LotteryTicketController extends Controller
     public function store(StoreLotteryTicketRequest $request)
     {
 
+        $request->merge([
+            'description' => $request->filled('description') ? $request->description : 'Pago de Ticket de Sorteo',
+        ]);
         // 1. Procesar el pago con Culqi
         $result = $this->culquiService->createCharge($request);
         AuditLogService::log('culqi_create_charge', $request->all(), $result);
@@ -111,7 +114,7 @@ class LotteryTicketController extends Controller
 
     public function store_admin(StoreAdminLotteryTicketRequest $request)
     {
-        return new LotteryTicketResource(
+        return LotteryTicketResource::collection(
             $this->lotteryTicketService->create([
                 ...$request->validated(),
                 'reason' => 'admin'
