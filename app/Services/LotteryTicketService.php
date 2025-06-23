@@ -49,8 +49,10 @@ class LotteryTicketService
                     ->orderByDesc('code_correlative')
                     ->value('code_correlative') ?? '00000000'
             );
+            $quantity = isset($data['quantity']) ? $data['quantity'] : 1;
 
-            return collect(range(1, $data['quantity']))->map(function ($i) use ($data, $lottery, $lastNumber) {
+
+            return collect(range(1, $quantity))->map(function ($i) use ($data, $lottery, $lastNumber) {
                 $codeCorrelative = $lottery->code_serie . '-' . str_pad($lastNumber + $i, 8, '0', STR_PAD_LEFT);
 
                 $ticket = LotteryTicket::create([
@@ -95,7 +97,7 @@ class LotteryTicketService
             $this->handleException('Error al eliminar el ticket', $e);
         }
     }
-    
+
     public function getLotteryHistoryForUser(int $userId)
     {
         return LotteryTicket::

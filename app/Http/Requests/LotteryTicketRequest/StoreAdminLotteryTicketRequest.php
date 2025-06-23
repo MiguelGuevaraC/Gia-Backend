@@ -26,6 +26,8 @@ class StoreAdminLotteryTicketRequest extends StoreRequest
         return [
             'lottery_id' => 'required|integer|exists:lotteries,id',
             'user_owner_id' => 'required|integer|exists:users,id',
+             'quantity' => ['nullable', 'integer', 'min:1'],
+             
         ];
     }
 
@@ -39,6 +41,10 @@ class StoreAdminLotteryTicketRequest extends StoreRequest
             'user_owner_id.required' => 'El ID del usuario es obligatorio.',
             'user_owner_id.integer' => 'El ID del usuario debe ser un número entero.',
             'user_owner_id.exists' => 'El usuario seleccionado no existe.',
+
+            'quantity.required' => 'La cantidad de tickets es obligatoria.',
+            'quantity.integer' => 'La cantidad de tickets debe ser un número entero.',
+            'quantity.min' => 'Debes comprar al menos un ticket.',
         ];
     }
 
