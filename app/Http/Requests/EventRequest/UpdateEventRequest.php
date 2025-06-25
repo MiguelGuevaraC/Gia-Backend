@@ -34,7 +34,7 @@ class UpdateEventRequest extends UpdateRequest
 
                     $exists = DB::table('events')
                         ->whereDate('event_datetime', $eventDate)
-                        ->where('id', '!=', $this->route('event')) // O $this->id si lo tienes directamente
+                        ->where('id', '!=', $this->route('id')) // O $this->id si lo tienes directamente
                         ->whereNull('deleted_at')
                         ->exists();
 

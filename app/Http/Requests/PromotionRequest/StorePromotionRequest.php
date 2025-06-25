@@ -29,7 +29,7 @@ class StorePromotionRequest extends StoreRequest
     {
         return [
             'name'        => 'required|string|max:255',
-            'description' => 'required|string|max:1000',
+            'description' => 'nullable|string|max:1000',
             'precio'      => 'required|numeric|min:0',
             'date_start'  => 'required|date_format:Y-m-d H:i:s',
             'date_end'    => 'required|date_format:Y-m-d H:i:s|after_or_equal:date_start',

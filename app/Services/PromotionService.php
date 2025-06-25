@@ -21,6 +21,7 @@ class PromotionService
     {
         $data['status']='Activo';
         $data['stock_restante']=$data['stock'];
+        $data['description']=$data['description'] ?? '';
         $Promotion = Promotion::create($data);
         $this->commonService->store_photo($data, $Promotion, 'Promotions');
         return $Promotion;
@@ -31,6 +32,7 @@ class PromotionService
         if (isset($data['route'])) {
             $data['route'] = $this->commonService->update_photo($data, $Promotion, 'Promotions');
         }
+        $data['description']=$data['description'] ?? '';
         $filteredData = array_intersect_key($data, $Promotion->getAttributes());
         $Promotion->update($filteredData);
         return $Promotion;
