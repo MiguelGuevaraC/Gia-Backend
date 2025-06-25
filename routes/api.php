@@ -46,4 +46,4 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
 
 Route::post('send-token', [AuthenticationController::class, 'send_token_sign_up']);
 Route::post('sign-up', [AuthenticationController::class, 'validate_mail']);
-Route::post('scanner', [CodeGeneratorController::class, 'scanner']);
+Route::post('scanner', [CodeGeneratorController::class, 'scanner'])->middleware('check.uuid');
