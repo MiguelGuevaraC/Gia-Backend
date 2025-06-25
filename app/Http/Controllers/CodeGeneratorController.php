@@ -30,6 +30,9 @@ class CodeGeneratorController extends Controller
 
     public function scanner(StoreScanRequest $request): JsonResponse
     {
+        if ($request->header('UUID') !== 'ZXCV-CVBN-VBNM') {
+            return response()->json(['status' => 'unauthorized'], 401);
+        }
         $encrypted = $request->input('encrypted');
         $ip = $request->ip();
 
