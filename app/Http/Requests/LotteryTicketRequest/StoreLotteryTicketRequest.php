@@ -68,6 +68,7 @@ class StoreLotteryTicketRequest extends StoreRequest
     {
         $validator->after(function ($validator) {
             $this->validateAmountTotal($validator);
+            $this->validateLotteryDate($validator);
         });
     }
 
@@ -90,5 +91,20 @@ class StoreLotteryTicketRequest extends StoreRequest
         }
     }
 
+    private function validateLotteryDate(Validator $validator): void
+    {
+        $lottery = Lottery::find($this->lottery_id);
+
+        if (!$lottery) {
+            return;
+        }
+
+        if (now()->greaterThan($lottery->lottery_date)) {
+            $validator->errors()->add(
+                'lottery_id',
+                'El sorteo ya ha finalizado y no se pueden comprar más tickets.'
+            );
+        }
+    }
 
 }

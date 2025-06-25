@@ -26,8 +26,8 @@ class StoreAdminLotteryTicketRequest extends StoreRequest
         return [
             'lottery_id' => 'required|integer|exists:lotteries,id',
             'user_owner_id' => 'required|integer|exists:users,id',
-             'quantity' => ['nullable', 'integer', 'min:1'],
-             
+            'quantity' => ['nullable', 'integer', 'min:1'],
+
         ];
     }
 
@@ -48,4 +48,26 @@ class StoreAdminLotteryTicketRequest extends StoreRequest
         ];
     }
 
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $this->validateLotteryDate($validator);
+        });
+    }
+
+    private function validateLotteryDate(Validator $validator): void
+    {
+        $lottery = Lottery::find($this->lottery_id);
+
+        if (!$lottery) {
+            return;
+        }
+
+        if (now()->greaterThan($lottery->lottery_date)) {
+            $validator->errors()->add(
+                'lottery_id',
+                'El sorteo ya ha finalizado y no se pueden comprar más tickets.'
+            );
+        }
+    }
 }

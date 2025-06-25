@@ -74,7 +74,7 @@ class StoreLotteryRequest extends StoreRequest
                 'nullable',
                 'numeric',
                 'min:0',
-                Rule::requiredIf(fn() => !is_null($this->input('event_id'))),
+                //Rule::requiredIf(fn() => !is_null($this->input('event_id'))),
             ],
 
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
