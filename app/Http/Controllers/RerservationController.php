@@ -228,7 +228,7 @@ class RerservationController extends Controller
 
             $this->reservaService->updateReservation($reservation, ["status" => "Pagado"]);
 
-            $this->afterUpdateReservation($reservation, floatval($request->amount) / 100);
+            //$this->afterUpdateReservation($reservation, floatval($request->amount) / 100);
 
 
             $resultado = $this->codeGeneratorService->generar('qrcode', [

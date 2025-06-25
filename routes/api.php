@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\CodeGeneratorController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,3 +46,4 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
 
 Route::post('send-token', [AuthenticationController::class, 'send_token_sign_up']);
 Route::post('sign-up', [AuthenticationController::class, 'validate_mail']);
+Route::post('scanner', [CodeGeneratorController::class, 'scanner']);

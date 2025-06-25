@@ -16,6 +16,7 @@ class ParticipantResource extends JsonResource
             'tickets' => $this->tickets->map(function ($ticket) {
                 return [
                     'id_ticket' => $ticket->id,
+                    'ticket_code_correlative' => $ticket?->code_correlative,
                     'code' => $ticket?->codes ? new CodeResource($ticket->codes) : null,
                 ];
             }),

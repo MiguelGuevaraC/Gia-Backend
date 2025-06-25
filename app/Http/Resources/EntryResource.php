@@ -30,16 +30,17 @@ class EntryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            "correlative"=> $this->correlative ?? null,
+            "correlative" => $this->correlative ?? null,
             'entry_datetime' => $this->entry_datetime ?? null,
             'code_pay' => $this->code_pay ?? null,
             'quantity' => $this->quantity ?? null,
             'status_pay' => $this->status_pay ?? null,
             'status_entry' => $this->status_entry ?? null,
             'user_id' => $this->user_id ?? null,
-            'user' => $this->user ? $this->user : null,
-            'person_id' => $this->person_id ?? null,
-            'person' => $this->person ? new PersonResource($this->person) : null,
+            'user' => $this->user ?? null,
+            'person_id' => $this->user?->person_id ?? null,
+            'person' => $this->user?->person ? new PersonResource($this->user->person) : null,
+
             'event_id' => $this->event_id ?? null,
             'event' => $this->event ? new EventResource($this->event) : null,
             'code' => new CodeResource($this->codes) ?? null,
