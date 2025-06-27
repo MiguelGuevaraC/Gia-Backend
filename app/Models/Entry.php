@@ -38,6 +38,7 @@ class Entry extends Model
         'status_entry'   => 'like',
         'user_id'        => '=',
         'event_id'       => '=',
+        'correlative'       => 'like',
         'person_id'      => '=',
     ];
 

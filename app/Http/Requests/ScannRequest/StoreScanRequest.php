@@ -43,9 +43,11 @@ class StoreScanRequest extends StoreRequest
 
                         if ($alreadyScanned) {
                             ScanLog::create([
+                                'ip' => $this->ip(),
                                 'code_asset_id' => $codeAsset->id,
                                 'status' => 'denied',
                                 'description' => 'Este código ya fue escaneado.',
+                                 "code" => $value,
                             ]);
 
                             return $fail('Este código ya fue escaneado.');

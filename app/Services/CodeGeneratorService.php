@@ -121,6 +121,7 @@ class CodeGeneratorService
                     'ip' => $ip,
                     'status' => 'denied',
                     'description' => 'Código no registrado.',
+                     "code" => $encrypted,
                 ]);
 
                 return [
@@ -156,7 +157,7 @@ class CodeGeneratorService
                 'ip' => $ip,
                 'status' => 'ok',
                 'description' => 'Escaneo permitido.',
-                "code" => $code,
+                "code" => $encrypted,
             ]);
 
             return [

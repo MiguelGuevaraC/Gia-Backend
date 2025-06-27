@@ -25,11 +25,12 @@ class CodeResource extends JsonResource
             // Datos de escaneo
             'total_scans' => $scansQuerytotal,
             'first_ok_scan' => $firstOk ? [
-                'created_at' => $firstOk->created_at,
+                'created_at' => $firstOk->created_at?->format('d/m/Y H:i:s'),
             ] : null,
             'last_scan_attempt' => $lastAttempt ? [
-                'created_at' => $lastAttempt->created_at,
+                'created_at' => $lastAttempt->created_at?->format('d/m/Y H:i:s'),
             ] : null,
+
         ];
     }
 }
