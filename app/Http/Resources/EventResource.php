@@ -30,6 +30,8 @@ class EventResource extends JsonResource
 
     public function toArray($request)
     {
+        $hasLotteries = $this->lotteries && $this->lotteries->isNotEmpty();
+
         return [
             'id' => $this->id,
             "correlative" => $this->correlative ?? null,
@@ -49,6 +51,18 @@ class EventResource extends JsonResource
 
             'company_id' => $this->company_id ?? null,
             'company' => $this->company ? new CompanyResource($this->company) : null,
+
+
+            'lotteries' => $hasLotteries
+                ? $this->lotteries->map(function ($lottery) {
+                    return [
+                        'flag' => true,
+                        'code_serie' => $lottery->code_serie,
+                        'lottery_name' => $lottery->lottery_name,
+                    ];
+                })
+                : null,
+            'flag_lottery' => $hasLotteries ? true : false,
         ];
     }
 

@@ -40,7 +40,7 @@ class LotteryResource extends JsonResource
             'code_serie' => $this->code_serie,
             'lottery_name' => $this->lottery_name,
             'lottery_description' => $this->lottery_description,
-            
+            'lottery_date' => $this->lottery_date,
             'lottery_price' => $this->lottery_price,
             'lottery_by_event' => $this->lotteryByEvent,
              'status' => now()->greaterThan($this->lottery_date) ? 'Finalizado' : 'Pendiente',
