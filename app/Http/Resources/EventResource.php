@@ -59,6 +59,7 @@ class EventResource extends JsonResource
                         'flag' => true,
                         'code_serie' => $lottery->code_serie,
                         'lottery_name' => $lottery->lottery_name,
+                        'status' => now()->greaterThan($this->lottery_date) ? 'Finalizado' : 'Pendiente',
                     ];
                 })
                 : null,
