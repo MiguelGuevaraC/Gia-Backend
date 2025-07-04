@@ -61,7 +61,7 @@ class LotteryTicketService
                     'status' => 'Pendiente',
                 ]);
 
-                $this->codeGeneratorService->generar('barcode', [
+                $this->codeGeneratorService->generar('qrcode', [
                     'description' => 'Ticket Sorteo',
                     'reservation_id' => null,
                     'lottery_ticket_id' => $ticket->id,
