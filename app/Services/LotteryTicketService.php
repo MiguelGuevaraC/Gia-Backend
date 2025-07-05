@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exports\Lottery\LotteryTicketsExport;
 use App\Http\Resources\LotteryTicketResource;
 use App\Mail\SendTicketMail;
 use App\Models\Lottery;
@@ -11,6 +12,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Excel;
 
 class LotteryTicketService
 {
@@ -70,6 +72,14 @@ class LotteryTicketService
                 $isValidEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
                 $sentStatus = $isValidEmail ? 'ENVIADO' : 'NO_ENVIADO';
 
+
+                $this->codeGeneratorService->generar('qrcode', [
+                    'description' => 'Ticket Sorteo',
+                    'reservation_id' => null,
+                    'lottery_ticket_id' => $ticket->id,
+                    'entry_id' => null,
+                ]);
+
                 // Enviar solo si es válido
                 if ($isValidEmail) {
                     $this->sendTokenByEmail($email, (new LotteryTicketResource($ticket))->toArray(request()));
@@ -87,15 +97,7 @@ class LotteryTicketService
                 ));
 
 
-                $this->codeGeneratorService->generar('qrcode', [
-                    'description' => 'Ticket Sorteo',
-                    'reservation_id' => null,
-                    'lottery_ticket_id' => $ticket->id,
-                    'entry_id' => null,
-                ]);
-
-
-                return $ticket;
+                return LotteryTicket::find($ticket->id);
             });
 
         } catch (\Throwable $e) {
@@ -139,4 +141,5 @@ class LotteryTicketService
     {
         Mail::to($email)->send(new SendTicketMail($ticket));
     }
+
 }

@@ -11,11 +11,13 @@ use App\Http\Requests\LotteryTicketRequest\UpdateLotteryTicketRequest;
 use App\Http\Requests\StoreLotteryRequest;
 
 use App\Http\Resources\LotteryTicketResource;
+use App\Models\Lottery;
 use App\Models\LotteryTicket;
 use App\Services\AuditLogService;
 use App\Services\CulquiService;
 use App\Services\LotteryTicketService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Maatwebsite\Excel\Excel;
 
 class LotteryTicketController extends Controller
 {
@@ -179,11 +181,16 @@ class LotteryTicketController extends Controller
         }
     }
 
-    
+
     public function lotteryHistory()
     {
         $lotteries = $this->lotteryTicketService->getLotteryHistoryForUser(auth()->id());
 
         return LotteryTicketResource::collection($lotteries);
     }
+
+
+
+
+
 }

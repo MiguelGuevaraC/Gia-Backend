@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 
+use App\Exports\Lottery\LotteryTicketsExport;
 use App\Http\Resources\UserOnlyResource;
 use App\Models\Lottery;
 use App\Models\LotteryTicket;
@@ -8,6 +9,7 @@ use App\Models\Prize;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LotteryService
 {
@@ -102,7 +104,7 @@ class LotteryService
                 ]);
 
                 $prize->refresh();
-              
+
                 $updatedPrizes->push($prize);
             });
 
@@ -210,5 +212,23 @@ class LotteryService
         }
         return $Lottery->delete(); // Devuelve true si la eliminación fue exitosa
     }
+
+    public function exportTickets($lottery_id)
+    {
+        $lottery = Lottery::find($lottery_id);
+        if (!$lottery) {
+            return response()->json(['message' => 'El sorteo no existe.'], 404);
+        }
+        $nameParts = array_filter([
+            $lottery->lottery_name ?? null,
+            $lottery->code_serie ?? null,
+        ]);
+        $sheetName = implode(' - ', $nameParts) ?: 'Reporte';
+        $tickets = LotteryTicket::with('codes')
+            ->where('lottery_id', $lottery_id)
+            ->get();
+        return Excel::download(new LotteryTicketsExport($tickets, $sheetName), 'tickets.xlsx');
+    }
+
 
 }

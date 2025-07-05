@@ -239,4 +239,15 @@ class LotteryController extends Controller
     }
 
 
+    public function export_excel($lottery_id)
+    {
+        $lottery = Lottery::find($lottery_id);
+
+        if (!$lottery) {
+            return response()->json(['message' => 'El sorteo no existe.'], 404);
+        }
+
+        return $this->lotteryService->exportTickets($lottery_id);
+    }
+
 }
