@@ -19,3 +19,4 @@ Route::get('/login', function () {
     return response()->json(['message' => 'Unauthenticated'], 401);
 })->name('login');
 // Route::get('view_token_email', [UserController::class, 'view_token_email']);
+ Route::get('view_ticket_email', [UserController::class, 'view_ticket_email']);

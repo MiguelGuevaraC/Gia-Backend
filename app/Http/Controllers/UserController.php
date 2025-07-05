@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserRequest\IndexUserRequest;
 use App\Http\Requests\UserRequest\StoreUserRequest;
 use App\Http\Requests\UserRequest\UpdateUserRequest;
+use App\Http\Resources\LotteryTicketResource;
 use App\Http\Resources\UserResource;
+use App\Models\LotteryTicket;
 use App\Models\User;
 use App\Services\UserService;
 
@@ -152,7 +154,7 @@ class UserController extends Controller
     {
 
         $validatedData = $request->validated();
-        if($id==1){
+        if ($id == 1) {
             return response()->json([
                 'message' => 'Este Usuario No puede ser Editado',
             ], 422);
@@ -182,7 +184,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        if($id==1){
+        if ($id == 1) {
             return response()->json([
                 'message' => 'Este Usuario No puede ser Eliminado',
             ], 422);
@@ -201,9 +203,27 @@ class UserController extends Controller
     }
     public function view_token_email()
     {
-        $token           = "1234";
+        $token = "1234";
         $name_aplication = "Gia Lounge";
-        return view('emails.token', ['token' => $token,
-            'name_aplication'                    => $name_aplication]);
+        return view('emails.token', [
+            'token' => $token,
+            'name_aplication' => $name_aplication
+        ]);
     }
+
+ public function view_ticket_email()
+{
+    $ticket = LotteryTicket::findOrFail(93);
+    $ticketResource = (new LotteryTicketResource($ticket))->toArray(request());
+
+    $name_aplication = "Gia Lounge";
+
+    return view('emails.ticket_email', [
+        'lottery_ticket' => $ticketResource,
+        'name_aplication' => $name_aplication
+    ]);
+}
+
+
+
 }

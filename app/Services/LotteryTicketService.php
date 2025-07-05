@@ -2,11 +2,15 @@
 
 namespace App\Services;
 
+use App\Http\Resources\LotteryTicketResource;
+use App\Mail\SendTicketMail;
 use App\Models\Lottery;
 use App\Models\LotteryTicket;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class LotteryTicketService
 {
@@ -61,12 +65,36 @@ class LotteryTicketService
                     'status' => 'Pendiente',
                 ]);
 
+
+                $email = $ticket->userOwner?->person?->email;
+                $isValidEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
+                $sentStatus = $isValidEmail ? 'ENVIADO' : 'NO_ENVIADO';
+
+                // Enviar solo si es válido
+                if ($isValidEmail) {
+                    $this->sendTokenByEmail($email, (new LotteryTicketResource($ticket))->toArray(request()));
+                }
+
+                // Registrar intento
+                Storage::append('logs/ticket_email.log', sprintf(
+                    "[%s] [%s] Ticket ID: %d | userOwner ID: %s | person ID: %s | Email: %s",
+                    now(),
+                    $sentStatus,
+                    $ticket->id,
+                    $ticket->userOwner->id ?? 'null',
+                    $ticket->userOwner?->person->id ?? 'null',
+                    $email ?? 'null'
+                ));
+
+
                 $this->codeGeneratorService->generar('qrcode', [
                     'description' => 'Ticket Sorteo',
                     'reservation_id' => null,
                     'lottery_ticket_id' => $ticket->id,
                     'entry_id' => null,
                 ]);
+
+
                 return $ticket;
             });
 
@@ -104,5 +132,11 @@ class LotteryTicketService
             ->orderByDesc('id')
             ->limit(50)
             ->get();
+    }
+
+
+    public function sendTokenByEmail($email, $ticket)
+    {
+        Mail::to($email)->send(new SendTicketMail($ticket));
     }
 }
