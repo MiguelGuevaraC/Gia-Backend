@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendTokenMail extends Mailable
+class SendTokenMailUpdatePassword extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -33,8 +33,8 @@ class SendTokenMail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.token') // Vista del correo
-                    ->subject('Crear Usuario: Tu Token de Verificación es...') // Asunto del correo
+        return $this->view('emails.token_update_password') // Vista del correo
+                    ->subject('Actualizar Contraseña: Tu Token de Verificación es...') // Asunto del correo
                     ->with(['token' => $this->token,
                     'name_aplication' =>  $this->name_aplication
                 ]); // Datos enviados a la vista

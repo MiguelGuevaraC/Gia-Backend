@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Mail\SendTokenMail;
+use App\Mail\SendTokenMailUpdatePassword;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\QueryException;
@@ -27,33 +28,33 @@ class AuthService
         $user = User::where('username', $username)->first();
 
         // Si el usuario no existe, retornamos un error genérico sin dar pistas sobre la existencia
-        if (! $user) {
+        if (!$user) {
             return [
-                'status'  => false,
+                'status' => false,
                 'message' => "Credenciales inválidas", // Mensaje más general
-                'user'    => null,
-                'token'   => null,
+                'user' => null,
+                'token' => null,
             ];
         }
 
         // Verifica si la contraseña es correcta
-        if (! Hash::check($password, $user->password)) {
+        if (!Hash::check($password, $user->password)) {
             return [
-                'status'  => false,
+                'status' => false,
                 'message' => "Credenciales inválidas", // Mensaje más general
-                'user'    => null,
-                'token'   => null,
+                'user' => null,
+                'token' => null,
             ];
         }
 
-        if ($user->rol_id == 1) {
-            return [
-                'status'  => false,
-                'message' => "Su Tipo Usuario No puede Acceder al portal App", // Mensaje más general
-                'user'    => null,
-                'token'   => null,
-            ];
-        }
+        // if ($user->rol_id == 1) {
+        //     return [
+        //         'status' => false,
+        //         'message' => "Su Tipo Usuario No puede Acceder al portal App", // Mensaje más general
+        //         'user' => null,
+        //         'token' => null,
+        //     ];
+        // }
 
 
         // Autentica al usuario
@@ -67,10 +68,10 @@ class AuthService
 
         // Retorna la respuesta con el token y usuario
         return [
-            'status'  => true,
+            'status' => true,
             'message' => 'Logueado Exitosamente',
-            'token'   => $token,
-            'user'    => $user,
+            'token' => $token,
+            'user' => $user,
         ];
     }
 
@@ -81,32 +82,32 @@ class AuthService
         $user = User::where('username', $username)->first();
 
         // Si el usuario no existe, retornamos un error genérico sin dar pistas sobre la existencia
-        if (! $user) {
+        if (!$user) {
             return [
-                'status'  => false,
+                'status' => false,
                 'message' => "Credenciales inválidas", // Mensaje más general
-                'user'    => null,
-                'token'   => null,
+                'user' => null,
+                'token' => null,
             ];
         }
 
         // Si el usuario no existe, retornamos un error genérico sin dar pistas sobre la existencia
         if ($user->rol_id == 2) {
             return [
-                'status'  => false,
+                'status' => false,
                 'message' => "Su Tipo Usuario No puede Acceder al portal Administrativo", // Mensaje más general
-                'user'    => null,
-                'token'   => null,
+                'user' => null,
+                'token' => null,
             ];
         }
 
         // Verifica si la contraseña es correcta
-        if (! Hash::check($password, $user->password)) {
+        if (!Hash::check($password, $user->password)) {
             return [
-                'status'  => false,
+                'status' => false,
                 'message' => "Credenciales inválidas", // Mensaje más general
-                'user'    => null,
-                'token'   => null,
+                'user' => null,
+                'token' => null,
             ];
         }
 
@@ -121,28 +122,28 @@ class AuthService
 
         // Retorna la respuesta con el token y usuario
         return [
-            'status'  => true,
+            'status' => true,
             'message' => 'Logueado Exitosamente',
-            'token'   => $token,
-            'user'    => $user,
+            'token' => $token,
+            'user' => $user,
         ];
     }
 
     public function authenticate(): array
     {
 
-        $user   = auth()->user();
+        $user = auth()->user();
         $status = true;
 
-        if (! $user) {
+        if (!$user) {
             $status = false;
-            $user   = null;
+            $user = null;
         }
 
         // Llama al método login para realizar la autenticación
         return [
             'status' => true,
-            'user'   => $user,
+            'user' => $user,
             'person' => $user?->person,
         ];
     }
@@ -189,22 +190,30 @@ class AuthService
         return "envio de codigo por telefono";
     }
 
-    public function sendTokenByEmail($names, $email, $token)
+    public function sendTokenByEmail($names = '', $email, $token)
     {
         Mail::to($email)->send(new SendTokenMail($token));
+    }
+
+    public function sendTokenByEmailUpdatePassword($email, $token)
+    {
+        Mail::to($email)->send(new SendTokenMailUpdatePassword($token));
     }
 
     public function sendToken($data)
     {
         $token = str_pad(random_int(0, 9999), 4, '0', STR_PAD_LEFT); // Token de 4 dígitos
 
-        Cache::put("email_verification_token:{$data['email']}", $token, 600);
+        Cache::put("email_verification_token:{$data['email']}", $token, 600); //600 segudnso 10 minutos
 
         if ($data['send_by'] == 'api') {
             return $this->sendTokenByApi($data['phone'], $token);
         }
         if ($data['send_by'] == 'email') {
             return $this->sendTokenByEmail($data['names'], $data['email'], $token);
+        }
+        if ($data['send_by'] == 'email_update_password') {
+            return $this->sendTokenByEmailUpdatePassword($data['email'], $token);
         }
     }
 }

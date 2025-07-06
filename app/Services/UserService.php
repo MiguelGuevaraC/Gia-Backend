@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\Person;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class UserService
 {
@@ -17,40 +18,56 @@ class UserService
         // Verificar si la persona existe; si no, crearla
 
         $attributes = [
-            'names'          => $data['names'] ?? null,
+            'names' => $data['names'] ?? null,
             'father_surname' => $data['father_surname'] ?? null,
             'mother_surname' => $data['mother_surname'] ?? null,
-            'type_document'  => $data['type_document'] ?? null,
-            'type_person'    => $data['type_person'] ?? null,
-            'business_name'  => $data['business_name'] ?? null,
-            'address'        => $data['address'] ?? null,
-            'phone'          => $data['phone'] ?? null,
-            'email'          => $data['email'] ?? null,
+            'type_document' => $data['type_document'] ?? null,
+            'type_person' => $data['type_person'] ?? null,
+            'business_name' => $data['business_name'] ?? null,
+            'address' => $data['address'] ?? null,
+            'phone' => $data['phone'] ?? null,
+            'email' => $data['email'] ?? null,
         ];
 
-        $person = ! empty($data['number_document'])
-        ? Person::firstOrCreate(['number_document' => $data['number_document']], $attributes)
-        : Person::create($attributes);
+        $person = !empty($data['number_document'])
+            ? Person::firstOrCreate(['number_document' => $data['number_document']], $attributes)
+            : Person::create($attributes);
 
         $name = isset($data['type_document']) && $data['type_document'] === 'DNI'
-        ? (isset($data['names']) ? $data['names'] : '') . ' ' .
-        (isset($data['father_surname']) ? $data['father_surname'] : '') . ' ' .
-        (isset($data['mother_surname']) ? $data['mother_surname'] : '')
-        : (isset($data['business_name']) ? $data['business_name'] : '');
+            ? (isset($data['names']) ? $data['names'] : '') . ' ' .
+            (isset($data['father_surname']) ? $data['father_surname'] : '') . ' ' .
+            (isset($data['mother_surname']) ? $data['mother_surname'] : '')
+            : (isset($data['business_name']) ? $data['business_name'] : '');
 
         // Crear y devolver el usuario, asociándolo con la persona encontrada o creada
         return User::create([
-            'name'      => $name,
-            'username'  => $data['username'],
-            'password'  => bcrypt($data['password']),
+            'name' => $name,
+            'username' => $data['username'],
+            'password' => bcrypt($data['password']),
             'person_id' => $person->id,
-            'rol_id'    => $data['rol_id'],
+            'rol_id' => $data['rol_id'],
         ]);
     }
 
+    public function updatePassword(string $email, string $newPassword): bool
+    {
+        $user = User::where('username', $email)
+            ->whereNull('deleted_at')
+            ->first();
+
+        if (!$user) {
+            Log::warning("Intento de actualización de contraseña fallido: usuario no encontrado o eliminado. Email: {$email}");
+            return false;
+        }
+
+        $user->password = bcrypt($newPassword);
+        return $user->save();
+    }
+
+
     public function updateUser($User, array $data)
     {
-                                 // Encontrar a la persona asociada al usuario
+        // Encontrar a la persona asociada al usuario
         $person = $User->person; // Relación 'person' entre Usuario y Persona
 
         // Verificar si la persona existe
@@ -105,7 +122,7 @@ class UserService
         }
         $User = User::find($id);
 
-        if (! $User) {
+        if (!$User) {
             return false;
         }
         return $User->delete(); // Devuelve true si la eliminación fue exitosa
