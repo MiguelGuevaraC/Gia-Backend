@@ -85,7 +85,7 @@
         <p class="token">{{ $token }}</p>
 
         <p class="message">
-            Este código tiene una validez limitada. Si tú no solicitaste esta actualización de contraseña.
+            Este código tiene una validez limitada.
         </p>
 
         <p class="message">Atentamente,</p>

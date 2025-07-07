@@ -33,9 +33,9 @@ class UpdateLotteryRequest extends UpdateRequest
                 'nullable',
                 'numeric',
                 'min:0',
-                Rule::requiredIf(function () {
-                    return !is_null($this->input('event_id'));
-                }),
+                // Rule::requiredIf(function () {
+                //     return !is_null($this->input('event_id'));
+                // }),
             ],
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
 
