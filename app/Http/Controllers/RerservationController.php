@@ -61,52 +61,65 @@ class RerservationController extends Controller
 
     public function index(IndexReservationRequest $request)
     {
-        // Obtener el ID del evento y la fecha seleccionada (hoy si no se especifica)
-        $event_id = $request->get('event_id');
         $reservationDatetime = $request->get('reservation_datetime', today()->toDateString());
+        $event_id = $request->get('event_id');
+        $is_event = $request->has('is_event') ? filter_var($request->get('is_event'), FILTER_VALIDATE_BOOLEAN) : null;
 
-        // Obtener los resultados filtrados
+        // Armar query base
+        $reservationQuery = Reservation::query();
+
+        // Filtrar por relación con evento
+        if ($is_event === true) {
+            $reservationQuery->whereNotNull('event_id'); // Reservas que sí tienen evento
+        } elseif ($is_event === false) {
+            $reservationQuery->whereNull('event_id'); // Reservas sin evento
+        } else {
+            $reservationQuery->whereNotNull('event_id'); // Por defecto, solo reservas con evento
+        }
+
+        // Obtener resultados filtrados usando la query ya armada
         $results = $this->getFilteredResults(
-            Reservation::class,
+            $reservationQuery, // en lugar de Reservation::class
             $request,
             Reservation::filters,
             Reservation::sorts,
             ReservationResource::class
         );
 
-        // Filtrar las reservas por la fecha seleccionada
+
+        // Filtrar por fecha y por event_id si es que existe
         $reservations = collect($results->items())->filter(function ($reservation) use ($reservationDatetime, $event_id) {
-            $isToday = Carbon::parse($reservation->reservation_datetime)->isSameDay(Carbon::parse($reservationDatetime));
-            $matchesEvent = $event_id ? $reservation->event->id == $event_id : true;
-            // return $isToday && $matchesEvent;
-            return $matchesEvent;
+            $isSameDate = Carbon::parse($reservation->reservation_datetime)->isSameDay(Carbon::parse($reservationDatetime));
+            $matchesEvent = $event_id ? optional($reservation->event)->id == $event_id : true;
+            return $isSameDate && $matchesEvent;
         });
 
-        // Contar reservas de tipo MESA y BOX
-        $reservasMesa = $reservations->where("status", "!=", "Caducado")->where('station.type', 'MESA')->count();
-        $reservasBox = $reservations->where("status", "!=", "Caducado")->where('station.type', 'BOX')->count();
+        $reservasMesa = $reservations->where("status", "!=", "Caducado")
+            ->filter(fn($r) => optional($r->station)->type === 'MESA')
+            ->count();
 
-        // Contar mesas libres para hoy, filtrando por event_id si es necesario
-        $event = Event::find($event_id); // Obtener el evento primero
+        $reservasBox = $reservations->where("status", "!=", "Caducado")
+            ->filter(fn($r) => optional($r->station)->type === 'BOX')
+            ->count();
 
-        $mesasLibres = Station::whereHas('environment', function ($query) use ($event) {
-            if ($event) {
-                $query->whereHas('company', function ($subQuery) use ($event) {
-                    $subQuery->where('id', $event->company_id); // Filtrar por la compañía del evento
-                });
-            }
-        })->whereDoesntHave('reservations', function ($query) use ($reservationDatetime) {
-            $query->whereDate('reservation_datetime', '=', $reservationDatetime);
-        })->count();
+        $mesasLibres = 0;
+        if ($event_id && ($event = Event::find($event_id))) {
+            $mesasLibres = Station::whereHas('environment.company', function ($query) use ($event) {
+                $query->where('id', $event->company_id);
+            })->whereDoesntHave('reservations', function ($query) use ($reservationDatetime) {
+                $query->whereDate('reservation_datetime', '=', $reservationDatetime);
+            })->count();
+        }
 
         return response()->json([
-            'data' => $reservations,
+            'data' => $reservations->values(),
             'totalReservas' => $reservations->count(),
             'reservasMesa' => $reservasMesa,
             'reservasBox' => $reservasBox,
             'mesasLibres' => $mesasLibres,
         ]);
     }
+
 
     /**
      * @OA\Get(
@@ -166,19 +179,36 @@ class RerservationController extends Controller
     {
         $data = $request->validated();
 
-        $event = Event::findOrFail($data['event_id']);
-        $station = Station::findOrFail($data['station_id']);
+        $event = null;
+        $precio = null;
 
-        $precio = match ($station->type) {
-            'MESA' => $event->pricetable,
-            'BOX' => $event->pricebox,
-            default => null,
-        };
+        if (!empty($data['event_id'])) {
+            $event = Event::find($data['event_id']); // No usamos findOrFail
 
-        if (is_null($precio)) {
-            return response()->json([
-                'message' => "No se pudo determinar el precio de la reserva para el tipo de estación '{$station->type}'.",
-            ], 422);
+            if (!$event) {
+                return response()->json([
+                    'message' => "El evento especificado no fue encontrado.",
+                ], 404);
+            }
+
+            $station = Station::findOrFail($data['station_id']);
+
+            $precio = match ($station->type) {
+                'MESA' => $event->pricetable,
+                'BOX' => $event->pricebox,
+                default => null,
+            };
+
+            if (is_null($precio)) {
+                return response()->json([
+                    'message' => "No se pudo determinar el precio de la reserva para el tipo de estación '{$station->type}' y el evento.",
+                ], 422);
+            }
+        } else {
+            // Si no hay evento, aún debes validar la estación si la necesitas para la reserva
+            $station = Station::findOrFail($data['station_id']);
+            $precio = $station->price;
+            
         }
 
         $data['precio_reservation'] = $precio;
@@ -187,6 +217,7 @@ class RerservationController extends Controller
 
         return new ReservationResource($reserva);
     }
+
 
     public function pay_reservation($id_reservation, PayReservationRequest $request)
     {
