@@ -16,7 +16,7 @@ class StoreEntryRequest extends StoreRequest
     {
         return [
             'event_id' => 'nullable|integer|exists:events,id',
-            'amount' => ['required', 'numeric', 'min:600'],
+            'amount' => ['nullable', 'numeric'],
             'description' => ['nullable', 'string', 'min:5', 'max:80'],
             'email' => ['required', 'email'],
             'token' => ['nullable', 'string'],
@@ -58,6 +58,13 @@ class StoreEntryRequest extends StoreRequest
             }
 
             if ($this->filled('event_id')) {
+
+                if (!$this->filled('amount')) {
+                    $validator->errors()->add('amount', 'El monto es obligatorio cuando se selecciona un evento.');
+                } elseif ($this->amount < 600) {
+                    $validator->errors()->add('amount', 'El monto mínimo permitido es de 600.');
+                }
+
                 $this->validateAmountTotal($validator);
                 $this->validateTokenRequirement($validator);
             }
