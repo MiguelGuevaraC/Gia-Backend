@@ -7,26 +7,21 @@ use Illuminate\Validation\Validator;
 
 class StoreEntryRequest extends StoreRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
-        return true; // Cambia esto si necesitas autorización específica
+        return true;
     }
 
     public function rules()
     {
         return [
-            'event_id' => 'required|integer|exists:events,id',
+            'event_id' => 'nullable|integer|exists:events,id',
             'amount' => ['required', 'numeric', 'min:600'],
             'description' => ['nullable', 'string', 'min:5', 'max:80'],
             'email' => ['required', 'email'],
-            'token' => ['required', 'string'],
+            'token' => ['nullable', 'string'],
             'quantity' => ['required', 'integer', 'min:1'],
-
+            'company_id' => 'nullable|string|exists:companies,id,deleted_at,NULL',
         ];
     }
 
@@ -40,24 +35,32 @@ class StoreEntryRequest extends StoreRequest
             'amount.numeric' => 'El monto debe ser un número.',
             'amount.min' => 'El monto mínimo permitido es de 600.',
             'description.required' => 'La descripción es obligatoria.',
-            
+            'description.min' => 'La descripción debe tener al menos 5 caracteres.',
+            'description.max' => 'La descripción no debe exceder los 80 caracteres.',
             'email.required' => 'El correo electrónico es obligatorio.',
             'email.email' => 'El correo electrónico no es válido.',
             'token.required' => 'El token de pago es obligatorio.',
             'quantity.required' => 'La cantidad de tickets es obligatoria.',
             'quantity.integer' => 'La cantidad de tickets debe ser un número entero.',
             'quantity.min' => 'Debes comprar al menos un ticket.',
-
-
-            'description.min' => 'La descripción debe tener al menos 5 caracteres.',
-            'description.max' => 'La descripción no debe exceder los 80 caracteres.',
+            'company_id.required' => 'El campo empresa es obligatorio.',
+            'company_id.string' => 'El campo empresa debe ser una cadena de texto.',
+            'company_id.exists' => 'La empresa seleccionada no existe o ha sido eliminada.',
         ];
     }
 
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            $this->validateAmountTotal($validator);
+            $data = $this->all();
+            if (empty($data['event_id']) && (empty($data['company_id']) || !isset($data['company_id']))) {
+                $validator->errors()->add('company_id', 'El campo company_id es obligatorio cuando no se proporciona un event_id.');
+            }
+
+            if ($this->filled('event_id')) {
+                $this->validateAmountTotal($validator);
+                $this->validateTokenRequirement($validator);
+            }
         });
     }
 
@@ -80,5 +83,17 @@ class StoreEntryRequest extends StoreRequest
         }
     }
 
+    private function validateTokenRequirement(Validator $validator): void
+    {
 
+        $event = Event::find($this->event_id);
+
+
+        if ($event && in_array($event->is_daily_event, [false, 0, "false", '0'], true) && !$this->filled('token')) {
+            $validator->errors()->add(
+                'token',
+                'El token de pago es obligatorio para este evento diario.'
+            );
+        }
+    }
 }

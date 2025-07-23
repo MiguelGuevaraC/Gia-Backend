@@ -44,6 +44,8 @@ class EventResource extends JsonResource
             'pricetable' => $this->pricetable ?? null,
 
             'price_entry' => $this->price_entry ?? null,
+            'is_daily_event' => $this->is_daily_event ?? null,
+
             'activeStations' => $this->activeStations() ?? null,
 
             'user_id' => $this->user_id ?? null,

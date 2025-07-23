@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Entry;
+use App\Models\Event;
 use Illuminate\Support\Collection;
 
 class EntryService
@@ -22,6 +23,30 @@ class EntryService
     public function createEntry(array $data): Collection
     {
         $data['user_id'] = auth()->id();
+
+        // Crear evento diario si no hay uno existente y event_id es null
+        if (empty($data['event_id'])) {
+            $todayStart = now()->startOfDay();
+            $todayEnd = now()->endOfDay();
+            $companyId = $data['company_id'];
+
+            $eventoHoy = Event::where('is_daily_event', true)
+                ->whereBetween('event_datetime', [$todayStart, $todayEnd])
+                ->where('company_id', $companyId)
+                ->whereNull('deleted_at')
+                ->first();
+
+            if (!$eventoHoy) {
+                $data['event_id'] = Event::create([
+                    'name' => 'Evento ' . ucfirst(now()->translatedFormat('l d/F/Y')),
+                    'event_datetime' => now(),
+                    'company_id' => $companyId,
+                    'is_daily_event' => true,
+                ])->id;
+            } else {
+                $data['event_id'] = $eventoHoy->id;
+            }
+        }
 
         $lastCorrelative = (int) Entry::where('event_id', $data['event_id'])->max('correlative') ?? 0;
 
@@ -45,6 +70,7 @@ class EntryService
             return $entry;
         });
     }
+
 
 
     public function updateEntry(Entry $entry, array $data): Entry

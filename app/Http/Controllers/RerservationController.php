@@ -62,7 +62,7 @@ class RerservationController extends Controller
     public function index(IndexReservationRequest $request)
     {
         $reservationDatetime = $request->get('reservation_datetime', today()->toDateString());
-        $event_id = $request->get('event_id');
+        $event_id = $request->get('event_id', '');
         $is_event = $request->has('is_event') ? filter_var($request->get('is_event'), FILTER_VALIDATE_BOOLEAN) : null;
 
         // Armar query base
@@ -74,7 +74,7 @@ class RerservationController extends Controller
         } elseif ($is_event === false) {
             $reservationQuery->whereNull('event_id'); // Reservas sin evento
         } else {
-            $reservationQuery->whereNotNull('event_id'); // Por defecto, solo reservas con evento
+            // $reservationQuery->whereNotNull('event_id'); // Por defecto, solo reservas con evento
         }
 
         // Obtener resultados filtrados usando la query ya armada
@@ -205,10 +205,20 @@ class RerservationController extends Controller
                 ], 422);
             }
         } else {
-            // Si no hay evento, aún debes validar la estación si la necesitas para la reserva
+            // No hay evento
             $station = Station::findOrFail($data['station_id']);
-            $precio = $station->price;
-            
+
+            $precio = match ($station->type) {
+                'MESA' => 0, // Precio 0 para mesas sin evento
+                'BOX' => $station->price, // Usar el precio directo del box
+                default => null,
+            };
+
+            if (is_null($precio)) {
+                return response()->json([
+                    'message' => "No se pudo determinar el precio de la reserva para el tipo de estación '{$station->type}'.",
+                ], 422);
+            }
         }
 
         $data['precio_reservation'] = $precio;

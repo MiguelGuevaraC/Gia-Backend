@@ -6,6 +6,7 @@ use App\Http\Requests\EntryRequest\StoreEntryRequest;
 use App\Http\Requests\EntryRequest\UpdateEntryRequest;
 use App\Http\Resources\EntryResource;
 use App\Models\Entry;
+use App\Models\Event;
 use App\Services\AuditLogService;
 use App\Services\CulquiService;
 use App\Services\EntryService;
@@ -118,16 +119,25 @@ class EntryController extends Controller
         $request->merge([
             'description' => $request->filled('description') ? $request->description : 'Pago de Entrada',
         ]);
-        // 1. Procesar el pago con Culqi
-        $result = $this->culquiService->createCharge($request);
-        AuditLogService::log('culqi_create_charge', $request->all(), $result);
 
-        if (!$result['success']) {
-            return response()->json([
-                'success' => false,
-                'message' => 'El pago falló.',
-                'error' => $result['message'] ?? 'Error desconocido en el pago.',
-            ], 400);
+        $event = null;
+        if ($request->filled('event_id')) {
+            $event = Event::find($request->event_id);
+        }
+     
+
+        // Procesar el pago con Culqi solo si el evento tiene un precio mayor a 0
+        if ($event && !in_array($event->is_daily_event, ["true", "1"], true)) {
+            $result = $this->culquiService->createCharge($request);
+            AuditLogService::log('culqi_create_charge', $request->all(), $result);
+
+            if (!$result['success']) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El pago falló.',
+                    'error' => $result['message'] ?? 'Error desconocido en el pago.',
+                ], 400);
+            }
         }
 
         return EntryResource::collection(
@@ -137,8 +147,8 @@ class EntryController extends Controller
                 'user_owner_id' => auth()->id(),
             ])
         );
-
     }
+
 
     /**
      * @OA\Put(

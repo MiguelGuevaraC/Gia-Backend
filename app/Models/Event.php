@@ -18,6 +18,7 @@ class Event extends Model
         'pricetable',
         'pricebox',
         'price_entry',
+        'is_daily_event',
         'company_id',
         'status',
         'user_id',
@@ -44,6 +45,7 @@ class Event extends Model
         'company_id' => '=',
         'pricetable' => '=',
         'pricebox' => '=',
+        'is_daily_event' => '=',
     ];
 
     /**
