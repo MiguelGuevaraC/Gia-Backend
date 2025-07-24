@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Promotion;
 use App\Models\Reservation;
 use App\Models\Station;
+use Carbon\Carbon;
 
 class StoreReservationRequest extends StoreRequest
 {
@@ -173,17 +174,23 @@ class StoreReservationRequest extends StoreRequest
             $eventId = $this->input('event_id');
 
             // Buscar evento activo del día si no se envía
-            if ($eventId == null) {
-                $todayStart = now()->startOfDay();
-                $todayEnd = now()->endOfDay();
+             if ($eventId === null) {
+            $reservationDate = $this->input('reservation_datetime');
 
-                $event = Event::where('is_daily_event', true)
-                    ->whereBetween('event_datetime', [$todayStart, $todayEnd])
-                    ->first();
-
-
-                $eventId = $event?->id;
+            if ($reservationDate) {
+                $start = Carbon::parse($reservationDate)->startOfDay();
+                $end = Carbon::parse($reservationDate)->endOfDay();
+            } else {
+                $start = now()->startOfDay();
+                $end = now()->endOfDay();
             }
+
+            $event = Event::where('is_daily_event', true)
+                ->whereBetween('event_datetime', [$start, $end])
+                ->first();
+
+            $eventId = $event?->id;
+        }
 
             if ($eventId) {
                 $mesaOcupada = Reservation::where('event_id', $eventId)
