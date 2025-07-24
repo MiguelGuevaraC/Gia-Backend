@@ -34,7 +34,7 @@ class EntryService
             $dayEnd = $entryDate->copy()->endOfDay();
             $companyId = $data['company_id'];
 
-            $evento = Event::where('is_daily_event', true)
+            $evento = Event::where('is_daily_event', '1')
                 ->whereBetween('event_datetime', [$dayStart, $dayEnd])
                 ->where('company_id', $companyId)
                 ->whereNull('deleted_at')
@@ -45,7 +45,7 @@ class EntryService
                     'name' => 'Evento ' . ucfirst($entryDate->translatedFormat('l d/F/Y')),
                     'event_datetime' => $dayEnd,
                     'company_id' => $companyId,
-                    'is_daily_event' => true,
+                    'is_daily_event' => '1',
                 ])->id;
             } else {
                 $data['event_id'] = $evento->id;

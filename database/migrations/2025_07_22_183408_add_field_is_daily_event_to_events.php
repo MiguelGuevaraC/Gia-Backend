@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('events', function (Blueprint $table) {
-            $table->string('is_daily_event')->default(false)->nullable();
+            $table->string('is_daily_event')->default('0')->nullable();
         });
     }
 
