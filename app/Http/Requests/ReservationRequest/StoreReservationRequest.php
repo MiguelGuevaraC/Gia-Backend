@@ -131,6 +131,7 @@ class StoreReservationRequest extends StoreRequest
             $reservationDateStr = date('Y-m-d', strtotime($this->reservation_datetime));
 
             $evento = Event::whereDate('event_datetime', $reservationDateStr)
+                ->where('is_daily_event', '0')
                 ->whereNull('deleted_at')
                 ->first();
 

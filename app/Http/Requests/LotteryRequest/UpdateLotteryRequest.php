@@ -39,10 +39,10 @@ class UpdateLotteryRequest extends UpdateRequest
             ],
             'route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
 
-            'prizes' => 'required|array|min:1',
-            'prizes.*.name' => 'required|string|max:255',
-            'prizes.*.route' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'prizes.*.description' => 'required|string',
+            'prizes' => 'nullable|array|min:1',
+            'prizes.*.name' => 'nullable|string|max:255',
+            'prizes.*.route' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'prizes.*.description' => 'nullable|string',
             'prizes.*.id' => 'nullable|integer|exists:prizes,id',
         ];
 

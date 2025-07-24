@@ -21,10 +21,10 @@ class PayReservationRequest extends StoreRequest
     public function rules()
     {
         return [
-            'amount'      => ['required', 'numeric', 'min:600'],
-            'description' => ['nullable', 'string', 'min:5','max:80'],
-            'email'       => ['required', 'email'],
-            'token'       => ['required', 'string'],
+            'amount' => ['required', 'numeric', 'min:600'],
+            'description' => ['nullable', 'string', 'min:5', 'max:80'],
+            'email' => ['required', 'email'],
+            'token' => ['required', 'string'],
 
             // Se quitan event_id, station_id y details de aquí
         ];
@@ -51,7 +51,7 @@ class PayReservationRequest extends StoreRequest
 
         if ($reservation && $reservation->event && $this->filled('reservation_datetime')) {
             $reservationDatetime = strtotime($this->reservation_datetime);
-            $eventDatetime       = strtotime($reservation->event->event_datetime);
+            $eventDatetime = strtotime($reservation->event->event_datetime);
 
             if ($reservationDatetime > $eventDatetime) {
                 $validator->errors()->add(
@@ -66,7 +66,7 @@ class PayReservationRequest extends StoreRequest
     {
         if ($this->filled('reservation_datetime')) {
             $reservationDate = date('Y-m-d', strtotime($this->reservation_datetime));
-            $todayDate       = date('Y-m-d');
+            $todayDate = date('Y-m-d');
 
             if ($reservationDate < $todayDate) {
                 $validator->errors()->add(
@@ -81,38 +81,39 @@ class PayReservationRequest extends StoreRequest
     {
         $reservation = $this->getReservationFromRoute();
 
-        if (! $reservation || ! $reservation->event || ! $reservation->station) {
+        if (!$reservation || !$reservation->event || !$reservation->station) {
             return $validator->errors()->add('amount', 'Reserva, evento o estación no encontrados.');
         }
 
-        $precioReservation = match ($reservation->station->type) {
-            'MESA' => floatval($reservation->event->pricetable),
-            'BOX' => floatval($reservation->event->pricebox),
-            default => null,
-        };
-
-        if ($precioReservation === null) {
-            return $validator->errors()->add('amount', 'Tipo de estación inválido.');
-        }
-
+        $totalReservation = 0;
         $totalPromotions = 0;
+
         if ($reservation->detailReservations) {
             foreach ($reservation->detailReservations as $detail) {
-                if ($detail->promotion) {
-                    $totalPromotions += floatval($detail->promotion->precio) * intval($detail->cant);
+                $cantidad = intval($detail->cant);
+
+                if ($detail->type === 'reserva') {
+                    $precio = floatval($detail->precio); // se asume que tiene el campo 'precio' en el detail
+                    $totalReservation += $precio * $cantidad;
+                }
+
+                if ($detail->type === 'promocion' && $detail->promotion) {
+                    $precio = floatval($detail->promotion->precio);
+                    $totalPromotions += $precio * $cantidad;
                 }
             }
         }
 
-        $expectedAmount = $precioReservation + $totalPromotions;
+        $expectedAmount = $totalReservation + $totalPromotions;
         $providedAmount = floatval($this->amount) / 100;
 
         if (round($expectedAmount, 2) !== round($providedAmount, 2)) {
             $validator->errors()->add(
                 'amount',
-                "El monto total ingresado S/. {$providedAmount} no es correcto. Debe ser igual a la suma del precio de la reserva S/. {$precioReservation} más el precio de las promociones seleccionadas S/. {$totalPromotions}, dando un total de S/. {$expectedAmount}."
+                "El monto total ingresado S/. {$providedAmount} no es correcto. Debe ser igual a la suma del precio de la reserva S/. {$totalReservation} más el precio de las promociones seleccionadas S/. {$totalPromotions}, dando un total de S/. {$expectedAmount}."
             );
         }
     }
+
 
 }

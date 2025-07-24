@@ -3,6 +3,7 @@ namespace App\Services;
 
 use App\Models\Entry;
 use App\Models\Event;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 
 class EntryService
@@ -19,32 +20,35 @@ class EntryService
     }
 
 
-
     public function createEntry(array $data): Collection
     {
         $data['user_id'] = auth()->id();
 
         // Crear evento diario si no hay uno existente y event_id es null
         if (empty($data['event_id'])) {
-            $todayStart = now()->startOfDay();
-            $todayEnd = now()->endOfDay();
+            $entryDate = !empty($data['entry_daily_date'])
+                ? Carbon::parse($data['entry_daily_date'])
+                : now();
+
+            $dayStart = $entryDate->copy()->startOfDay();
+            $dayEnd = $entryDate->copy()->endOfDay();
             $companyId = $data['company_id'];
 
-            $eventoHoy = Event::where('is_daily_event', true)
-                ->whereBetween('event_datetime', [$todayStart, $todayEnd])
+            $evento = Event::where('is_daily_event', true)
+                ->whereBetween('event_datetime', [$dayStart, $dayEnd])
                 ->where('company_id', $companyId)
                 ->whereNull('deleted_at')
                 ->first();
 
-            if (!$eventoHoy) {
+            if (!$evento) {
                 $data['event_id'] = Event::create([
-                    'name' => 'Evento ' . ucfirst(now()->translatedFormat('l d/F/Y')),
-                    'event_datetime' => now(),
+                    'name' => 'Evento ' . ucfirst($entryDate->translatedFormat('l d/F/Y')),
+                    'event_datetime' => $dayEnd,
                     'company_id' => $companyId,
                     'is_daily_event' => true,
                 ])->id;
             } else {
-                $data['event_id'] = $eventoHoy->id;
+                $data['event_id'] = $evento->id;
             }
         }
 
