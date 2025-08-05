@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSorteoByEventRequest extends FormRequest
+class StoreSorteoByEventRequest extends StoreRequest
 {
     /**
      * Determine if the user is authorized to make this request.

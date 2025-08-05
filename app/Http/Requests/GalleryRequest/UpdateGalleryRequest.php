@@ -20,8 +20,8 @@ class UpdateGalleryRequest extends UpdateRequest
     public function rules()
     {
         return [
-            'images'        => 'required|array|min:1',
-    
+            'images' => 'required|array|min:1',
+
             // Permitir que cada elemento de images sea un archivo o un array con file y name
             'images.*.file' => [
                 'required_without:images.*.name', // Si no hay nombre, el archivo es obligatorio
@@ -29,6 +29,7 @@ class UpdateGalleryRequest extends UpdateRequest
                 'mimes:jpeg,jpg,png,gif,pdf,doc,docx,xls,xlsx',
                 'max:4096',
             ],
+            'route_drive' => ['nullable'],
             'images.*.name' => 'nullable|string|max:255',
         ];
     }
@@ -37,19 +38,19 @@ class UpdateGalleryRequest extends UpdateRequest
     public function messages()
     {
         return [
-            'images.required'                => 'Debe subir al menos un archivo.',
-            'images.array'                   => 'El campo imágenes debe ser un arreglo.',
-            'images.min'                     => 'Debe subir al menos un archivo.',
+            'images.required' => 'Debe subir al menos un archivo.',
+            'images.array' => 'El campo imágenes debe ser un arreglo.',
+            'images.min' => 'Debe subir al menos un archivo.',
 
-            'images.*.file'                  => 'El archivo subido no es válido.',
-            'images.*.mimes'                 => 'El archivo debe ser de tipo: jpeg, jpg, png, gif, pdf, doc, docx, xls o xlsx.',
-            'images.*.max'                   => 'El archivo no debe superar los 4MB.',
+            'images.*.file' => 'El archivo subido no es válido.',
+            'images.*.mimes' => 'El archivo debe ser de tipo: jpeg, jpg, png, gif, pdf, doc, docx, xls o xlsx.',
+            'images.*.max' => 'El archivo no debe superar los 4MB.',
 
-            'images.*.name.string'           => 'El nombre del archivo debe ser una cadena de texto.',
-            'images.*.name.max'              => 'El nombre del archivo no debe superar los 255 caracteres.',
+            'images.*.name.string' => 'El nombre del archivo debe ser una cadena de texto.',
+            'images.*.name.max' => 'El nombre del archivo no debe superar los 255 caracteres.',
 
             'images.*.file.required_without' => 'Debe proporcionar un archivo si no se ha subido ninguna imagen válida.',
-            'images.*.file.required_with'    => 'Debe proporcionar un archivo cuando se especifica un nombre.',
+            'images.*.file.required_with' => 'Debe proporcionar un archivo cuando se especifica un nombre.',
         ];
     }
 

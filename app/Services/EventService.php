@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Event;
+use Illuminate\Support\Facades\Log;
 
 class EventService
 {
@@ -49,5 +50,25 @@ class EventService
         }
         return $Event->delete(); // Devuelve true si la eliminación fue exitosa
     }
+
+    public function getEvents_by_date($date)
+    {
+        try {
+            $eventos = Event::whereDate('event_datetime', $date)
+                ->whereNull('deleted_at')
+                ->get()
+                ->groupBy('is_daily_event');
+
+            return [
+                'diario' => optional($eventos[1] ?? collect())->first(),
+                'particular' => optional($eventos[0] ?? collect())->first(),
+            ];
+        } catch (\Exception $e) {
+            Log::error("Error al obtener eventos por fecha ({$date}): " . $e->getMessage());
+
+            throw new \Exception("Error interno al consultar eventos");
+        }
+    }
+
 
 }

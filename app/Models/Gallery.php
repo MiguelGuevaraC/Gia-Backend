@@ -11,6 +11,7 @@ class Gallery extends Model
         'id',
         'name_image',
         'route',
+        'route_drive',
         'company_id',
         'user_created_id',
 

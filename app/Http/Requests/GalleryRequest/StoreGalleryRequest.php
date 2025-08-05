@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Requests\GalleryRequest;
 
+use App\Http\Requests\StoreRequest;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
@@ -20,7 +22,7 @@ use Illuminate\Foundation\Http\FormRequest;
  *     )
  * )
  */
-class StoreGalleryRequest extends FormRequest
+class StoreGalleryRequest extends StoreRequest
 {
     public function authorize(): bool
     {
@@ -29,38 +31,38 @@ class StoreGalleryRequest extends FormRequest
 
     public function rules(): array
     {
+        // dd('request');
         return [
-            'company_id'    => 'required|exists:companies,id',
-            'images'        => 'required|array|min:1',
-
-            // Validación de cada imagen
+            'company_id' => ['required', 'exists:companies,id'],
+            'images' => ['required', 'array', 'min:1'],
+            'route_drive' => ['nullable'],
             'images.*.file' => [
-                'required_without:images.*.name',
+                'required',
                 'file',
                 'mimes:jpeg,jpg,png,gif',
-                'max:4096',
+                'max:4096', // en kilobytes = 4MB
             ],
-            'images.*.name' => 'nullable|string|max:255',
+            'images.*.name' => ['nullable', 'string', 'max:255'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'company_id.required'            => 'El campo empresa es obligatorio.',
-            'company_id.exists'              => 'La empresa seleccionada no existe.',
+            'company_id.required' => 'El campo empresa es obligatorio.',
+            'company_id.exists' => 'La empresa seleccionada no existe.',
 
-            'images.required'                => 'Debe subir al menos un archivo.',
-            'images.array'                   => 'El campo imágenes debe ser un arreglo.',
-            'images.min'                     => 'Debe subir al menos un archivo.',
+            'images.required' => 'Debe subir al menos un archivo.',
+            'images.array' => 'El campo imágenes debe ser un arreglo.',
+            'images.min' => 'Debe subir al menos un archivo.',
 
-            'images.*.file.required_without' => 'Debe proporcionar un archivo si no se especifica un nombre.',
-            'images.*.file'                  => 'El archivo subido no es válido.',
-            'images.*.file.mimes'            => 'El archivo debe ser de tipo: jpeg, jpg, png o gif',
-            'images.*.file.max'              => 'El archivo no debe superar los 4MB.',
+            'images.*.file.required' => 'Cada imagen debe tener un archivo.',
+            'images.*.file.file' => 'Cada imagen debe ser un archivo válido.',
+            'images.*.file.mimes' => 'El archivo debe ser de tipo: jpeg, jpg, png o gif.',
+            'images.*.file.max' => 'El archivo no debe superar los 4MB.',
 
-            'images.*.name.string'           => 'El nombre del archivo debe ser una cadena de texto.',
-            'images.*.name.max'              => 'El nombre del archivo no debe superar los 255 caracteres.',
+            'images.*.name.string' => 'El nombre del archivo debe ser una cadena de texto.',
+            'images.*.name.max' => 'El nombre del archivo no debe superar los 255 caracteres.',
         ];
     }
 }

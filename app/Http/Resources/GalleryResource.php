@@ -25,6 +25,7 @@ class GalleryResource extends JsonResource
             'id'                => $this->id,
             'name_image'        => $this->name_image,
             'route'             => $this->route,
+            'route_drive'             => $this->route_drive,
             'company_id'        => $this->company_id,
             'company_name'      => $this?->company?->business_name,
             'user_created_id'   => $this->user_created_id,

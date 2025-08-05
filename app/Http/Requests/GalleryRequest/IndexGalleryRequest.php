@@ -27,6 +27,7 @@ class IndexGalleryRequest extends IndexRequest
             'name_image'      => 'nullable|string',
             'company_id'      => 'nullable|string',
             'user_created_id' => 'nullable|string',
+            'route_drive' => 'nullable|string',
 
         ];
     }
