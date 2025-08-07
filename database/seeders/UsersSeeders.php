@@ -17,7 +17,7 @@ class UsersSeeders extends Seeder
     {
 
         DB::table('people')->insert([
-            'id' => 100000000,
+            'id' => 1,
             'type_document' => "DNI",
             'type_person' => "NATURAL",
             'number_document' => "00000000",

@@ -24,7 +24,7 @@ class IndexStationRequest extends IndexRequest
     public function rules(): array
     {
         return [
-'event_id' => 'nullable|string',
+            'event_id' => 'nullable|string',
             'name' => 'nullable|string',
             'type' => 'nullable|string',
             'descriptioni' => 'nullable|string',
@@ -32,6 +32,7 @@ class IndexStationRequest extends IndexRequest
             'station_datetime' => 'nullable',
 
             'environment$name' => 'nullable|string',
+            'environment$company_id' => 'nullable|string',
             'environment_id' => 'nullable|string',
 
             'precio' => 'nullable|string',
